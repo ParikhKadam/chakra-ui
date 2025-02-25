@@ -1,91 +1,25 @@
-import { Box, Button, Field, For, Span, Stack } from "../src"
-import { Textarea } from "../src/components/textarea"
-import { useRecipe } from "../src/styled-system"
-import { PlaygroundTable } from "./shared/playground-table"
+import type { Meta } from "@storybook/react"
+import { Box } from "../src"
 
 export default {
   title: "Components / Textarea",
-  decorators: [(story: Function) => <Box padding="40px">{story()}</Box>],
-}
+  decorators: [
+    (Story) => (
+      <Box p="10">
+        <Story />
+      </Box>
+    ),
+  ],
+} satisfies Meta
 
-export const Variants = () => {
-  const recipe = useRecipe("Input")
-  return (
-    <PlaygroundTable>
-      <tbody>
-        <For each={recipe.variantMap.variant}>
-          {(v) => (
-            <tr>
-              <td>
-                <Span fontSize="sm" color="fg.muted" minW="8ch">
-                  {v}
-                </Span>
-              </td>
-              <td>
-                <Textarea variant={v} placeholder="Placeholder" />
-              </td>
-            </tr>
-          )}
-        </For>
-        <tr>
-          <td>
-            <Span fontSize="sm" color="fg.muted" minW="8ch">
-              unstyled
-            </Span>
-          </td>
-          <td>
-            <Textarea minW="320px" placeholder="Placeholder" />
-          </td>
-        </tr>
-      </tbody>
-    </PlaygroundTable>
-  )
-}
-
-export const Sizes = () => {
-  const recipe = useRecipe("Input")
-  return (
-    <PlaygroundTable>
-      <tbody>
-        <For each={recipe.variantMap.size}>
-          {(v) => (
-            <tr>
-              <td>
-                <Span fontSize="sm" color="fg.muted" minW="8ch">
-                  {v}
-                </Span>
-              </td>
-              <td>
-                <Stack minW="320px">
-                  <Textarea size={v} placeholder="Placeholder" />
-                  <Textarea
-                    variant="filled"
-                    size={v}
-                    placeholder="Placeholder"
-                  />
-                </Stack>
-              </td>
-            </tr>
-          )}
-        </For>
-      </tbody>
-    </PlaygroundTable>
-  )
-}
-
-export const WithLabel = () => {
-  return (
-    <Stack maxW="sm" gap="4">
-      <Field.Root>
-        <Field.Label>Issue Details</Field.Label>
-        <Textarea placeholder="Type your message here..." />
-        <Field.HelpText>
-          You can @mention people and refer to issues and pull requests.
-        </Field.HelpText>
-      </Field.Root>
-      <Button alignSelf="flex-start" variant="solid" mt="3">
-        Submit
-      </Button>
-    </Stack>
-  )
-}
+export { TextareaBasic as Basic } from "compositions/examples/textarea-basic"
+export { TextareaSizeTable as Sizes } from "compositions/examples/textarea-size-table"
+export { TextareaVariantTable as Variants } from "compositions/examples/textarea-variant-table"
+export { TextareaWithAutoresize as Autoresize } from "compositions/examples/textarea-with-autoresize"
+export { TextareaWithAutoresizeMaxRows as AutoresizeMaxRows } from "compositions/examples/textarea-with-autoresize-max-rows"
+export { TextareaWithErrorText as ErrorText } from "compositions/examples/textarea-with-error-text"
+export { TextareaWithField as Field } from "compositions/examples/textarea-with-field"
+export { TextareaWithForm as Form } from "compositions/examples/textarea-with-form"
+export { TextareaWithHelperText as HelperText } from "compositions/examples/textarea-with-helper-text"
+export { TextareaWithHookForm as HookForm } from "compositions/examples/textarea-with-hook-form"
+export { TextareaWithResize as Resize } from "compositions/examples/textarea-with-resize"

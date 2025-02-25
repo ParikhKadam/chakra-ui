@@ -1,46 +1,22 @@
-import { Box, Circle, HStack, Square } from "../src"
-import { DecorativeBox } from "./shared/decorative-box"
+import type { Meta } from "@storybook/react"
+import { Box } from "../src"
 
 export default {
   title: "Layout / Box",
-}
+  decorators: [
+    (Story) => (
+      <Box p="4">
+        <Story />
+      </Box>
+    ),
+  ],
+} satisfies Meta
 
-export const basic = () => (
-  <Box>
-    <Box color="tomato" _hover={{ bg: "red.500", color: "white" }}>
-      Welcome to Box
-    </Box>
-    <Box
-      position="relative"
-      bg="red.400"
-      _before={{
-        height: 0,
-        content: `""`,
-        display: "block",
-        paddingBottom: ["40px", "100px"],
-      }}
-    />
-  </Box>
-)
-
-export const square = () => (
-  <Square bg="red.300" size={["40px", "60px", "100px"]}>
-    <Circle size="60px" bg="tomato" color="white">
-      Bee
-    </Circle>
-  </Square>
-)
-
-export const HideBelow = () => (
-  <HStack>
-    <DecorativeBox bg="green.300" hideBelow="md" height="40px" flex="1" />
-    <DecorativeBox height="40px" flex="1" />
-  </HStack>
-)
-
-export const HideFrom = () => (
-  <HStack>
-    <DecorativeBox bg="green.300" hideFrom="md" height="40px" flex="1" />
-    <DecorativeBox height="40px" flex="1" />
-  </HStack>
-)
+export { BoxBasic as Basic } from "compositions/examples/box-basic"
+export { BoxWithPseudoProps as PseudoProps } from "compositions/examples/box-with-pseudo-props"
+export { BoxWithHideBelow as HideBelow } from "compositions/examples/box-with-hide-below"
+export { BoxWithHideFrom as HideFrom } from "compositions/examples/box-with-hide-from"
+export { BoxWithShadow as Shadow } from "compositions/examples/box-with-shadow"
+export { BoxWithBorder as Border } from "compositions/examples/box-with-border"
+export { BoxWithAsProp as AsProp } from "compositions/examples/box-with-as-prop"
+export { BoxPropertyCard as Composition } from "compositions/examples/box-property-card"

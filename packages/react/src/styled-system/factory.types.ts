@@ -1,16 +1,17 @@
-import type {
-  Assign,
-  Dict,
-  DistributiveOmit,
-  DistributiveUnion,
-  Pretty,
-} from "@chakra-ui/utils"
+import type { Assign } from "@ark-ui/react"
 import type {
   ComponentProps,
   ComponentPropsWithoutRef,
   ElementType,
   FunctionComponent,
+  JSX,
 } from "react"
+import type {
+  Dict,
+  DistributiveOmit,
+  DistributiveUnion,
+  Pretty,
+} from "../utils"
 import type { MinimalNested, SystemStyleObject } from "./css.types"
 import type { SystemProperties } from "./generated/system.gen"
 import type {
@@ -18,6 +19,13 @@ import type {
   RecipeSelection,
   RecipeVariantRecord,
 } from "./recipe.types"
+
+export interface UnstyledProp {
+  /**
+   * If `true`, the element will opt out of the theme styles.
+   */
+  unstyled?: boolean
+}
 
 export interface PolymorphicProps {
   as?: ElementType
@@ -41,9 +49,9 @@ export type HtmlProp =
   | "height"
   | "content"
 
-type PatchHtmlProps<T> = DistributiveOmit<T, HtmlProp> & HtmlProps
+export type PatchHtmlProps<T> = DistributiveOmit<T, HtmlProp> & HtmlProps
 
-type AssignHtmlProps<T extends Dict, P extends Dict = {}> = Assign<
+export type JsxHtmlProps<T extends Dict, P extends Dict = {}> = Assign<
   PatchHtmlProps<T>,
   P
 >
@@ -56,7 +64,7 @@ export type ChakraComponent<
 export type HTMLChakraProps<
   T extends ElementType,
   P extends Dict = {},
-> = AssignHtmlProps<
+> = JsxHtmlProps<
   ComponentPropsWithoutRef<T>,
   Assign<JsxStyleProps, P> & PolymorphicProps
 >
@@ -81,8 +89,14 @@ type JsxElements = {
 
 export type StyledFactoryFn = JsxFactory & JsxElements
 
+export type DataAttr = Record<
+  `data-${string}`,
+  string | number | undefined | null | boolean
+>
+
 export interface JsxFactoryOptions<TProps> {
-  defaultProps?: TProps
+  forwardProps?: string[]
+  defaultProps?: Partial<TProps> & DataAttr
   forwardAsChild?: boolean
   shouldForwardProp?(prop: string, variantKeys: string[]): boolean
 }
@@ -98,17 +112,3 @@ export interface JsxStyleProps
 
 export type InferRecipeProps<T> =
   T extends ChakraComponent<any, infer P> ? P : {}
-
-export interface UnstyledProp {
-  /**
-   * If `true`, the element will opt out of the theme styles.
-   */
-  unstyled?: boolean
-}
-
-export type PropGetterFn<T extends keyof JSX.IntrinsicElements, P = unknown> = (
-  props?: Partial<Omit<JSX.IntrinsicElements[T], HtmlProp | keyof P>> & P,
-  ref?: any,
-) => JSX.IntrinsicElements[T] & { ref?: any } & {
-  [key in `data-${string}`]?: any
-}

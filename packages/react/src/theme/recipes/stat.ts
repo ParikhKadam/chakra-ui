@@ -1,44 +1,81 @@
-import { statAnatomy as parts } from "../../anatomy"
+import { statAnatomy } from "../../anatomy"
 import { defineSlotRecipe } from "../../styled-system"
 
 export const statSlotRecipe = defineSlotRecipe({
-  slots: parts.keys,
+  className: "chakra-stat",
+  slots: statAnatomy.keys(),
   base: {
     root: {
+      display: "flex",
+      flexDirection: "column",
+      gap: "1",
       position: "relative",
-      flex: "1 1 0%",
+      flex: "1",
     },
     label: {
-      fontWeight: "medium",
+      display: "inline-flex",
+      gap: "1.5",
+      alignItems: "center",
+      color: "fg.muted",
+      textStyle: "sm",
     },
     helpText: {
-      opacity: 0.8,
-      marginBottom: "2",
+      color: "fg.muted",
+      textStyle: "xs",
     },
-    number: {
+    valueUnit: {
+      color: "fg.muted",
+      textStyle: "xs",
+      fontWeight: "initial",
+      letterSpacing: "initial",
+    },
+    valueText: {
       verticalAlign: "baseline",
       fontWeight: "semibold",
+      letterSpacing: "tight",
       fontFeatureSettings: "pnum",
       fontVariantNumeric: "proportional-nums",
+      display: "inline-flex",
+      gap: "1",
     },
     indicator: {
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
       marginEnd: 1,
-      "& svg": {
-        w: "3.5",
-        h: "3.5",
-        verticalAlign: "middle",
+      "& :where(svg)": {
+        w: "1em",
+        h: "1em",
+      },
+      "&[data-type=up]": {
+        color: "fg.success",
+      },
+      "&[data-type=down]": {
+        color: "fg.error",
       },
     },
   },
+
   variants: {
     size: {
+      sm: {
+        valueText: {
+          textStyle: "xl",
+        },
+      },
       md: {
-        label: { fontSize: "sm" },
-        helpText: { fontSize: "sm" },
-        number: { fontSize: "2xl" },
+        valueText: {
+          textStyle: "2xl",
+        },
+      },
+      lg: {
+        valueText: {
+          textStyle: "3xl",
+        },
       },
     },
   },
+
   defaultVariants: {
     size: "md",
   },

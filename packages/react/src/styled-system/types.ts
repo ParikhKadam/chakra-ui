@@ -1,5 +1,5 @@
-import type { Dict, DistributiveOmit } from "@chakra-ui/utils"
 import type { PropertiesFallback } from "csstype"
+import type { Dict, DistributiveOmit } from "../utils"
 import type {
   ConditionalValue,
   CssKeyframes,
@@ -51,6 +51,7 @@ export type TokenCategory =
   | "blurs"
   | "gradients"
   | "assets"
+  | "cursor"
   | "borderWidths"
   | "breakpoints"
   | "borderStyles"
@@ -131,6 +132,7 @@ export interface TokenExtensions {
   cssVar?: TokenCssVar
   colorPalette?: ColorPaletteExtension
   references?: Dict<Token>
+  pixelValue?: string
 }
 
 export interface Token<T = any> {
@@ -214,6 +216,7 @@ export interface Utility {
   transform(key: string, value: any): Dict | undefined
   register(property: string, config: UtilityPropertyConfig): void
   getTypes(): Map<string, string[]>
+  addPropertyType(property: string, type: string[]): void
 }
 
 /* -----------------------------------------------------------------------------
@@ -249,9 +252,13 @@ export interface Condition {
   expandAtRule(key: string): string
 }
 
+export interface ConditionRecord {
+  [key: string]: string | string[]
+}
+
 export interface ConditionConfig {
   breakpoints: Breakpoint
-  conditions: Dict
+  conditions: ConditionRecord
 }
 
 /* -----------------------------------------------------------------------------
@@ -267,15 +274,23 @@ export type CssFn = (
   ...styles: (SystemStyleObject | undefined)[]
 ) => SystemStyleObject
 
+export interface Layers {
+  wrap(layer: CascadeLayer, styles: Dict): Dict
+  names: string[]
+  atRule: string
+}
+
 export interface SystemContext {
-  $$typeof: "SystemContext"
+  $$chakra: true
   _config: SystemConfig
+  _global: Dict[]
   utility: Utility
   conditions: Condition
   tokens: TokenDictionary
   breakpoints: Breakpoint
   properties: Set<string>
   isValidProperty(prop: string): boolean
+  normalizeValue(value: any): any
   splitCssProps<T extends SystemStyleObject>(
     props: T,
   ): [SystemStyleObject, DistributiveOmit<T, keyof SystemStyleObject>]
@@ -287,7 +302,11 @@ export interface SystemContext {
   sva: SlotRecipeCreatorFn
   getRecipe(key: string, fallback?: any): any
   getSlotRecipe(key: string, fallback?: any): any
+  isRecipe(key: string): boolean
+  isSlotRecipe(key: string): boolean
+  hasRecipe(key: string): boolean
   token: TokenFn
+  layers: Layers
 }
 
 export interface ThemingConfig {
@@ -297,6 +316,7 @@ export interface ThemingConfig {
   semanticTokens?: SemanticTokenDefinition
   textStyles?: Record<string, Dict>
   layerStyles?: Record<string, Dict>
+  animationStyles?: Record<string, Dict>
   recipes?: Record<string, RecipeDefinition>
   slotRecipes?: Record<string, SlotRecipeConfig>
 }
@@ -305,11 +325,16 @@ export interface PreflightConfig {
   preflight?: boolean | { scope?: string; level?: "parent" | "element" }
 }
 
+export type CascadeLayer = "reset" | "base" | "tokens" | "recipes"
+
 export interface SystemConfig extends PreflightConfig {
   cssVarsRoot?: string
   cssVarsPrefix?: string
   globalCss?: Record<string, SystemStyleObject>
+  disableLayers?: boolean
+  layers?: Record<CascadeLayer, string>
   theme?: ThemingConfig
   utilities?: UtilityConfig
   conditions?: Dict
+  strictTokens?: boolean
 }

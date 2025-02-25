@@ -1,76 +1,61 @@
 "use client"
 
-import { cx } from "@chakra-ui/utils"
+import type { Assign } from "@ark-ui/react"
 import { forwardRef } from "react"
-import {
-  type HTMLChakraProps,
-  type SystemStyleObject,
-  chakra,
-} from "../../styled-system"
+import type { HTMLChakraProps, SystemStyleObject } from "../../styled-system"
+import { chakra, defineStyle } from "../../styled-system"
+import { cx } from "../../utils"
 
-interface WrapOptions {
-  /**
-   * The `justify-content` value (for cross-axis alignment)
-   * @type SystemStyleObject["justifyContent"]
-   */
-  justify?: SystemStyleObject["justifyContent"]
-  /**
-   * The `align-items` value (for main axis alignment)
-   * @type SystemStyleObject["alignItems"]
-   */
-  align?: SystemStyleObject["alignItems"]
-  /**
-   * The `flex-direction` value
-   * @type SystemStyleObject["flexDirection"]
-   */
-  direction?: SystemStyleObject["flexDirection"]
-}
+export interface WrapProps
+  extends Assign<
+    HTMLChakraProps<"div">,
+    {
+      justify?: SystemStyleObject["justifyContent"]
+      align?: SystemStyleObject["alignItems"]
+      direction?: SystemStyleObject["flexDirection"]
+    }
+  > {}
 
-export interface WrapProps extends HTMLChakraProps<"div", WrapOptions> {}
-
-/**
- * Layout component used to stack elements that differ in length
- * and are liable to wrap.
- *
- * Common use cases:
- * - Buttons that appear together at the end of forms
- * - Lists of tags and chips
- *
- * @see Docs https://chakra-ui.com/wrap
- */
 export const Wrap = forwardRef<HTMLDivElement, WrapProps>(
   function Wrap(props, ref) {
-    const {
-      gap = "0.5rem",
-      columnGap,
-      rowGap,
-      justify,
-      direction,
-      align,
-      ...rest
-    } = props
+    const { gap = "0.5rem", justify, direction, align, ...rest } = props
 
     return (
       <chakra.div
         ref={ref}
+        display="flex"
+        flexWrap="wrap"
+        justifyContent={justify}
+        alignItems={align}
+        flexDirection={direction}
+        gap={gap}
         {...rest}
         className={cx("chakra-wrap", props.className)}
-        css={{
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: justify,
-          alignItems: align,
-          flexDirection: direction,
-          listStyleType: "none",
-          gap,
-          columnGap,
-          rowGap,
-          padding: "0",
-          ...props.css,
-        }}
       />
     )
   },
 )
 
 Wrap.displayName = "Wrap"
+
+/////////////////////////////////////////////////////////////////////////////////
+
+export interface WrapItemProps extends HTMLChakraProps<"div"> {}
+
+const itemStyle = defineStyle({
+  display: "flex",
+  alignItems: "flex-start",
+})
+
+export const WrapItem = forwardRef<HTMLDivElement, WrapItemProps>(
+  function WrapItem(props, ref) {
+    return (
+      <chakra.div
+        ref={ref}
+        css={[itemStyle, props.css]}
+        {...props}
+        className={cx("chakra-wrap__listitem", props.className)}
+      />
+    )
+  },
+)

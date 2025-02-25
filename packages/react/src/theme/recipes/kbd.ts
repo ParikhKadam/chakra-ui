@@ -1,58 +1,60 @@
 import { defineRecipe } from "../../styled-system"
 
 export const kbdRecipe = defineRecipe({
+  className: "chakra-kbd",
   base: {
+    display: "inline-flex",
+    alignItems: "center",
     fontWeight: "medium",
-    lineHeight: "normal",
     fontFamily: "mono",
-    flexShrink: 0,
+    flexShrink: "0",
     whiteSpace: "nowrap",
     wordSpacing: "-0.5em",
     userSelect: "none",
-    verticalAlign: "text-top",
-    colorPalette: "gray",
+    px: "1",
+    borderRadius: "l2",
   },
+
   variants: {
     variant: {
       raised: {
-        bg: { base: "colorPalette.100", _dark: "colorPalette.400/20" },
+        bg: "colorPalette.subtle",
+        color: "colorPalette.fg",
         borderWidth: "1px",
-        borderBottomWidth: "3px",
-        borderColor: { base: "colorPalette.300", _dark: "colorPalette.200/10" },
+        borderBottomWidth: "2px",
+        borderColor: "colorPalette.muted",
       },
       outline: {
         borderWidth: "1px",
-        color: { base: "colorPalette.800", _dark: "colorPalette.300" },
+        color: "colorPalette.fg",
       },
       subtle: {
-        bg: { base: "colorPalette.100", _dark: "colorPalette.400/20" },
-        color: { base: "colorPalette.800", _dark: "colorPalette.300" },
+        bg: "colorPalette.muted",
+        color: "colorPalette.fg",
       },
       plain: {
-        color: "colorPalette.600",
+        color: "colorPalette.fg",
       },
     },
+
     size: {
       sm: {
-        fontSize: "0.6em",
-        px: "0.25em",
-        borderRadius: "xs",
+        textStyle: "xs",
+        height: "4.5",
       },
       md: {
-        fontSize: "0.8em",
-        px: "0.4em",
-        borderRadius: "sm",
+        textStyle: "sm",
+        height: "5",
       },
       lg: {
-        fontSize: "0.9em",
-        px: "0.4em",
-        borderRadius: "sm",
+        textStyle: "md",
+        height: "6",
       },
     },
   },
+
   defaultVariants: {
     size: "md",
     variant: "raised",
-    colorPalette: "gray",
   },
 })

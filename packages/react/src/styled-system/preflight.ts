@@ -1,4 +1,4 @@
-import { isObject } from "@chakra-ui/utils"
+import { isObject } from "../utils"
 import type { CssProperties } from "./css.types"
 import type { PreflightConfig } from "./types"
 
@@ -21,8 +21,10 @@ export function createPreflight(options: PreflightConfig) {
       margin: "0px",
       padding: "0px",
       font: "inherit",
+      wordWrap: "break-word",
+      WebkitTapHighlightColor: "transparent",
     },
-    "*, *::before, *::after": {
+    "*, *::before, *::after, *::backdrop": {
       boxSizing: "border-box",
       borderWidth: "0px",
       borderStyle: "solid",
@@ -44,6 +46,7 @@ export function createPreflight(options: PreflightConfig) {
       display: "block",
       verticalAlign: "middle",
     },
+    iframe: { border: "none" },
     "img, video": { maxWidth: "100%", height: "auto" },
     "p, h1, h2, h3, h4, h5, h6": { overflowWrap: "break-word" },
     "ol, ul": { listStyle: "none" },
@@ -61,8 +64,9 @@ export function createPreflight(options: PreflightConfig) {
       borderCollapse: "collapse",
     },
     "*::placeholder": {
-      opacity: 1,
+      opacity: "unset",
       color: "#9ca3af",
+      userSelect: "none",
     },
     textarea: {
       resize: "vertical",
@@ -133,7 +137,7 @@ export function createPreflight(options: PreflightConfig) {
     ":-moz-focusring": {
       outline: "auto",
     },
-    "[hidden]": {
+    "[hidden]:where(:not([hidden='until-found']))": {
       display: "none !important",
     },
   }

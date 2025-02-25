@@ -1,11 +1,19 @@
-export { PinInputRoot as Root } from "./pin-input-root"
-export type { PinInputRootProps as RootProps } from "./pin-input-root"
+export {
+  PinInputControl as Control,
+  PinInputInput as Input,
+  PinInputLabel as Label,
+  PinInputRoot as Root,
+  PinInputRootProvider as RootProvider,
+  PinInputPropsProvider as PropsProvider,
+  PinInputContext as Context,
+  PinInputHiddenInput as HiddenInput,
+} from "./pin-input"
 
-export { PinInputField as Field } from "./pin-input-field"
-export type { PinInputFieldProps as FieldProps } from "./pin-input-field"
-
-export { PinInputControl as Control } from "./pin-input-control"
-export type { PinInputControlProps as ControlProps } from "./pin-input-control"
-
-export { PinInputLabel as Label } from "./pin-input-label"
-export type { PinInputLabelProps as LabelProps } from "./pin-input-label"
+export type {
+  PinInputControlProps as ControlProps,
+  PinInputInputProps as InputProps,
+  PinInputLabelProps as LabelProps,
+  PinInputRootProps as RootProps,
+  PinInputRootProviderProps as RootProviderProps,
+  PinInputValueChangeDetails as ValueChangeDetails,
+} from "./pin-input"

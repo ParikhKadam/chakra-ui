@@ -1,7 +1,8 @@
-import { fileUploadAnatomy } from "@ark-ui/anatomy"
+import { fileUploadAnatomy } from "../../anatomy"
 import { defineSlotRecipe } from "../../styled-system"
 
 export const fileUploadSlotRecipe = defineSlotRecipe({
+  className: "chakra-file-upload",
   slots: fileUploadAnatomy.keys(),
   base: {
     root: {
@@ -9,66 +10,87 @@ export const fileUploadSlotRecipe = defineSlotRecipe({
       flexDirection: "column",
       gap: "4",
       width: "100%",
+      alignItems: "flex-start",
     },
     label: {
       fontWeight: "medium",
-      fontSize: "sm",
+      textStyle: "sm",
     },
     dropzone: {
-      alignItems: "center",
-      background: "bg.default",
+      background: "bg",
       borderRadius: "l3",
-      borderWidth: "1px",
+      borderWidth: "2px",
+      borderStyle: "dashed",
+      display: "flex",
+      alignItems: "center",
+      flexDirection: "column",
+      gap: "4",
+      justifyContent: "center",
+      minHeight: "2xs",
+      px: "3",
+      py: "2",
+      transition: "backgrounds",
+      focusVisibleRing: "outside",
+      _hover: {
+        bg: "bg.subtle",
+      },
+      _dragging: {
+        bg: "colorPalette.subtle",
+        borderStyle: "solid",
+        borderColor: "colorPalette.solid",
+      },
+    },
+    dropzoneContent: {
       display: "flex",
       flexDirection: "column",
-      gap: "3",
-      justifyContent: "center",
-      minHeight: "xs",
-      px: "6",
-      py: "4",
+      alignItems: "center",
+      textAlign: "center",
+      gap: "1",
+      textStyle: "sm",
     },
     item: {
-      animation: "fadeIn 0.25s ease-out",
-      background: "bg.default",
-      borderRadius: "l3",
+      textStyle: "sm",
+      animationName: "fade-in",
+      animationDuration: "moderate",
+      background: "bg",
+      borderRadius: "l2",
       borderWidth: "1px",
-      columnGap: "3",
-      display: "grid",
-      gridTemplateColumns: "auto 1fr auto",
-      gridTemplateAreas: `
-          "preview name delete"
-          "preview size delete"
-          `,
+      width: "100%",
+      display: "flex",
+      alignItems: "center",
+      gap: "3",
       p: "4",
     },
     itemGroup: {
+      width: "100%",
       display: "flex",
       flexDirection: "column",
       gap: "3",
     },
     itemName: {
-      color: "fg.default",
+      color: "fg",
       fontWeight: "medium",
-      gridArea: "name",
-      fontSize: "sm",
+      lineClamp: "1",
+    },
+    itemContent: {
+      display: "flex",
+      flexDirection: "column",
+      gap: "0.5",
+      flex: "1",
     },
     itemSizeText: {
       color: "fg.muted",
-      gridArea: "size",
-      fontSize: "sm",
+      textStyle: "xs",
     },
     itemDeleteTrigger: {
       alignSelf: "flex-start",
-      gridArea: "delete",
-    },
-    itemPreview: {
-      gridArea: "preview",
     },
     itemPreviewImage: {
-      aspectRatio: "1",
+      width: "10",
       height: "10",
       objectFit: "scale-down",
-      width: "10",
     },
   },
+
+  defaultVariants: {},
 })

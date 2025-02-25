@@ -1,97 +1,112 @@
-import { tagAnatomy as parts } from "../../anatomy"
+import { tagAnatomy } from "../../anatomy"
 import { defineSlotRecipe } from "../../styled-system"
 import { badgeRecipe } from "./badge"
 
 const badgeVariant = badgeRecipe.variants?.variant
 
 export const tagSlotRecipe = defineSlotRecipe({
-  slots: parts.keys,
+  slots: tagAnatomy.keys(),
+  className: "chakra-tag",
   base: {
     root: {
-      colorPalette: "gray",
       display: "inline-flex",
-      verticalAlign: "top",
       alignItems: "center",
+      verticalAlign: "top",
       maxWidth: "100%",
       userSelect: "none",
-      borderRadius: "md",
-      "& svg": {
-        fontSize: "md",
-      },
-      "& > svg:first-of-type": {
-        marginStart: "0.2em",
-      },
-      _focusVisible: {
-        outline: "2px solid",
-        outlineColor: "colorPalette.500",
-        outlineOffset: "2px",
-      },
+      borderRadius: "l2",
+      focusVisibleRing: "outside",
     },
     label: {
-      display: "inline-flex",
-      whiteSpace: "nowrap",
-      overflow: "hidden",
-      textOverflow: "ellipsis",
+      lineClamp: "1",
     },
     closeTrigger: {
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
       outline: "0",
-      borderRadius: "xs",
-      color: "currentColor/60",
-      _focusVisible: {
-        outline: "2px solid",
-        outlineColor: "colorPalette.500",
-        outlineOffset: "2px",
+      borderRadius: "l1",
+      color: "currentColor",
+      focusVisibleRing: "inside",
+      focusRingWidth: "2px",
+    },
+    startElement: {
+      flexShrink: 0,
+      boxSize: "var(--tag-element-size)",
+      ms: "var(--tag-element-offset)",
+      "&:has([data-scope=avatar])": {
+        boxSize: "var(--tag-avatar-size)",
+        ms: "calc(var(--tag-element-offset) * 1.5)",
+      },
+      _icon: { boxSize: "100%" },
+    },
+    endElement: {
+      flexShrink: 0,
+      boxSize: "var(--tag-element-size)",
+      me: "var(--tag-element-offset)",
+      _icon: { boxSize: "100%" },
+      "&:has(button)": {
+        ms: "calc(var(--tag-element-offset) * -1)",
       },
     },
   },
+
   variants: {
     size: {
       sm: {
         root: {
-          minH: "5",
-          minW: "5",
-          fontSize: "xs",
-          px: "0.5",
+          px: "1.5",
+          minH: "4.5",
+          gap: "1",
+          "--tag-avatar-size": "spacing.3",
+          "--tag-element-size": "spacing.3",
+          "--tag-element-offset": "-2px",
         },
         label: {
-          px: "1",
-        },
-        closeTrigger: {
-          marginEnd: "0.5",
+          textStyle: "xs",
         },
       },
       md: {
         root: {
-          minH: "6",
-          minW: "6",
-          fontSize: "sm",
-          px: "0.5",
+          px: "1.5",
+          minH: "5",
+          gap: "1",
+          "--tag-avatar-size": "spacing.3.5",
+          "--tag-element-size": "spacing.3.5",
+          "--tag-element-offset": "-2px",
         },
         label: {
-          px: "1.5",
-        },
-        closeTrigger: {
-          marginEnd: "0.5",
+          textStyle: "xs",
         },
       },
       lg: {
         root: {
-          minH: "8",
-          minW: "8",
-          fontSize: "md",
-          px: "0.5",
+          px: "2",
+          minH: "6",
+          gap: "1.5",
+          "--tag-avatar-size": "spacing.4.5",
+          "--tag-element-size": "spacing.4",
+          "--tag-element-offset": "-3px",
         },
         label: {
-          px: "1.5",
+          textStyle: "sm",
         },
-        closeTrigger: {
-          marginEnd: "1",
+      },
+      xl: {
+        root: {
+          px: "2.5",
+          minH: "8",
+          gap: "1.5",
+          "--tag-avatar-size": "spacing.6",
+          "--tag-element-size": "spacing.4.5",
+          "--tag-element-offset": "-4px",
+        },
+        label: {
+          textStyle: "sm",
         },
       },
     },
+
     variant: {
       subtle: {
         root: badgeVariant?.subtle,
@@ -105,18 +120,11 @@ export const tagSlotRecipe = defineSlotRecipe({
       surface: {
         root: badgeVariant?.surface,
       },
-      raised: {
-        root: {
-          bg: "bg.panel",
-          color: { base: "colorPalette.800", _dark: "colorPalette.300" },
-          boxShadow: "sm",
-        },
-      },
     },
   },
+
   defaultVariants: {
     size: "md",
-    variant: "subtle",
-    colorPalette: "gray",
+    variant: "surface",
   },
 })

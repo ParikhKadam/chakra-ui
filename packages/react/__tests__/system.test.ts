@@ -23,12 +23,14 @@ describe("system", () => {
 
     expect(sys.getTokenCss()).toMatchInlineSnapshot(`
       {
-        "&:where(html)": {
-          "--chakra-colors-primary": "#000",
-          "--chakra-colors-test": "",
-        },
-        ".dark &": {
-          "--chakra-colors-test": "pink",
+        "@layer tokens": {
+          "&:where(html)": {
+            "--chakra-colors-primary": "#000",
+            "--chakra-colors-test": "",
+          },
+          ".dark &": {
+            "--chakra-colors-test": "pink",
+          },
         },
       }
     `)
@@ -70,23 +72,25 @@ describe("system", () => {
 
     expect(sys.getGlobalCss()).toMatchInlineSnapshot(`
       {
-        "&body": {
-          "background": "var(--chakra-colors-primary)",
-        },
-        "@keyframes pulse": {
-          "from": {
-            "opacity": 1,
+        "@layer base": {
+          "&body": {
+            "background": "var(--chakra-colors-primary)",
           },
-          "to": {
-            "opacity": 0,
+          "@keyframes pulse": {
+            "from": {
+              "opacity": 1,
+            },
+            "to": {
+              "opacity": 0,
+            },
           },
-        },
-        "@keyframes spin": {
-          "from": {
-            "transform": "rotate(0deg)",
-          },
-          "to": {
-            "transform": "rotate(360deg)",
+          "@keyframes spin": {
+            "from": {
+              "transform": "rotate(0deg)",
+            },
+            "to": {
+              "transform": "rotate(360deg)",
+            },
           },
         },
       }
@@ -145,9 +149,66 @@ describe("system", () => {
 
     expect(sys.getTokenCss()).toMatchInlineSnapshot(`
       {
-        "&:where(:root, :host)": {
-          "--chakra-borders-initial": "1px solid var(--chakra-colors-primary)",
-          "--chakra-colors-primary": "tomato",
+        "@layer tokens": {
+          "&:where(:root, :host)": {
+            "--chakra-borders-initial": "1px solid var(--chakra-colors-primary)",
+            "--chakra-colors-primary": "tomato",
+          },
+        },
+      }
+    `)
+  })
+
+  test("responsive semantic tokens", () => {
+    const sys = createSystem({
+      theme: {
+        breakpoints: {
+          sm: "640px",
+          md: "768px",
+          lg: "1024px",
+        },
+        tokens: {
+          spacing: {
+            4: { value: "12px" },
+            6: { value: "16px" },
+            8: { value: "24px" },
+          },
+        },
+        semanticTokens: {
+          spacing: {
+            container: {
+              value: {
+                base: "{spacing.4}",
+                md: "{spacing.6}",
+                lg: "{spacing.8}",
+              },
+            },
+          },
+        },
+      },
+    })
+
+    expect(sys.getTokenCss()).toMatchInlineSnapshot(`
+      {
+        "@layer tokens": {
+          "&:where(:root, :host)": {
+            "--chakra-breakpoints-lg": "1024px",
+            "--chakra-breakpoints-md": "768px",
+            "--chakra-breakpoints-sm": "640px",
+            "--chakra-sizes-breakpoint-lg": "1024px",
+            "--chakra-sizes-breakpoint-md": "768px",
+            "--chakra-sizes-breakpoint-sm": "640px",
+            "--chakra-spacing-4": "12px",
+            "--chakra-spacing-6": "16px",
+            "--chakra-spacing-8": "24px",
+            "--chakra-spacing-container": "var(--chakra-spacing-4)",
+          },
+          "@media screen and (min-width: 48rem)": {
+            "--chakra-spacing-container": "var(--chakra-spacing-6)",
+          },
+          "@media screen and (min-width: 64rem)": {
+            "--chakra-spacing-container": "var(--chakra-spacing-8)",
+          },
         },
       }
     `)

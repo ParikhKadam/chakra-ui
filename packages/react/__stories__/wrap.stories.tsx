@@ -1,31 +1,20 @@
-import { Badge, Wrap } from "../src"
-import { DecorativeBox } from "./shared/decorative-box"
+import type { Meta } from "@storybook/react"
+import { Box } from "../src"
 
 export default {
   title: "Layout / Wrap",
-}
+  decorators: [
+    (Story) => (
+      <Box p="10">
+        <Story />
+      </Box>
+    ),
+  ],
+} satisfies Meta
 
-export const Basic = () => (
-  <Wrap gap="2" maxW="200px">
-    <Badge>Badge 1</Badge>
-    <Badge>Badge 2</Badge>
-    <Badge>Badge 3</Badge>
-    <Badge>Badge 4</Badge>
-  </Wrap>
-)
-
-export const Placeholder = () => (
-  <Wrap gap="5">
-    {Array.from({ length: 12 }).map((_, index) => (
-      <DecorativeBox boxSize="12" key={index} />
-    ))}
-  </Wrap>
-)
-
-export const Responsive = () => (
-  <Wrap gap={["12px", "24px"]} justify={["center", "flex-start"]}>
-    {Array.from({ length: 12 }).map((_, index) => (
-      <DecorativeBox boxSize="12" key={index} />
-    ))}
-  </Wrap>
-)
+export { WrapBasic as Basic } from "compositions/examples/wrap-basic"
+export { WrapResponsive as Responsive } from "compositions/examples/wrap-responsive"
+export { WrapWithAlign as Align } from "compositions/examples/wrap-with-align"
+export { WrapWithGap as Gap } from "compositions/examples/wrap-with-gap"
+export { WrapWithJustify as Justify } from "compositions/examples/wrap-with-justify"
+export { WrapWithRowColumnGap as RowColumnGap } from "compositions/examples/wrap-with-row-column-gap"

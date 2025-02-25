@@ -1,115 +1,25 @@
-import { HiChevronDown } from "react-icons/hi"
-import { Accordion, Box, For, Icon, Span, useSlotRecipe } from "../src"
-import { colorPalettes } from "./shared/color-palettes"
-import { PlaygroundTable } from "./shared/playground-table"
+import type { Meta } from "@storybook/react"
+import { Box } from "../src"
 
 export default {
   title: "Components / Accordion",
-  decorators: [(story: Function) => <Box padding="4">{story()}</Box>],
-}
+  decorators: [
+    (Story) => (
+      <Box p="10">
+        <Story />
+      </Box>
+    ),
+  ],
+} satisfies Meta
 
-const items = [
-  { value: "a", title: "First Item", text: "Some value 1..." },
-  { value: "b", title: "Second Item", text: "Some value 2..." },
-  { value: "c", title: "Third Item", text: "Some value 3..." },
-]
-
-const AccordionDemo = (props: Accordion.RootProps) => {
-  return (
-    <Accordion.Root minW="300px" {...props} defaultValue={["b"]}>
-      {items.map((item, index) => (
-        <Accordion.Item key={index} value={item.value}>
-          <h2>
-            <Accordion.ItemTrigger>
-              <Box flex="1" textAlign="start">
-                {item.title}
-              </Box>
-              <Accordion.ItemIndicator>
-                <Icon as={HiChevronDown} />
-              </Accordion.ItemIndicator>
-            </Accordion.ItemTrigger>
-          </h2>
-          <Accordion.ItemContent>
-            <Accordion.ItemBody>{item.text}</Accordion.ItemBody>
-          </Accordion.ItemContent>
-        </Accordion.Item>
-      ))}
-    </Accordion.Root>
-  )
-}
-
-export const Basic = () => {
-  return <AccordionDemo collapsible />
-}
-
-export const Variants = () => {
-  const recipe = useSlotRecipe("Accordion")
-  return (
-    <PlaygroundTable>
-      <thead>
-        <tr>
-          <td />
-          <For each={recipe.variantMap.variant}>{(v) => <td>{v}</td>}</For>
-        </tr>
-      </thead>
-      <tbody>
-        <For each={colorPalettes}>
-          {(c) => (
-            <tr>
-              <td>
-                <Span fontSize="sm" color="fg.muted" minW="8ch">
-                  {c}
-                </Span>
-              </td>
-              <For each={recipe.variantMap.variant}>
-                {(v) => (
-                  <td>
-                    <AccordionDemo variant={v} colorPalette={c} />
-                  </td>
-                )}
-              </For>
-            </tr>
-          )}
-        </For>
-      </tbody>
-    </PlaygroundTable>
-  )
-}
-
-export const Sizes = () => {
-  const recipe = useSlotRecipe("Accordion")
-  return (
-    <PlaygroundTable>
-      <thead>
-        <tr>
-          <td />
-          <For each={recipe.variantMap.size}>{(v) => <td>{v}</td>}</For>
-        </tr>
-      </thead>
-      <tbody>
-        <For each={colorPalettes}>
-          {(c) => (
-            <tr>
-              <td>
-                <Span fontSize="sm" color="fg.muted" minW="8ch">
-                  {c}
-                </Span>
-              </td>
-              <For each={recipe.variantMap.size}>
-                {(v) => (
-                  <td>
-                    <AccordionDemo
-                      size={v}
-                      colorPalette={c}
-                      variant="contained"
-                    />
-                  </td>
-                )}
-              </For>
-            </tr>
-          )}
-        </For>
-      </tbody>
-    </PlaygroundTable>
-  )
-}
+export { AccordionBasic as Basic } from "compositions/examples/accordion-basic"
+export { AccordionControlled as Controlled } from "compositions/examples/accordion-controlled"
+export { AccordionSizeTable as Sizes } from "compositions/examples/accordion-size-table"
+export { AccordionVariantTable as Variants } from "compositions/examples/accordion-variant-table"
+export { AccordionWithActions as Actions } from "compositions/examples/accordion-with-actions"
+export { AccordionWithAvatar as Avatar } from "compositions/examples/accordion-with-avatar"
+export { AccordionWithDisabledItem as DisabledItem } from "compositions/examples/accordion-with-disabled-item"
+export { AccordionWithIcon as Icon } from "compositions/examples/accordion-with-icon"
+export { AccordionWithMultiple as Multiple } from "compositions/examples/accordion-with-multiple"
+export { AccordionWithSubtext as Subtext } from "compositions/examples/accordion-with-subtext"
+export { AccordionWithoutSnippet as WithoutSnippet } from "compositions/examples/accordion-without-snippet"

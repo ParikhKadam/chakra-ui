@@ -1,5 +1,6 @@
 import { createColorMixTransform } from "./styled-system/color-mix"
-import { defineConfig } from "./styled-system/config"
+import { defineConditions, defineConfig } from "./styled-system/config"
+import { cssVar } from "./styled-system/css-var"
 
 const isCssVar = (v: string) => /^var\(--.+\)$/.test(v)
 
@@ -11,145 +12,250 @@ const deg = (v: any) => {
   return typeof v === "number" || unitless ? `${v}deg` : v
 }
 
+const createFocusRing = (selector: string) => {
+  return {
+    values: ["outside", "inside", "mixed", "none"],
+    transform(value: any, { token }: any) {
+      const focusRingColor = token("colors.colorPalette.focusRing")
+      const styles: Record<string, any> = {
+        inside: {
+          "--focus-ring-color": focusRingColor,
+          [selector]: {
+            outlineOffset: "0px",
+            outlineWidth: "var(--focus-ring-width, 1px)",
+            outlineColor: "var(--focus-ring-color)",
+            outlineStyle: "var(--focus-ring-style, solid)",
+            borderColor: "var(--focus-ring-color)",
+          },
+        },
+        outside: {
+          "--focus-ring-color": focusRingColor,
+          [selector]: {
+            outlineWidth: "var(--focus-ring-width, 2px)",
+            outlineOffset: "var(--focus-ring-offset, 2px)",
+            outlineStyle: "var(--focus-ring-style, solid)",
+            outlineColor: "var(--focus-ring-color)",
+          },
+        },
+        mixed: {
+          "--focus-ring-color": focusRingColor,
+          [selector]: {
+            outlineWidth: "var(--focus-ring-width, 3px)",
+            outlineStyle: "var(--focus-ring-style, solid)",
+            outlineColor:
+              "color-mix(in srgb, var(--focus-ring-color), transparent 60%)",
+            borderColor: "var(--focus-ring-color)",
+          },
+        },
+        none: {
+          "--focus-ring-color": focusRingColor,
+          [selector]: {
+            outline: "none",
+          },
+        },
+      }
+
+      return styles[value] ?? {}
+    },
+  }
+}
+
 const divideColor = createColorMixTransform("borderColor")
 
+const createTransition = (value: string) => {
+  return {
+    transition: value,
+    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+    transitionDuration: "150ms",
+  }
+}
+
+export const defaultConditions = defineConditions({
+  hover: [
+    "@media (hover: hover)",
+    "&:is(:hover, [data-hover]):not(:disabled, [data-disabled])",
+  ],
+  active:
+    "&:is(:active, [data-active]):not(:disabled, [data-disabled], [data-state=open])",
+  focus: "&:is(:focus, [data-focus])",
+  focusWithin: "&:is(:focus-within, [data-focus-within])",
+  focusVisible: "&:is(:focus-visible, [data-focus-visible])",
+  disabled:
+    "&:is(:disabled, [disabled], [data-disabled], [aria-disabled=true])",
+  visited: "&:visited",
+  target: "&:target",
+  readOnly: "&:is([data-readonly], [aria-readonly=true], [readonly])",
+  readWrite: "&:read-write",
+  empty: "&:is(:empty, [data-empty])",
+  checked:
+    "&:is(:checked, [data-checked], [aria-checked=true], [data-state=checked])",
+  enabled: "&:enabled",
+  expanded:
+    "&:is([aria-expanded=true], [data-expanded], [data-state=expanded])",
+  highlighted: "&[data-highlighted]",
+  complete: "&[data-complete]",
+  incomplete: "&[data-incomplete]",
+  dragging: "&[data-dragging]",
+
+  before: "&::before",
+  after: "&::after",
+  firstLetter: "&::first-letter",
+  firstLine: "&::first-line",
+  marker: "&::marker",
+  selection: "&::selection",
+  file: "&::file-selector-button",
+  backdrop: "&::backdrop",
+
+  first: "&:first-of-type",
+  last: "&:last-of-type",
+  notFirst: "&:not(:first-of-type)",
+  notLast: "&:not(:last-of-type)",
+  only: "&:only-child",
+  even: "&:nth-of-type(even)",
+  odd: "&:nth-of-type(odd)",
+
+  peerFocus: ".peer:is(:focus, [data-focus]) ~ &",
+  peerHover:
+    ".peer:is(:hover, [data-hover]):not(:disabled, [data-disabled]) ~ &",
+  peerActive:
+    ".peer:is(:active, [data-active]):not(:disabled, [data-disabled]) ~ &",
+  peerFocusWithin: ".peer:focus-within ~ &",
+  peerFocusVisible: ".peer:is(:focus-visible, [data-focus-visible]) ~ &",
+  peerDisabled: ".peer:is(:disabled, [disabled], [data-disabled]) ~ &",
+  peerChecked:
+    ".peer:is(:checked, [data-checked], [aria-checked=true], [data-state=checked]) ~ &",
+  peerInvalid: ".peer:is(:invalid, [data-invalid], [aria-invalid=true]) ~ &",
+  peerExpanded:
+    ".peer:is([aria-expanded=true], [data-expanded], [data-state=expanded]) ~ &",
+  peerPlaceholderShown: ".peer:placeholder-shown ~ &",
+
+  groupFocus: ".group:is(:focus, [data-focus]) &",
+  groupHover:
+    ".group:is(:hover, [data-hover]):not(:disabled, [data-disabled]) &",
+  groupActive:
+    ".group:is(:active, [data-active]):not(:disabled, [data-disabled]) &",
+  groupFocusWithin: ".group:focus-within &",
+  groupFocusVisible: ".group:is(:focus-visible, [data-focus-visible]) &",
+  groupDisabled: ".group:is(:disabled, [disabled], [data-disabled]) &",
+  groupChecked:
+    ".group:is(:checked, [data-checked], [aria-checked=true], [data-state=checked]) &",
+  groupExpanded:
+    ".group:is([aria-expanded=true], [data-expanded], [data-state=expanded]) &",
+  groupInvalid: ".group:invalid &",
+
+  indeterminate:
+    "&:is(:indeterminate, [data-indeterminate], [aria-checked=mixed], [data-state=indeterminate])",
+  required: "&:is([data-required], [aria-required=true])",
+  valid: "&:is([data-valid], [data-state=valid])",
+  invalid: "&:is([data-invalid], [aria-invalid=true], [data-state=invalid])",
+  autofill: "&:autofill",
+  inRange: "&:is(:in-range, [data-in-range])",
+  outOfRange: "&:is(:out-of-range, [data-outside-range])",
+  placeholder: "&::placeholder, &[data-placeholder]",
+  placeholderShown: "&:is(:placeholder-shown, [data-placeholder-shown])",
+  pressed: "&:is([aria-pressed=true], [data-pressed])",
+  selected: "&:is([aria-selected=true], [data-selected])",
+  grabbed: "&:is([aria-grabbed=true], [data-grabbed])",
+  underValue: "&[data-state=under-value]",
+  overValue: "&[data-state=over-value]",
+  atValue: "&[data-state=at-value]",
+
+  default: "&:default",
+  optional: "&:optional",
+  open: "&:is([open], [data-open], [data-state=open])",
+  closed: "&:is([closed], [data-closed], [data-state=closed])",
+  fullscreen: "&is(:fullscreen, [data-fullscreen])",
+  loading: "&:is([data-loading], [aria-busy=true])",
+  hidden: "&:is([hidden], [data-hidden])",
+
+  current: "&[data-current]",
+  currentPage: "&[aria-current=page]",
+  currentStep: "&[aria-current=step]",
+  today: "&[data-today]",
+  unavailable: "&[data-unavailable]",
+  rangeStart: "&[data-range-start]",
+  rangeEnd: "&[data-range-end]",
+  now: "&[data-now]",
+  topmost: "&[data-topmost]",
+
+  motionReduce: "@media (prefers-reduced-motion: reduce)",
+  motionSafe: "@media (prefers-reduced-motion: no-preference)",
+  print: "@media print",
+  landscape: "@media (orientation: landscape)",
+  portrait: "@media (orientation: portrait)",
+
+  dark: ".dark &, .dark .chakra-theme:not(.light) &",
+  light: ":root &, .light &",
+  osDark: "@media (prefers-color-scheme: dark)",
+  osLight: "@media (prefers-color-scheme: light)",
+
+  highContrast: "@media (forced-colors: active)",
+  lessContrast: "@media (prefers-contrast: less)",
+  moreContrast: "@media (prefers-contrast: more)",
+
+  ltr: "[dir=ltr] &",
+  rtl: "[dir=rtl] &",
+
+  scrollbar: "&::-webkit-scrollbar",
+  scrollbarThumb: "&::-webkit-scrollbar-thumb",
+  scrollbarTrack: "&::-webkit-scrollbar-track",
+
+  horizontal: "&[data-orientation=horizontal]",
+  vertical: "&[data-orientation=vertical]",
+
+  icon: "& :where(svg)",
+  starting: "@starting-style",
+})
+
+const currentBgVar = cssVar("bg-currentcolor")
+
+const isCurrentBgVar = (value: string) =>
+  value === currentBgVar.ref || value === "currentBg"
+
+const colorValues = (theme: any) => ({
+  ...theme("colors"),
+  currentBg: currentBgVar,
+})
+
 export const defaultBaseConfig = defineConfig({
-  conditions: {
-    hover: "&:is(:hover, [data-hover]):not(:disabled, [data-disabled])",
-    active: "&:is(:active, [data-active]):not(:disabled, [data-disabled])",
-    focus: "&:is(:focus, [data-focus])",
-    focusWithin: "&:is(:focus-within, [data-focus-within])",
-    focusVisible: "&:is(:focus-visible, [data-focus-visible])",
-    disabled:
-      "&:is(:disabled, [disabled], [data-disabled], [aria-disabled=true])",
-    visited: "&:visited",
-    target: "&:target",
-    readOnly: "&:is([data-readonly], [aria-readonly=true], [readonly])",
-    readWrite: "&:read-write",
-    empty: "&:is(:empty, [data-empty])",
-    checked:
-      "&:is(:checked, [data-checked], [aria-checked=true], [data-state=checked])",
-    enabled: "&:enabled",
-    expanded:
-      "&:is([aria-expanded=true], [data-expanded], [data-state=expanded])",
-    highlighted: "&[data-highlighted]",
-    complete: "&[data-complete]",
-    incomplete: "&[data-incomplete]",
-
-    before: "&::before",
-    after: "&::after",
-    firstLetter: "&::first-letter",
-    firstLine: "&::first-line",
-    marker: "&::marker",
-    selection: "&::selection",
-    file: "&::file-selector-button",
-    backdrop: "&::backdrop",
-
-    first: "&:first-of-type",
-    last: "&:last-of-type",
-    notFirst: "&:not(:first-of-type)",
-    notLast: "&:not(:last-of-type)",
-    only: "&:only-child",
-    even: "&:nth-of-type(even)",
-    odd: "&:nth-of-type(odd)",
-
-    peerFocus: ".peer:is(:focus, [data-focus]) ~ &",
-    peerHover:
-      ".peer:is(:hover, [data-hover]):not(:disabled, [data-disabled]) ~ &",
-    peerActive:
-      ".peer:is(:active, [data-active]):not(:disabled, [data-disabled]) ~ &",
-    peerFocusWithin: ".peer:focus-within ~ &",
-    peerFocusVisible: ".peer:is(:focus-visible, [data-focus-visible]) ~ &",
-    peerDisabled: ".peer:is(:disabled, [disabled], [data-disabled]) ~ &",
-    peerChecked:
-      ".peer:is(:checked, [data-checked], [aria-checked=true], [data-state=checked]) ~ &",
-    peerInvalid: ".peer:is(:invalid, [data-invalid], [aria-invalid=true]) ~ &",
-    peerExpanded:
-      ".peer:is([aria-expanded=true], [data-expanded], [data-state=expanded]) ~ &",
-    peerPlaceholderShown: ".peer:placeholder-shown ~ &",
-
-    groupFocus: ".group:is(:focus, [data-focus]) &",
-    groupHover:
-      ".group:is(:hover, [data-hover]):not(:disabled, [data-disabled]) &",
-    groupActive:
-      ".group:is(:active, [data-active]):not(:disabled, [data-disabled]) &",
-    groupFocusWithin: ".group:focus-within &",
-    groupFocusVisible: ".group:is(:focus-visible, [data-focus-visible]) &",
-    groupDisabled: ".group:is(:disabled, [disabled], [data-disabled]) &",
-    groupChecked:
-      ".group:is(:checked, [data-checked], [aria-checked=true], [data-state=checked]) &",
-    groupExpanded:
-      ".group:is([aria-expanded=true], [data-expanded], [data-state=expanded]) &",
-    groupInvalid: ".group:invalid &",
-
-    indeterminate:
-      "&:is(:indeterminate, [data-indeterminate], [aria-checked=mixed], [data-state=indeterminate])",
-    required: "&:is([data-required], [aria-required=true])",
-    valid: "&:is([data-valid], [data-state=valid])",
-    invalid: "&:is([data-invalid], [aria-invalid=true], [data-state=invalid])",
-    autofill: "&:autofill",
-    inRange: "&:in-range",
-    outOfRange: "&:out-of-range",
-    placeholder: "&::placeholder, &[data-placeholder]",
-    placeholderShown: "&:is(:placeholder-shown, [data-placeholder-shown])",
-    pressed: "&:is([aria-pressed=true], [data-pressed])",
-    selected: "&:is([aria-selected=true], [data-selected])",
-    grabbed: "&:is([aria-grabbed=true], [data-grabbed])",
-
-    default: "&:default",
-    optional: "&:optional",
-    open: "&:is([open], [data-open], [data-state=open])",
-    closed: "&:is([closed], [data-closed], [data-state=closed])",
-    fullscreen: "&is(:fullscreen, [data-fullscreen])",
-    loading: "&:is([data-loading], [aria-busy=true])",
-    hidden: "&:is([hidden], [data-hidden])",
-
-    current: "&[data-current]",
-    currentPage: "&[aria-current=page]",
-    currentStep: "&[aria-current=step]",
-
-    motionReduce: "@media (prefers-reduced-motion: reduce)",
-    motionSafe: "@media (prefers-reduced-motion: no-preference)",
-    print: "@media print",
-    landscape: "@media (orientation: landscape)",
-    portrait: "@media (orientation: portrait)",
-
-    dark: " &.dark, .dark &",
-    light: " &.light, .light &",
-    mediaDark: "@media (prefers-color-scheme: dark)",
-    mediaLight: "@media (prefers-color-scheme: light)",
-
-    highContrast: "@media (forced-colors: active)",
-    lessContrast: "@media (prefers-contrast: less)",
-    moreContrast: "@media (prefers-contrast: more)",
-
-    ltr: "[dir=ltr] &",
-    rtl: "[dir=rtl] &",
-
-    scrollbar: "&::-webkit-scrollbar",
-    scrollbarThumb: "&::-webkit-scrollbar-thumb",
-    scrollbarTrack: "&::-webkit-scrollbar-track",
-
-    horizontal: "&[data-orientation=horizontal]",
-    vertical: "&[data-orientation=vertical]",
-  },
+  conditions: defaultConditions,
   utilities: {
     // background
     background: {
-      values: "colors",
+      values: colorValues,
       shorthand: ["bg"],
-      transform: createColorMixTransform("background"),
+      transform(value, args) {
+        if (isCurrentBgVar(args.raw)) return { background: currentBgVar.ref }
+        const styleObj = createColorMixTransform("background")(value, args)
+        return { ...styleObj, [currentBgVar.var]: styleObj?.background }
+      },
     },
     backgroundColor: {
-      values: "colors",
+      values: colorValues,
       shorthand: ["bgColor"],
-      transform: createColorMixTransform("backgroundColor"),
+      transform(value, args) {
+        if (isCurrentBgVar(args.raw))
+          return { backgroundColor: currentBgVar.ref }
+        const styleObj = createColorMixTransform("backgroundColor")(value, args)
+        return {
+          ...styleObj,
+          [currentBgVar.var]: styleObj?.backgroundColor,
+        }
+      },
     },
     backgroundSize: { shorthand: ["bgSize"] },
     backgroundPosition: { shorthand: ["bgPos"] },
     backgroundRepeat: { shorthand: ["bgRepeat"] },
     backgroundAttachment: { shorthand: ["bgAttachment"] },
-    backgroundClip: { shorthand: ["bgClip"] },
+    backgroundClip: {
+      shorthand: ["bgClip"],
+      values: ["text"],
+      transform(value) {
+        return value === "text"
+          ? { color: "transparent", backgroundClip: "text" }
+          : { backgroundClip: value }
+      },
+    },
     backgroundGradient: {
       shorthand: ["bgGradient"],
       values(theme) {
@@ -174,24 +280,30 @@ export const defaultBaseConfig = defineConfig({
       },
     },
     gradientFrom: {
-      values: "colors",
-      transform: (value) => ({ "--gradient-from": value }),
+      values: colorValues,
+      transform: createColorMixTransform("--gradient-from"),
     },
     gradientTo: {
-      values: "colors",
-      transform: (value) => ({ "--gradient-to": value }),
+      values: colorValues,
+      transform: createColorMixTransform("--gradient-to"),
     },
     gradientVia: {
-      values: "colors",
-      transform(value) {
+      values: colorValues,
+      transform(value, args) {
+        const styles = createColorMixTransform("--gradient-via")(value, args)
         return {
-          "--gradient-via": value,
+          ...styles,
           "--gradient-via-stops":
             "var(--gradient-from), var(--gradient-via), var(--gradient-to)",
         }
       },
     },
-    backgroundImage: { values: "gradients", shorthand: ["bgImg", "bgImage"] },
+    backgroundImage: {
+      values(theme) {
+        return { ...theme("gradients"), ...theme("assets") }
+      },
+      shorthand: ["bgImg", "bgImage"],
+    },
     // border
     border: { values: "borders" },
     borderTop: { values: "borders" },
@@ -206,40 +318,40 @@ export const defaultBaseConfig = defineConfig({
     borderBlock: { values: "borders", shorthand: ["borderY"] },
     // border colors
     borderColor: {
-      values: "colors",
+      values: colorValues,
       transform: createColorMixTransform("borderColor"),
     },
     borderTopColor: {
-      values: "colors",
+      values: colorValues,
       transform: createColorMixTransform("borderTopColor"),
     },
     borderBlockStartColor: {
-      values: "colors",
+      values: colorValues,
       transform: createColorMixTransform("borderBlockStartColor"),
     },
     borderBottomColor: {
-      values: "colors",
+      values: colorValues,
       transform: createColorMixTransform("borderBottomColor"),
     },
     borderBlockEndColor: {
-      values: "colors",
+      values: colorValues,
       transform: createColorMixTransform("borderBlockEndColor"),
     },
     borderLeftColor: {
-      values: "colors",
+      values: colorValues,
       transform: createColorMixTransform("borderLeftColor"),
     },
     borderInlineStartColor: {
-      values: "colors",
+      values: colorValues,
       shorthand: ["borderStartColor"],
       transform: createColorMixTransform("borderInlineStartColor"),
     },
     borderRightColor: {
-      values: "colors",
+      values: colorValues,
       transform: createColorMixTransform("borderRightColor"),
     },
     borderInlineEndColor: {
-      values: "colors",
+      values: colorValues,
       shorthand: ["borderEndColor"],
       transform: createColorMixTransform("borderInlineEndColor"),
     },
@@ -353,6 +465,10 @@ export const defaultBaseConfig = defineConfig({
     borderBottomWidth: { values: "borderWidths" },
     borderBlockEndWidth: { values: "borderWidths" },
     borderRightWidth: { values: "borderWidths" },
+    borderInlineWidth: {
+      values: "borderWidths",
+      shorthand: ["borderXWidth"],
+    },
     borderInlineStartWidth: {
       values: "borderWidths",
       shorthand: ["borderStartWidth"],
@@ -362,21 +478,25 @@ export const defaultBaseConfig = defineConfig({
       shorthand: ["borderEndWidth"],
     },
     borderLeftWidth: { values: "borderWidths" },
+    borderBlockWidth: {
+      values: "borderWidths",
+      shorthand: ["borderYWidth"],
+    },
     // colors
     color: {
-      values: "colors",
+      values: colorValues,
       transform: createColorMixTransform("color"),
     },
     fill: {
-      values: "colors",
+      values: colorValues,
       transform: createColorMixTransform("fill"),
     },
     stroke: {
-      values: "colors",
+      values: colorValues,
       transform: createColorMixTransform("stroke"),
     },
     accentColor: {
-      values: "colors",
+      values: colorValues,
       transform: createColorMixTransform("accentColor"),
     },
     // divide
@@ -403,7 +523,7 @@ export const defaultBaseConfig = defineConfig({
       },
     },
     divideColor: {
-      values: "colors",
+      values: colorValues,
       transform(value, args) {
         return {
           "& > :not(style, [hidden]) ~ :not(style, [hidden])": divideColor(
@@ -426,7 +546,7 @@ export const defaultBaseConfig = defineConfig({
     // effects
     boxShadow: { values: "shadows", shorthand: ["shadow"] },
     boxShadowColor: {
-      values: "colors",
+      values: colorValues,
       transform: createColorMixTransform("--shadow-color"),
       shorthand: ["shadowColor"],
     },
@@ -444,7 +564,10 @@ export const defaultBaseConfig = defineConfig({
         }
       },
     },
-    blur: { transform: (v) => ({ "--blur": wrap("blur", v) }) },
+    blur: {
+      values: "blurs",
+      transform: (v) => ({ "--blur": wrap("blur", v) }),
+    },
     brightness: {
       transform: (v) => ({ "--brightness": wrap("brightness", v) }),
     },
@@ -513,8 +636,8 @@ export const defaultBaseConfig = defineConfig({
     // flexbox
     flexBasis: { values: "sizes" },
     gap: { values: "spacing" },
-    rowGap: { values: "spacing" },
-    columnGap: { values: "spacing" },
+    rowGap: { values: "spacing", shorthand: ["gapY"] },
+    columnGap: { values: "spacing", shorthand: ["gapX"] },
     flexDirection: { shorthand: ["flexDir"] },
     // grid
     gridGap: { values: "spacing" },
@@ -522,8 +645,30 @@ export const defaultBaseConfig = defineConfig({
     gridRowGap: { values: "spacing" },
     // interactivity
     outlineColor: {
-      values: "colors",
+      values: colorValues,
       transform: createColorMixTransform("outlineColor"),
+    },
+    focusRing: createFocusRing("&:is(:focus, [data-focus])"),
+    focusVisibleRing: createFocusRing(
+      "&:is(:focus-visible, [data-focus-visible])",
+    ),
+    focusRingColor: {
+      values: colorValues,
+      transform: createColorMixTransform("--focus-ring-color"),
+    },
+    focusRingOffset: {
+      values: "spacing",
+      transform: (v) => ({ "--focus-ring-offset": v }),
+    },
+    focusRingWidth: {
+      values: "borderWidths",
+      property: "outlineWidth",
+      transform: (v) => ({ "--focus-ring-width": v }),
+    },
+    focusRingStyle: {
+      values: "borderStyles",
+      property: "outlineStyle",
+      transform: (v) => ({ "--focus-ring-style": v }),
     },
     // layout
     aspectRatio: { values: "aspectRatios" },
@@ -531,7 +676,11 @@ export const defaultBaseConfig = defineConfig({
     inlineSize: { values: "sizes" },
     height: { values: "sizes", shorthand: ["h"] },
     blockSize: { values: "sizes" },
-    boxSize: { values: "sizes", transform: (v) => ({ width: v, height: v }) },
+    boxSize: {
+      values: "sizes",
+      property: "width",
+      transform: (v) => ({ width: v, height: v }),
+    },
     minWidth: { values: "sizes", shorthand: ["minW"] },
     minInlineSize: { values: "sizes" },
     minHeight: { values: "sizes", shorthand: ["minH"] },
@@ -543,17 +692,62 @@ export const defaultBaseConfig = defineConfig({
     hideFrom: {
       values: "breakpoints",
       //@ts-ignore
-      transform: (v) => ({ [`@breakpoint ${v}`]: { display: "none" } }),
+      transform: (value, { raw, token }) => {
+        const bp = token.raw(`breakpoints.${raw}`)
+        const media = bp
+          ? `@breakpoint ${raw}`
+          : `@media screen and (min-width: ${value})`
+        return {
+          [media]: { display: "none" },
+        }
+      },
     },
     hideBelow: {
       values: "breakpoints",
       //@ts-ignore
-      transform: (v) => ({ [`@breakpoint ${v}Down`]: { display: "none" } }),
+      transform(value, { raw, token }) {
+        const bp = token.raw(`breakpoints.${raw}`)
+        const media = bp
+          ? `@breakpoint ${raw}Down`
+          : `@media screen and (max-width: ${value})`
+        return {
+          [media]: {
+            display: "none",
+          },
+        }
+      },
     },
     // scroll
     overscrollBehavior: { shorthand: ["overscroll"] },
     overscrollBehaviorX: { shorthand: ["overscrollX"] },
     overscrollBehaviorY: { shorthand: ["overscrollY"] },
+    scrollbar: {
+      values: ["visible", "hidden"],
+      transform(v) {
+        switch (v) {
+          case "visible":
+            return {
+              msOverflowStyle: "auto",
+              scrollbarWidth: "auto",
+              "&::-webkit-scrollbar": { display: "block" },
+            }
+          case "hidden":
+            return {
+              msOverflowStyle: "none",
+              scrollbarWidth: "none",
+              "&::-webkit-scrollbar": { display: "none" },
+            }
+          default:
+            return {}
+        }
+      },
+    },
+    scrollbarColor: {
+      values: colorValues,
+      transform: createColorMixTransform("scrollbarColor"),
+    },
+    scrollbarGutter: { values: "spacing" },
+    scrollbarWidth: { values: "sizes" },
     // scroll margin
     scrollMargin: { values: "spacing" },
     scrollMarginTop: { values: "spacing" },
@@ -574,11 +768,29 @@ export const defaultBaseConfig = defineConfig({
     scrollPaddingBottom: { values: "spacing" },
     scrollPaddingLeft: { values: "spacing" },
     scrollPaddingRight: { values: "spacing" },
-    scrollPaddingX: { values: "spacing" },
-    scrollPaddingY: { values: "spacing" },
+    scrollPaddingInline: { values: "spacing", shorthand: ["scrollPaddingX"] },
+    scrollPaddingBlock: { values: "spacing", shorthand: ["scrollPaddingY"] },
+    // scroll snap
+    scrollSnapType: {
+      values: {
+        none: "none",
+        x: "x var(--scroll-snap-strictness)",
+        y: "y var(--scroll-snap-strictness)",
+        both: "both var(--scroll-snap-strictness)",
+      },
+    },
+    scrollSnapStrictness: {
+      values: ["mandatory", "proximity"],
+      transform: (v) => ({ "--scroll-snap-strictness": v }),
+    },
+    scrollSnapMargin: { values: "spacing" },
+    scrollSnapMarginTop: { values: "spacing" },
+    scrollSnapMarginBottom: { values: "spacing" },
+    scrollSnapMarginLeft: { values: "spacing" },
+    scrollSnapMarginRight: { values: "spacing" },
     // list
     listStylePosition: { shorthand: ["listStylePos"] },
-    listStyleImage: { shorthand: ["listStyleImg"] },
+    listStyleImage: { values: "assets", shorthand: ["listStyleImg"] },
     // position
     position: { shorthand: ["pos"] },
     zIndex: { values: "zIndex" },
@@ -612,14 +824,14 @@ export const defaultBaseConfig = defineConfig({
       },
     },
     ringColor: {
-      values: "colors",
+      values: colorValues,
       transform: createColorMixTransform("--ring-color"),
     },
     ringOffset: {
       transform: (value) => ({ "--ring-offset-width": value }),
     },
     ringOffsetColor: {
-      values: "colors",
+      values: colorValues,
       transform: createColorMixTransform("--ring-offset-color"),
     },
     ringInset: {
@@ -655,7 +867,7 @@ export const defaultBaseConfig = defineConfig({
     // text decoration
     textDecoration: { shorthand: ["textDecor"] },
     textDecorationColor: {
-      values: "colors",
+      values: colorValues,
       transform: createColorMixTransform("textDecorationColor"),
     },
     textShadow: { values: "shadows" },
@@ -684,12 +896,64 @@ export const defaultBaseConfig = defineConfig({
         }
       },
     },
+    spaceXReverse: {
+      values: { type: "boolean" },
+      transform(value) {
+        return {
+          "& > :not(style, [hidden]) ~ :not(style, [hidden])": {
+            "--space-x-reverse": value ? "1" : undefined,
+          },
+        }
+      },
+    },
+    spaceX: {
+      property: "marginInlineStart",
+      values: "spacing",
+      transform: (v) => ({
+        "& > :not(style, [hidden]) ~ :not(style, [hidden])": {
+          "--space-x-reverse": "0",
+          marginInlineStart: `calc(${v} * calc(1 - var(--space-x-reverse)))`,
+          marginInlineEnd: `calc(${v} * var(--space-x-reverse))`,
+        },
+      }),
+    },
+    spaceYReverse: {
+      values: { type: "boolean" },
+      transform(value) {
+        return {
+          "& > :not(style, [hidden]) ~ :not(style, [hidden])": {
+            "--space-y-reverse": value ? "1" : undefined,
+          },
+        }
+      },
+    },
+    spaceY: {
+      property: "marginTop",
+      values: "spacing",
+      transform: (v) => ({
+        "& > :not(style, [hidden]) ~ :not(style, [hidden])": {
+          "--space-y-reverse": "0",
+          marginTop: `calc(${v} * calc(1 - var(--space-y-reverse)))`,
+          marginBottom: `calc(${v} * var(--space-y-reverse))`,
+        },
+      }),
+    },
     rotate: {
       transform(value) {
         if (value !== "auto") return { rotate: deg(value) }
         return {
           rotate: `var(--rotate-x, 0) var(--rotate-y, 0) var(--rotate-z, 0)`,
         }
+      },
+    },
+    rotateX: {
+      transform(value) {
+        return { "--rotate-x": deg(value) }
+      },
+    },
+    rotateY: {
+      transform(value) {
+        return { "--rotate-y": deg(value) }
       },
     },
     // transform / translate
@@ -710,6 +974,51 @@ export const defaultBaseConfig = defineConfig({
       transform: (v) => ({ "--translate-y": v }),
     },
     // transition
+    transition: {
+      values: [
+        "all",
+        "common",
+        "colors",
+        "opacity",
+        "position",
+        "backgrounds",
+        "size",
+        "shadow",
+        "transform",
+      ],
+      transform(value) {
+        switch (value) {
+          case "all":
+            return createTransition("all")
+          case "position":
+            return createTransition(
+              "left, right, top, bottom, inset-inline, inset-block",
+            )
+          case "colors":
+            return createTransition(
+              "color, background-color, border-color, text-decoration-color, fill, stroke",
+            )
+          case "opacity":
+            return createTransition("opacity")
+          case "shadow":
+            return createTransition("box-shadow")
+          case "transform":
+            return createTransition("transform")
+          case "size":
+            return createTransition("width, height")
+          case "backgrounds":
+            return createTransition(
+              "background, background-color, background-image, background-position",
+            )
+          case "common":
+            return createTransition(
+              "color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter",
+            )
+          default:
+            return { transition: value }
+        }
+      },
+    },
     transitionDuration: { values: "durations" },
     transitionProperty: {
       values: {
@@ -717,25 +1026,25 @@ export const defaultBaseConfig = defineConfig({
           "background-color, border-color, color, fill, stroke, opacity, box-shadow, translate, transform",
         colors: "background-color, border-color, color, fill, stroke",
         size: "width, height",
-        position: "left, right, top, bottom",
-        background: "background-color, background-image, background-position",
+        position: "left, right, top, bottom, inset-inline, inset-block",
+        background:
+          "background, background-color, background-image, background-position",
       },
     },
-    transitionTimingFunction: {
-      values: "easings",
-      shorthand: ["transitionTiming"],
-    },
+    transitionTimingFunction: { values: "easings" },
     // animation
     animation: { values: "animations" },
     animationDuration: { values: "durations" },
     animationDelay: { values: "durations" },
+    animationTimingFunction: { values: "easings" },
     // typography
     fontFamily: { values: "fonts" },
     fontSize: { values: "fontSizes" },
     fontWeight: { values: "fontWeights" },
     lineHeight: { values: "lineHeights" },
     letterSpacing: { values: "letterSpacings" },
-    truncated: {
+    textIndent: { values: "spacing" },
+    truncate: {
       values: { type: "boolean" },
       transform(value) {
         if (value === true) {
@@ -748,15 +1057,19 @@ export const defaultBaseConfig = defineConfig({
         return {}
       },
     },
-    noOfLines: {
+    lineClamp: {
       transform(value) {
+        if (value === "none") {
+          return {
+            WebkitLineClamp: "unset",
+          }
+        }
         return {
-          display: "-webkit-box",
-          WebkitBoxOrient: "vertical",
-          WebkitLineClamp: "var(--line-clamp)",
-          "--line-clamp": value,
           overflow: "hidden",
-          textOverflow: "ellipsis",
+          display: "-webkit-box",
+          WebkitLineClamp: value,
+          WebkitBoxOrient: "vertical",
+          textWrap: "wrap",
         }
       },
     },
@@ -780,9 +1093,10 @@ export const defaultBaseConfig = defineConfig({
       },
     },
     caretColor: {
-      values: "colors",
+      values: colorValues,
       transform: createColorMixTransform("caretColor"),
     },
+    cursor: { values: "cursor" },
   },
 })
 

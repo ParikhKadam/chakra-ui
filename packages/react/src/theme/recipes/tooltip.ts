@@ -1,30 +1,30 @@
-import { tooltipAnatomy } from "@ark-ui/anatomy"
+import { tooltipAnatomy } from "../../anatomy"
 import { defineSlotRecipe } from "../../styled-system"
 
 export const tooltipSlotRecipe = defineSlotRecipe({
   slots: tooltipAnatomy.keys(),
+  className: "chakra-tooltip",
   base: {
     content: {
-      "--tooltip-bg": "colors.bg.inverse",
+      "--tooltip-bg": "colors.bg.inverted",
       bg: "var(--tooltip-bg)",
-      color: "fg.inverse",
-      px: "2",
-      py: "0.5",
-      borderRadius: "sm",
+      color: "fg.inverted",
+      px: "2.5",
+      py: "1",
+      borderRadius: "l2",
       fontWeight: "medium",
-      fontSize: "sm",
+      textStyle: "xs",
       boxShadow: "md",
       maxW: "xs",
       zIndex: "tooltip",
+      transformOrigin: "var(--transform-origin)",
       _open: {
-        "--enter-opacity": "0",
-        "--enter-scale": "0.95",
-        animation: "enter 0.2s cubic-bezier(0, 0, 0.2, 1)",
+        animationStyle: "scale-fade-in",
+        animationDuration: "fast",
       },
       _closed: {
-        "--exit-opacity": "0",
-        "--exit-scale": "0.95",
-        animation: "exit 0.1s cubic-bezier(0.4, 0, 1, 1)",
+        animationStyle: "scale-fade-out",
+        animationDuration: "fast",
       },
     },
     arrow: {

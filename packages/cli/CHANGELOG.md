@@ -1,5 +1,359 @@
 # @chakra-ui/cli
 
+## 3.8.1
+
+## 3.8.0
+
+## 3.7.0
+
+## 3.6.0
+
+### Patch Changes
+
+- [`07f2c56`](https://github.com/chakra-ui/chakra-ui/commit/07f2c56af4e6224d419a82217f4d3351e1b6ca87)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - Fix issue where CLI
+  doesn't properly check for existing files when adding snippets.
+
+## 3.5.1
+
+## 3.5.0
+
+## 3.4.0
+
+## 3.3.3
+
+## 3.3.2
+
+## 3.3.1
+
+## 3.3.0
+
+### Minor Changes
+
+- [`e5ecd91`](https://github.com/chakra-ui/chakra-ui/commit/e5ecd91b6395c4d98f94c6490686b79a01a6075f)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - Add support for
+  `--tsx` flag in the `snippet add` command to allow explicitly specifying
+  tsx/jsx file generation.
+
+## 3.2.5
+
+## 3.2.4
+
+## 3.2.3
+
+## 3.2.2
+
+### Patch Changes
+
+- [#9254](https://github.com/chakra-ui/chakra-ui/pull/9254)
+  [`6d4e7b6`](https://github.com/chakra-ui/chakra-ui/commit/6d4e7b6c794171392c57f394523e1298dfdc454e)
+  Thanks [@TinsFox](https://github.com/TinsFox)! - Output the real version from
+  `package.json`
+
+## 3.2.1
+
+### Patch Changes
+
+- [`c79b7bf`](https://github.com/chakra-ui/chakra-ui/commit/c79b7bf2190c002ec9ff222e6e6ad1fbf1aa50d7)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - - Fix issue where
+  npmDependencies for snippets were not auto-installed
+  - Support React Router 7 framework detection
+
+## 3.2.0
+
+### Minor Changes
+
+- [`069e39d`](https://github.com/chakra-ui/chakra-ui/commit/069e39d793b78896291144e0dda9db7fb6d7d8fe)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - Add support for
+  `--all` flag to add all snippets. By default, we only install a
+  minimal/recommended set of snippets.
+
+  > **Recommended snippets:** provider, avatar, button, checkbox, radio,
+  > input-group, slider, popover, dialog, drawer, tooltip, field
+
+  If you want to add all snippets, you can use the `--all` flag.
+
+### Patch Changes
+
+- [`a3ba8e6`](https://github.com/chakra-ui/chakra-ui/commit/a3ba8e630fba4743d0a9384a7d3ea011c66c3a9a)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - Fix issue where
+  typegen doesn't work when CLI installed globally or run using `npx`
+
+## 3.1.2
+
+## 3.1.1
+
+## 3.1.0
+
+### Patch Changes
+
+- [`baa3cb1`](https://github.com/chakra-ui/chakra-ui/commit/baa3cb1f7f90adb94e29875f799edbd6ccc80685)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - Fix issue where
+  adding a snippet with `--outdir` still creates snippets a `src/components/ui`
+  directory.
+
+## 3.0.2
+
+### Patch Changes
+
+- [`bfd9cac`](https://github.com/chakra-ui/chakra-ui/commit/bfd9cac4756e599724f087842f70e6551198e956)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - Fix issue with vite
+  setup where `.mjs` and `mts` files were not considered.
+
+- [#9022](https://github.com/chakra-ui/chakra-ui/pull/9022)
+  [`b40eb6b`](https://github.com/chakra-ui/chakra-ui/commit/b40eb6b0b8184b7a38428d5d6a0bd7d9932e393a)
+  Thanks [@Newbie012](https://github.com/Newbie012)! - Fix issue where style
+  props types show as `any` when using `strictTokens`
+
+## 3.0.1
+
+## 3.0.0
+
+### Minor Changes
+
+- [`758f226`](https://github.com/chakra-ui/chakra-ui/commit/758f226e941e4ac9b644a5ab5a4900c2db728c28)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - Add support for
+  `composition` command in CLI to import ready-made compositions for faster
+  development experience.
+
+  ```sh
+  Usage: chakra-ui composition [options] [command]
+
+  Add compositions to your project for better DX
+
+  Options:
+    -h, --help                     display help for command
+
+  Commands:
+    add [options] [components...]  Add a new composition for better DX
+    list                           List all compositions
+    help [command]                 display help for command
+  ```
+
+- [`bfb68dc`](https://github.com/chakra-ui/chakra-ui/commit/bfb68dc319786ee7495a78527408e8d193c53e06)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - Add `eject` command
+  to import default theme into project
+
+- [`085cacd`](https://github.com/chakra-ui/chakra-ui/commit/085cacdef4dbc853609d2930ca01382599df705c)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - Add support for
+  installing required NPM dependencies for compositions
+
+- [`77fe01d`](https://github.com/chakra-ui/chakra-ui/commit/77fe01d3de6e07936998acce37d6f2e7d34c25ed)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - Change CLI name and
+  command structure.
+
+  - Change the CLI name from `chakra-cli` to `chakra`.
+  - Change `tokens` command to `typegen` to better reflect its purpose since its
+    generates types for more than just the tokens.
+  - Scaffold new `composition` command to help users scaffold new compositions
+    easily. Compositions are snippets of Chakra UI component composition them
+    easier to reuse across projects.
+
+- [`8fc7b49`](https://github.com/chakra-ui/chakra-ui/commit/8fc7b4979739acb347ca9c662d8d242833438b51)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - - Add support for
+  conditional value in variant props.
+
+  - Add `@default` JSDoc comment for `defaultVariants` in generated types.
+
+- [`4ff153f`](https://github.com/chakra-ui/chakra-ui/commit/4ff153fd9b449d3e43561b7daceaadfe3c925b08)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - Speed up
+  intellisence for style props, and add support for `strictTokens` in the CLI.
+
+- [`d50d72c`](https://github.com/chakra-ui/chakra-ui/commit/d50d72c2bcdf147caa273f3a1aa1e0cd67da38d3)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - Rename
+  `compositions` command to `snippet` for better intuitiveness
+
+- [#8569](https://github.com/chakra-ui/chakra-ui/pull/8569)
+  [`eb26857`](https://github.com/chakra-ui/chakra-ui/commit/eb2685735e25d6790d14d28653c792b9572c080e)
+  Thanks [@isBatak](https://github.com/isBatak)! - Fix the `boxSize` type to
+  allow number values.
+
+- [`14b6a45`](https://github.com/chakra-ui/chakra-ui/commit/14b6a45f5df2405e7e40494d4691efceed87f962)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - Show the number of
+  skipped snippets that already exists in outdir
+
+### Patch Changes
+
+- [`0eda15c`](https://github.com/chakra-ui/chakra-ui/commit/0eda15c6dc09fc777a0091be15416063dc4ad862)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - Set process
+  setMaxListeners to improve watch mode
+
+- [`c074b58`](https://github.com/chakra-ui/chakra-ui/commit/c074b58770908d9ab27367578020134975ea5378)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - Fix issue where
+  vite project throws due to config search
+
+- [`0f0ed76`](https://github.com/chakra-ui/chakra-ui/commit/0f0ed76e3f06b9f3efeb7421d2283aee8aead9f7)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - Fix regression
+  where files were always converted to `.jsx`
+
+- [#8740](https://github.com/chakra-ui/chakra-ui/pull/8740)
+  [`d5a225f`](https://github.com/chakra-ui/chakra-ui/commit/d5a225f1bc3eca8be67a69b78429481cf802372b)
+  Thanks [@Pagebakers](https://github.com/Pagebakers)! - Use correct extension
+  for ESM exports
+
+## 3.0.0-next.32
+
+## 3.0.0-next.31
+
+## 3.0.0-next.30
+
+## 3.0.0-next.29
+
+### Patch Changes
+
+- [`0eda15c`](https://github.com/chakra-ui/chakra-ui/commit/0eda15c6dc09fc777a0091be15416063dc4ad862)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - Set process
+  setMaxListeners to improve watch mode
+
+## 3.0.0-next.28
+
+## 3.0.0-next.27
+
+## 3.0.0-next.26
+
+## 3.0.0-next.25
+
+## 3.0.0-next.24
+
+## 3.0.0-next.23
+
+## 3.0.0-next.22
+
+## 3.0.0-next.21
+
+### Minor Changes
+
+- [`14b6a45`](https://github.com/chakra-ui/chakra-ui/commit/14b6a45f5df2405e7e40494d4691efceed87f962)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - Show the number of
+  skipped snippets that already exists in outdir
+
+## 3.0.0-next.20
+
+### Patch Changes
+
+- [`c074b58`](https://github.com/chakra-ui/chakra-ui/commit/c074b58770908d9ab27367578020134975ea5378)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - Fix issue where
+  vite project throws due to config search
+
+## 3.0.0-next.19
+
+## 3.0.0-next.18
+
+### Minor Changes
+
+- [`bfb68dc`](https://github.com/chakra-ui/chakra-ui/commit/bfb68dc319786ee7495a78527408e8d193c53e06)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - Add `eject` command
+  to import default theme into project
+
+- [`8fc7b49`](https://github.com/chakra-ui/chakra-ui/commit/8fc7b4979739acb347ca9c662d8d242833438b51)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - - Add support for
+  conditional value in variant props.
+  - Add `@default` JSDoc comment for `defaultVariants` in generated types.
+
+## 3.0.0-next.17
+
+## 3.0.0-next.16
+
+### Patch Changes
+
+- [#8740](https://github.com/chakra-ui/chakra-ui/pull/8740)
+  [`d5a225f`](https://github.com/chakra-ui/chakra-ui/commit/d5a225f1bc3eca8be67a69b78429481cf802372b)
+  Thanks [@Pagebakers](https://github.com/Pagebakers)! - Use correct extension
+  for ESM exports
+
+## 3.0.0-next.15
+
+## 3.0.0-next.14
+
+### Minor Changes
+
+- [`d50d72c`](https://github.com/chakra-ui/chakra-ui/commit/d50d72c2bcdf147caa273f3a1aa1e0cd67da38d3)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - Rename
+  `compositions` command to `snippet` for better intuitiveness
+
+## 3.0.0-next.13
+
+## 3.0.0-next.12
+
+### Patch Changes
+
+- [`0f0ed76`](https://github.com/chakra-ui/chakra-ui/commit/0f0ed76e3f06b9f3efeb7421d2283aee8aead9f7)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - Fix regression
+  where files were always converted to `.jsx`
+
+## 3.0.0-next.11
+
+### Minor Changes
+
+- [`085cacd`](https://github.com/chakra-ui/chakra-ui/commit/085cacdef4dbc853609d2930ca01382599df705c)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - Add support for
+  installing required NPM dependencies for compositions
+
+## 3.0.0-next.10
+
+### Minor Changes
+
+- [`758f226`](https://github.com/chakra-ui/chakra-ui/commit/758f226e941e4ac9b644a5ab5a4900c2db728c28)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - Add support for
+  `composition` command in CLI to import ready-made compositions for faster
+  development experience.
+
+  ```sh
+  Usage: chakra-ui composition [options] [command]
+
+  Add compositions to your project for better DX
+
+  Options:
+    -h, --help                     display help for command
+
+  Commands:
+    add [options] [components...]  Add a new composition for better DX
+    list                           List all compositions
+    help [command]                 display help for command
+  ```
+
+## 3.0.0-next.9
+
+### Minor Changes
+
+- [`77fe01d`](https://github.com/chakra-ui/chakra-ui/commit/77fe01d3de6e07936998acce37d6f2e7d34c25ed)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - Change CLI name and
+  command structure.
+
+  - Change the CLI name from `chakra-cli` to `chakra`.
+  - Change `tokens` command to `typegen` to better reflect its purpose since its
+    generates types for more than just the tokens.
+  - Scaffold new `composition` command to help users scaffold new compositions
+    easily. Compositions are snippets of Chakra UI component composition them
+    easier to reuse across projects.
+
+## 3.0.0-next.8
+
+## 3.0.0-next.7
+
+### Minor Changes
+
+- [`4ff153f`](https://github.com/chakra-ui/chakra-ui/commit/4ff153fd9b449d3e43561b7daceaadfe3c925b08)
+  Thanks [@segunadebayo](https://github.com/segunadebayo)! - Speed up
+  intellisence for style props, and add support for `strictTokens` in the CLI.
+
+## 3.0.0-next.6
+
+## 3.0.0-next.5
+
+### Minor Changes
+
+- [#8569](https://github.com/chakra-ui/chakra-ui/pull/8569)
+  [`eb26857`](https://github.com/chakra-ui/chakra-ui/commit/eb2685735e25d6790d14d28653c792b9572c080e)
+  Thanks [@isBatak](https://github.com/isBatak)! - Fix the `boxSize` type to
+  allow number values.
+
+## 3.0.0-next.4
+
+## 3.0.0-next.3
+
+## 3.0.0-next.2
+
 ## 3.0.0-next.1
 
 ## 3.0.0-next.0

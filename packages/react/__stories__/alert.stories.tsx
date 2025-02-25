@@ -1,107 +1,25 @@
-import { Alert, Box, For, Span, Spinner, useSlotRecipe } from "../src"
-import { colorPalettes } from "./shared/color-palettes"
-import { PlaygroundTable } from "./shared/playground-table"
+import type { Meta } from "@storybook/react"
+import { Box } from "../src"
 
 export default {
   title: "Components / Alert",
-  decorators: [(story: Function) => <Box padding="4">{story()}</Box>],
-}
+  decorators: [
+    (Story) => (
+      <Box p="10">
+        <Story />
+      </Box>
+    ),
+  ],
+} satisfies Meta
 
-export const Variants = () => {
-  const recipe = useSlotRecipe("Alert")
-  return (
-    <PlaygroundTable>
-      <thead>
-        <tr>
-          <td />
-          <For each={recipe.variantMap.variant}>{(v) => <td>{v}</td>}</For>
-        </tr>
-      </thead>
-      <tbody>
-        <For each={colorPalettes}>
-          {(c) => (
-            <tr>
-              <td>
-                <Span fontSize="sm" color="fg.muted" minW="8ch">
-                  {c}
-                </Span>
-              </td>
-              <For each={recipe.variantMap.variant}>
-                {(v) => (
-                  <td>
-                    <Alert.Root variant={v} colorPalette={c}>
-                      <Alert.Icon />
-                      <Box>
-                        <Alert.Title>Alert Title</Alert.Title>
-                        <Alert.Description>
-                          Chakra UI v3 is the greatest! Check it out.
-                        </Alert.Description>
-                      </Box>
-                    </Alert.Root>
-                  </td>
-                )}
-              </For>
-            </tr>
-          )}
-        </For>
-      </tbody>
-    </PlaygroundTable>
-  )
-}
-
-export const Sizes = () => {
-  const recipe = useSlotRecipe("Alert")
-  return (
-    <PlaygroundTable>
-      <thead>
-        <tr>
-          <td />
-          <For each={recipe.variantMap.size}>{(v) => <td>{v}</td>}</For>
-        </tr>
-      </thead>
-      <tbody>
-        <For each={colorPalettes}>
-          {(c) => (
-            <tr>
-              <td>
-                <Span fontSize="sm" color="fg.muted" minW="8ch">
-                  {c}
-                </Span>
-              </td>
-              <For each={recipe.variantMap.size}>
-                {(v) => (
-                  <td>
-                    <Alert.Root size={v} colorPalette={c}>
-                      <Alert.Icon />
-                      <Box>
-                        <Alert.Title>Alert Title</Alert.Title>
-                        <Alert.Description>
-                          Chakra UI v3 is the greatest! Check it out.
-                        </Alert.Description>
-                      </Box>
-                    </Alert.Root>
-                  </td>
-                )}
-              </For>
-            </tr>
-          )}
-        </For>
-      </tbody>
-    </PlaygroundTable>
-  )
-}
-
-export const WithSpinner = () => {
-  return (
-    <Alert.Root
-      maxW="xl"
-      borderStartWidth="3px"
-      borderStartColor="colorPalette.600"
-    >
-      <Alert.Icon>
-        <Spinner size="sm" />
-      </Alert.Icon>
-      We are loading something
-    </Alert.Root>
-  )
-}
+export { AlertBasic as Basic } from "compositions/examples/alert-basic"
+export { AlertSizeTable as Sizes } from "compositions/examples/alert-size-table"
+export { AlertVariantTable as Variants } from "compositions/examples/alert-variant-table"
+export { AlertWithButtons as Buttons } from "compositions/examples/alert-with-buttons"
+export { AlertWithCloseButton as CloseButton } from "compositions/examples/alert-with-close-button"
+export { AlertWithColorPaletteOverride as ColorPaletteOverride } from "compositions/examples/alert-with-color-palette-override"
+export { AlertWithCustomIcon as CustomIcon } from "compositions/examples/alert-with-custom-icon"
+export { AlertWithCustomization as Customization } from "compositions/examples/alert-with-customization"
+export { AlertWithDescription as Description } from "compositions/examples/alert-with-description"
+export { AlertWithSpinner as Spinner } from "compositions/examples/alert-with-spinner"
+export { AlertWithStatus as Status } from "compositions/examples/alert-with-status"

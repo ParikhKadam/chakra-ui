@@ -14,10 +14,12 @@ describe("css", () => {
       }),
     ).toMatchInlineSnapshot(`
       {
-        "&:is(:hover, [data-hover]):not(:disabled, [data-disabled])": {
-          "color": "pink !important",
-        },
         "--bg": "var(--chakra-colors-pink-400)",
+        "@media (hover: hover)": {
+          "&:is(:hover, [data-hover]):not(:disabled, [data-disabled])": {
+            "color": "pink !important",
+          },
+        },
         "@media screen and (min-width: 30rem)": {
           "padding": "20px",
         },
@@ -155,10 +157,10 @@ describe("css", () => {
       {
         "@media screen and (min-width: 30rem)": {
           "fontSize": "var(--chakra-font-sizes-lg)",
-          "lineHeight": "1.5",
+          "lineHeight": "1.75rem",
         },
         "fontSize": "var(--chakra-font-sizes-sm)",
-        "lineHeight": "1.5",
+        "lineHeight": "1.25rem",
       }
     `)
   })
@@ -185,6 +187,7 @@ describe("css", () => {
 
     expect(result).toMatchInlineSnapshot(`
       {
+        "--bg-currentcolor": "#fff !important",
         "background": "#fff !important",
         "color": "#fff !important",
       }
@@ -242,7 +245,9 @@ describe("css", () => {
 
     expect(result).toMatchInlineSnapshot(`
       {
+        "--bg-currentcolor": "var(--chakra-colors-red-300)",
         ".peer:is(:checked, [data-checked], [aria-checked=true], [data-state=checked]) ~ &": {
+          "--bg-currentcolor": "var(--chakra-colors-transparent)",
           "background": "var(--chakra-colors-transparent)",
         },
         "background": "var(--chakra-colors-red-300)",
@@ -257,6 +262,7 @@ describe("css", () => {
 
     expect(result).toMatchInlineSnapshot(`
       {
+        "--bg-currentcolor": "var(--mix-background, var(--chakra-colors-red-300))",
         "--mix-background": "color-mix(in srgb, var(--chakra-colors-red-300) 30%, transparent)",
         "background": "var(--mix-background, var(--chakra-colors-red-300))",
       }
@@ -270,6 +276,7 @@ describe("css", () => {
 
     expect(result).toMatchInlineSnapshot(`
       {
+        "--bg-currentcolor": "var(--mix-background, var(--chakra-colors-red-300))",
         "--mix-background": "color-mix(in srgb, var(--chakra-colors-red-300) 30%, transparent)",
         "background": "var(--mix-background, var(--chakra-colors-red-300))",
       }
@@ -284,6 +291,7 @@ describe("css", () => {
 
     expect(result).toMatchInlineSnapshot(`
       {
+        "--bg-currentcolor": "var(--chakra-colors-color-palette-300)",
         "--chakra-colors-color-palette-100": "var(--chakra-colors-red-100)",
         "--chakra-colors-color-palette-200": "var(--chakra-colors-red-200)",
         "--chakra-colors-color-palette-300": "var(--chakra-colors-red-300)",
@@ -295,6 +303,13 @@ describe("css", () => {
         "--chakra-colors-color-palette-800": "var(--chakra-colors-red-800)",
         "--chakra-colors-color-palette-900": "var(--chakra-colors-red-900)",
         "--chakra-colors-color-palette-950": "var(--chakra-colors-red-950)",
+        "--chakra-colors-color-palette-contrast": "var(--chakra-colors-red-contrast)",
+        "--chakra-colors-color-palette-emphasized": "var(--chakra-colors-red-emphasized)",
+        "--chakra-colors-color-palette-fg": "var(--chakra-colors-red-fg)",
+        "--chakra-colors-color-palette-focus-ring": "var(--chakra-colors-red-focus-ring)",
+        "--chakra-colors-color-palette-muted": "var(--chakra-colors-red-muted)",
+        "--chakra-colors-color-palette-solid": "var(--chakra-colors-red-solid)",
+        "--chakra-colors-color-palette-subtle": "var(--chakra-colors-red-subtle)",
         "background": "var(--chakra-colors-color-palette-300)",
       }
     `)
@@ -303,17 +318,17 @@ describe("css", () => {
   test("token reference", () => {
     const result = css({
       border: {
-        base: "1px solid {colors.primary}",
+        base: "1px solid {colors.white}",
         _dark: "2px solid {colors.green.300}",
       },
     })
 
     expect(result).toMatchInlineSnapshot(`
       {
-        " &.dark, .dark &": {
+        ".dark &, .dark .chakra-theme:not(.light) &": {
           "border": "2px solid var(--chakra-colors-green-300)",
         },
-        "border": "1px solid var(--colors.primary)",
+        "border": "1px solid var(--chakra-colors-white)",
       }
     `)
   })
@@ -356,6 +371,87 @@ describe("css", () => {
         "@media screen and (max-width: 47.9975rem)": {
           "display": "none",
         },
+      }
+    `)
+  })
+
+  test("space x and y", () => {
+    const result = css({
+      spaceX: "2",
+      spaceXReverse: true,
+    })
+
+    expect(result).toMatchInlineSnapshot(`
+      {
+        "& > :not(style, [hidden]) ~ :not(style, [hidden])": {
+          "--space-x-reverse": "1",
+          "marginInlineEnd": "calc(var(--chakra-spacing-2) * var(--space-x-reverse))",
+          "marginInlineStart": "calc(var(--chakra-spacing-2) * calc(1 - var(--space-x-reverse)))",
+        },
+      }
+    `)
+  })
+
+  test("color opacity modifier in css var", () => {
+    const result = css({
+      "--bg": "{colors.red.300/30}",
+      "--color": "{pink/40}",
+      border: "2px solid {colors.red.300}",
+    })
+
+    expect(result).toMatchInlineSnapshot(`
+      {
+        "--bg": "color-mix(in srgb, var(--chakra-colors-red-300) 30%, transparent)",
+        "--color": "color-mix(in srgb, pink 40%, transparent)",
+        "border": "2px solid var(--chakra-colors-red-300)",
+      }
+    `)
+  })
+
+  test("merge layer styles", () => {
+    const result = css({
+      layerStyle: "fill.subtle",
+      color: "inherit",
+    })
+
+    expect(result).toMatchInlineSnapshot(`
+      {
+        "--bg-currentcolor": "var(--chakra-colors-color-palette-subtle)",
+        "background": "var(--chakra-colors-color-palette-subtle)",
+        "color": "inherit",
+      }
+    `)
+  })
+
+  test("media query order", () => {
+    const result = css({
+      flex: [undefined, undefined, 1, 5],
+      display: ["none", "none", "flex"],
+      h: "100vh",
+      minH: "200px",
+      position: "sticky",
+      top: "0",
+      borderLeft: [undefined, "2px solid red"],
+    })
+
+    expect(result).toMatchInlineSnapshot(`
+      {
+        "@media screen and (min-width: 30rem)": {
+          "borderLeft": "2px solid red",
+          "display": "none",
+        },
+        "@media screen and (min-width: 48rem)": {
+          "display": "flex",
+          "flex": 1,
+        },
+        "@media screen and (min-width: 64rem)": {
+          "flex": 5,
+        },
+        "display": "none",
+        "height": "100vh",
+        "minHeight": "200px",
+        "position": "sticky",
+        "top": "0",
       }
     `)
   })

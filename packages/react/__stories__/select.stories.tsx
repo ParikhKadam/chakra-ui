@@ -1,54 +1,32 @@
-import { HiCheck, HiChevronDown } from "react-icons/hi"
-import { Select, chakra } from "../src"
+import type { Meta } from "@storybook/react"
+import { Box } from "../src"
 
 export default {
   title: "Components / Select",
   decorators: [
-    (Story: any) => (
-      <chakra.div maxWidth="500px" mx="auto" mt="40px">
+    (Story) => (
+      <Box p="10">
         <Story />
-      </chakra.div>
+      </Box>
     ),
   ],
-}
+} satisfies Meta
 
-const items = [
-  { label: "React", value: "react" },
-  { label: "Solid", value: "solid" },
-  { label: "Svelte", value: "svelte", disabled: true },
-  { label: "Vue", value: "vue" },
-]
-
-export const Demo = (props: Select.RootProps) => {
-  return (
-    <Select.Root
-      positioning={{ sameWidth: true }}
-      width="12rem"
-      {...props}
-      items={items}
-    >
-      <Select.Label>Framework</Select.Label>
-      <Select.Control>
-        <Select.Trigger>
-          <Select.ValueText placeholder="Select a Framework" />
-          <HiChevronDown />
-        </Select.Trigger>
-      </Select.Control>
-      <Select.Positioner>
-        <Select.Content>
-          <Select.ItemGroup>
-            <Select.ItemGroupLabel>Framework</Select.ItemGroupLabel>
-            {items.map((item) => (
-              <Select.Item key={item.value} item={item}>
-                <Select.ItemText>{item.label}</Select.ItemText>
-                <Select.ItemIndicator>
-                  <HiCheck />
-                </Select.ItemIndicator>
-              </Select.Item>
-            ))}
-          </Select.ItemGroup>
-        </Select.Content>
-      </Select.Positioner>
-    </Select.Root>
-  )
-}
+export { SelectAsyncLoading as AsyncLoading } from "compositions/examples/select-async-loading"
+export { SelectBasic as Basic } from "compositions/examples/select-basic"
+export { SelectControlled as Controlled } from "compositions/examples/select-controlled"
+export { SelectInDialog as WithinDialog } from "compositions/examples/select-in-dialog"
+export { SelectInPopover as WithinPopover } from "compositions/examples/select-in-popover"
+export { SelectWithAvatar as Avatar } from "compositions/examples/select-with-avatar"
+export { SelectWithClear as Clear } from "compositions/examples/select-with-clear"
+export { SelectWithDisabled as Disabled } from "compositions/examples/select-with-disabled"
+export { SelectWithDisabledOption as DisabledOption } from "compositions/examples/select-with-disabled-option"
+export { SelectWithHookForm as HookForm } from "compositions/examples/select-with-hook-form"
+export { SelectWithInvalid as Invalid } from "compositions/examples/select-with-invalid"
+export { SelectWithMultiple as Multiple } from "compositions/examples/select-with-multiple"
+export { SelectWithNativeForm as NativeForm } from "compositions/examples/select-with-native-form"
+export { SelectWithOptionGroup as OptionGroup } from "compositions/examples/select-with-option-group"
+export { SelectWithOverflow as Overflow } from "compositions/examples/select-with-overflow"
+export { SelectWithPositioning as Positioning } from "compositions/examples/select-with-positioning"
+export { SelectWithSizes as Sizes } from "compositions/examples/select-with-sizes"
+export { SelectWithVariants as Variants } from "compositions/examples/select-with-variants"

@@ -1,53 +1,63 @@
-import { accordionAnatomy as parts } from "../../anatomy"
+import { accordionAnatomy } from "../../anatomy"
 import { defineSlotRecipe } from "../../styled-system"
 
 export const accordionSlotRecipe = defineSlotRecipe({
-  slots: parts.keys,
+  className: "chakra-accordion",
+  slots: accordionAnatomy.keys(),
   base: {
+    root: {
+      width: "full",
+      "--accordion-radius": "radii.l2",
+    },
     item: {
       overflowAnchor: "none",
     },
-    trigger: {
+    itemTrigger: {
       display: "flex",
       alignItems: "center",
-      width: "100%",
-      fontWeight: "medium",
+      width: "full",
       outline: "0",
+      gap: "3",
+      fontWeight: "medium",
       borderRadius: "var(--accordion-radius)",
       _focusVisible: {
         outline: "2px solid",
-        outlineColor: "colorPalette.500",
+        outlineColor: "colorPalette.focusRing",
       },
       _disabled: {
-        opacity: "0.5",
-        cursor: "not-allowed",
+        layerStyle: "disabled",
       },
     },
-    body: {
-      paddingBottom: "calc(var(--accordion-padding-y) * 2)",
+    itemBody: {
+      pt: "var(--accordion-padding-y)",
+      pb: "calc(var(--accordion-padding-y) * 2)",
     },
-    content: {
+    itemContent: {
       overflow: "hidden",
       borderRadius: "var(--accordion-radius)",
       _open: {
-        animation: "collapse-in 250ms",
+        animationName: "expand-height, fade-in",
+        animationDuration: "moderate",
       },
       _closed: {
-        animation: "collapse-out 250ms",
+        animationName: "collapse-height, fade-out",
+        animationDuration: "moderate",
       },
     },
-    indicator: {
-      transition: "transform 0.2s",
+    itemIndicator: {
+      transition: "rotate 0.2s",
       transformOrigin: "center",
+      color: "fg.subtle",
       _open: {
-        transform: "rotate(180deg)",
+        rotate: "180deg",
       },
-      "& svg": {
-        boxSize: "1em",
-        fontSize: "lg",
+      _icon: {
+        width: "1.2em",
+        height: "1.2em",
       },
     },
   },
+
   variants: {
     variant: {
       outline: {
@@ -55,76 +65,81 @@ export const accordionSlotRecipe = defineSlotRecipe({
           borderBottomWidth: "1px",
         },
       },
-      elevated: {
-        trigger: {
-          paddingX: "var(--accordion-padding-x)",
+
+      subtle: {
+        itemTrigger: {
+          px: "var(--accordion-padding-x)",
         },
-        content: {
-          paddingX: "var(--accordion-padding-x)",
-        },
-        item: {
-          borderRadius: "var(--accordion-radius)",
-          _open: {
-            bg: "bg.panel",
-            boxShadow: "xs",
-          },
-        },
-      },
-      contained: {
-        trigger: {
-          paddingX: "var(--accordion-padding-x)",
-        },
-        content: {
-          paddingX: "var(--accordion-padding-x)",
+        itemContent: {
+          px: "var(--accordion-padding-x)",
         },
         item: {
           borderRadius: "var(--accordion-radius)",
           _open: {
-            bg: { base: "colorPalette.100", _dark: "colorPalette.400/20" },
+            bg: "colorPalette.subtle",
           },
         },
       },
+
+      enclosed: {
+        root: {
+          borderWidth: "1px",
+          borderRadius: "var(--accordion-radius)",
+          divideY: "1px",
+          overflow: "hidden",
+        },
+        itemTrigger: {
+          px: "var(--accordion-padding-x)",
+        },
+        itemContent: {
+          px: "var(--accordion-padding-x)",
+        },
+        item: {
+          _open: {
+            bg: "bg.subtle",
+          },
+        },
+      },
+
       plain: {},
     },
+
     size: {
       sm: {
-        item: {
+        root: {
           "--accordion-padding-x": "spacing.3",
-          "--accordion-padding-y": "spacing.1.5",
-          "--accordion-radius": "radii.sm",
-          fontSize: "sm",
+          "--accordion-padding-y": "spacing.2",
         },
-        trigger: {
-          paddingY: "var(--accordion-padding-y)",
+        itemTrigger: {
+          textStyle: "sm",
+          py: "var(--accordion-padding-y)",
         },
       },
       md: {
-        item: {
+        root: {
           "--accordion-padding-x": "spacing.4",
           "--accordion-padding-y": "spacing.2",
-          "--accordion-radius": "radii.md",
-          fontSize: "sm",
         },
-        trigger: {
-          paddingY: "var(--accordion-padding-y)",
+        itemTrigger: {
+          textStyle: "md",
+          py: "var(--accordion-padding-y)",
         },
       },
       lg: {
-        item: {
-          "--accordion-padding-x": "spacing.6",
-          "--accordion-padding-y": "spacing.3",
-          "--accordion-radius": "radii.md",
-          fontSize: "md",
+        root: {
+          "--accordion-padding-x": "spacing.4.5",
+          "--accordion-padding-y": "spacing.2.5",
         },
-        trigger: {
-          paddingY: "var(--accordion-padding-y)",
+        itemTrigger: {
+          textStyle: "lg",
+          py: "var(--accordion-padding-y)",
         },
       },
     },
   },
+
   defaultVariants: {
     size: "md",
     variant: "outline",
-    colorPalette: "gray",
   },
 })

@@ -1,12 +1,20 @@
 "use client"
 
-import { dataAttr } from "@chakra-ui/utils"
-import { Children, cloneElement, forwardRef, isValidElement, memo } from "react"
+import {
+  Children,
+  cloneElement,
+  forwardRef,
+  isValidElement,
+  memo,
+  useMemo,
+} from "react"
 import {
   type HTMLChakraProps,
   type InferRecipeProps,
+  type JsxStyleProps,
   chakra,
 } from "../../styled-system"
+import { cx, dataAttr } from "../../utils"
 
 const StyledGroup = chakra("div", {
   base: {
@@ -14,7 +22,7 @@ const StyledGroup = chakra("div", {
     gap: "0.5rem",
     isolation: "isolate",
     position: "relative",
-    "& *": {
+    "& [data-group-item]": {
       _focusVisible: {
         zIndex: 1,
       },
@@ -34,6 +42,26 @@ const StyledGroup = chakra("div", {
         gap: "0!",
       },
     },
+    grow: {
+      true: {
+        display: "flex",
+        "& > *": {
+          flex: 1,
+        },
+      },
+    },
+    stacking: {
+      "first-on-top": {
+        "& > [data-group-item]": {
+          zIndex: "calc(var(--group-count) - var(--group-index))",
+        },
+      },
+      "last-on-top": {
+        "& > [data-group-item]": {
+          zIndex: "var(--group-index)",
+        },
+      },
+    },
   },
   compoundVariants: [
     {
@@ -44,7 +72,7 @@ const StyledGroup = chakra("div", {
           borderEndRadius: "0!",
           marginEnd: "-1px",
         },
-        "& > *:not([data-first]):not([data-last])": {
+        "& > *[data-between]": {
           borderRadius: "0!",
           marginEnd: "-1px",
         },
@@ -61,7 +89,7 @@ const StyledGroup = chakra("div", {
           borderBottomRadius: "0!",
           marginBottom: "-1px",
         },
-        "& > *:not([data-first]):not([data-last])": {
+        "& > *[data-between]": {
           borderRadius: "0!",
           marginBottom: "-1px",
         },
@@ -78,27 +106,62 @@ const StyledGroup = chakra("div", {
 
 type VariantProps = InferRecipeProps<typeof StyledGroup>
 
-interface GroupProps extends HTMLChakraProps<"div", VariantProps> {}
+export interface GroupProps extends HTMLChakraProps<"div", VariantProps> {
+  /**
+   * The `alignItems` style property
+   */
+  align?: JsxStyleProps["alignItems"]
+  /**
+   * The `justifyContent` style property
+   */
+  justify?: JsxStyleProps["justifyContent"]
+  /**
+   * The `flexWrap` style property
+   */
+  wrap?: JsxStyleProps["flexWrap"]
+}
 
 export const Group = memo(
   forwardRef<HTMLDivElement, GroupProps>(function Group(props, ref) {
-    const count = Children.count(props.children)
-    const clones = Children.map(props.children, (child, index) => {
-      if (!isValidElement(child)) {
-        throw new Error(
-          "chakra-ui: Group expects children to be valid elements",
-        )
-      }
-      return cloneElement(child, {
-        ...child.props,
-        "data-first": dataAttr(index === 0),
-        "data-last": dataAttr(index === count - 1),
-      } as any)
-    })
+    const {
+      align = "center",
+      justify = "flex-start",
+      children,
+      wrap,
+      ...rest
+    } = props
+
+    const _children = useMemo(() => {
+      const childArray = Children.toArray(children).filter(isValidElement)
+      const count = childArray.length
+
+      return childArray.map((child, index) => {
+        const childProps = child.props as any
+        return cloneElement(child, {
+          ...childProps,
+          "data-group-item": "",
+          "data-first": dataAttr(index === 0),
+          "data-last": dataAttr(index === count - 1),
+          "data-between": dataAttr(index > 0 && index < count - 1),
+          style: {
+            "--group-count": count,
+            "--group-index": index,
+            ...(childProps?.style ?? {}),
+          },
+        } as any)
+      })
+    }, [children])
 
     return (
-      <StyledGroup ref={ref} {...props}>
-        {clones}
+      <StyledGroup
+        ref={ref}
+        alignItems={align}
+        justifyContent={justify}
+        flexWrap={wrap}
+        {...rest}
+        className={cx("chakra-group", props.className)}
+      >
+        {_children}
       </StyledGroup>
     )
   }),

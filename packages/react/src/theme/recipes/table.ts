@@ -1,8 +1,9 @@
-import { tableAnatomy as parts } from "../../anatomy"
+import { tableAnatomy } from "../../anatomy"
 import { defineSlotRecipe } from "../../styled-system"
 
 export const tableSlotRecipe = defineSlotRecipe({
-  slots: parts.keys,
+  className: "chakra-table",
+  slots: tableAnatomy.keys(),
   base: {
     root: {
       fontVariantNumeric: "lining-nums tabular-nums",
@@ -13,38 +14,47 @@ export const tableSlotRecipe = defineSlotRecipe({
     },
     row: {
       _selected: {
-        bg: { base: "colorPalette.100", _dark: "colorPalette.400/20" },
-        shadowColor: "colorPalette.600",
-        boxShadow: "inset 2px 0 0px 0px var(--shadow-color)",
+        bg: "colorPalette.subtle",
       },
     },
     cell: {
       textAlign: "start",
+      alignItems: "center",
     },
     columnHeader: {
-      fontWeight: "semibold",
+      fontWeight: "medium",
       textAlign: "start",
+      color: "fg",
     },
     caption: {
       fontWeight: "medium",
-      fontSize: "xs",
+      textStyle: "xs",
     },
     footer: {
       fontWeight: "medium",
     },
   },
+
   variants: {
-    numeric: {
-      true: {
-        columnHeader: { textAlign: "end" },
-        cell: { textAlign: "end" },
-      },
-    },
     interactive: {
       true: {
-        row: {
-          _hover: {
-            bg: { base: "colorPalette.100", _dark: "colorPalette.700" },
+        body: {
+          "& tr": {
+            _hover: {
+              bg: "colorPalette.subtle",
+            },
+          },
+        },
+      },
+    },
+
+    stickyHeader: {
+      true: {
+        header: {
+          "& :where(tr)": {
+            top: "var(--table-sticky-offset, 0)",
+            position: "sticky",
+            zIndex: 1,
           },
         },
       },
@@ -53,8 +63,8 @@ export const tableSlotRecipe = defineSlotRecipe({
     striped: {
       true: {
         row: {
-          "&:nth-of-type(even)": {
-            bg: "bg.subtle",
+          "&:nth-of-type(odd) td": {
+            bg: "bg.muted",
           },
         },
       },
@@ -83,19 +93,21 @@ export const tableSlotRecipe = defineSlotRecipe({
         cell: {
           borderBottomWidth: "1px",
         },
+        row: {
+          bg: "bg",
+        },
       },
 
       outline: {
         root: {
           boxShadow: "0 0 0 1px {colors.border}",
-          borderRadius: "var(--table-radius)",
           overflow: "hidden",
         },
         columnHeader: {
           borderBottomWidth: "1px",
         },
         header: {
-          bg: "bg.subtle",
+          bg: "bg.muted",
         },
         row: {
           "&:not(:last-of-type)": {
@@ -107,11 +119,11 @@ export const tableSlotRecipe = defineSlotRecipe({
         },
       },
     },
+
     size: {
       sm: {
         root: {
-          "--table-radius": "radii.sm",
-          fontSize: "sm",
+          textStyle: "sm",
         },
         columnHeader: {
           px: "2",
@@ -122,10 +134,10 @@ export const tableSlotRecipe = defineSlotRecipe({
           py: "2",
         },
       },
+
       md: {
         root: {
-          "--table-radius": "radii.md",
-          fontSize: "sm",
+          textStyle: "sm",
         },
         columnHeader: {
           px: "3",
@@ -136,10 +148,10 @@ export const tableSlotRecipe = defineSlotRecipe({
           py: "3",
         },
       },
+
       lg: {
         root: {
-          "--table-radius": "radii.md",
-          fontSize: "md",
+          textStyle: "md",
         },
         columnHeader: {
           px: "4",
@@ -152,6 +164,7 @@ export const tableSlotRecipe = defineSlotRecipe({
       },
     },
   },
+
   defaultVariants: {
     variant: "line",
     size: "md",

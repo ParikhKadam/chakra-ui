@@ -1,40 +1,43 @@
 "use client"
 
-import { cx } from "@chakra-ui/utils"
-import { forwardRef } from "react"
+import * as React from "react"
 import {
   type HTMLChakraProps,
   type RecipeProps,
   chakra,
-  useRecipe,
+  createRecipeContext,
 } from "../../styled-system"
+import { cx } from "../../utils"
+
+const { useRecipeResult, PropsProvider } = createRecipeContext({ key: "icon" })
 
 export interface IconProps
   extends HTMLChakraProps<"svg">,
-    RecipeProps<"Icon"> {}
+    RecipeProps<"icon"> {}
 
 /**
  * The Icon component renders as an svg element to help define your own custom components.
  *
  * @see Docs https://chakra-ui.com/docs/components/icon#using-the-icon-component
  */
-export const Icon = forwardRef<SVGElement, IconProps>(
+export const Icon = React.forwardRef<SVGSVGElement, IconProps>(
   function Icon(props, ref) {
-    const recipe = useRecipe("Icon", props.recipe)
-    const [variantProps, localProps] = recipe.splitVariantProps(props)
-    const styles = recipe(variantProps)
-
+    const {
+      styles,
+      className,
+      props: otherProps,
+    } = useRecipeResult({ asChild: !props.as, ...props })
     return (
       <chakra.svg
-        verticalAlign="middle"
-        focusable="false"
         ref={ref}
-        {...localProps}
+        focusable={false}
+        aria-hidden="true"
+        {...otherProps}
         css={[styles, props.css]}
-        className={cx("chakra-icon", props.className)}
+        className={cx(className, props.className)}
       />
     )
   },
 )
 
-Icon.displayName = "Icon"
+export const IconPropsProvider = PropsProvider as React.Provider<IconProps>

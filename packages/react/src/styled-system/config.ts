@@ -1,4 +1,4 @@
-import { mergeWith } from "@chakra-ui/utils"
+import { clone, mergeWith } from "../utils"
 import type { CompositionStyles } from "./composition"
 import type {
   GlobalStyleIdentityFn,
@@ -7,6 +7,7 @@ import type {
 } from "./css.types"
 import type { RecipeIdentityFn, SlotRecipeIdentityFn } from "./recipe.types"
 import type {
+  ConditionRecord,
   SemanticTokenDefinition,
   SystemConfig,
   TokenDefinition,
@@ -15,6 +16,8 @@ import type {
 /* -----------------------------------------------------------------------------
  * Core creators
  * -----------------------------------------------------------------------------*/
+
+export const defineConditions = <T extends ConditionRecord>(v: T): T => v
 
 export const defineRecipe: RecipeIdentityFn = (v) => v
 
@@ -27,6 +30,10 @@ export const defineGlobalStyles: GlobalStyleIdentityFn = (v) => v
 export const defineStyle: SystemStyleIdentityFn = (v) => v
 
 export const defineTextStyles = (v: CompositionStyles["textStyles"]) => v
+
+export const defineAnimationStyles = (
+  v: CompositionStyles["animationStyles"],
+) => v
 
 export const defineLayerStyles = (v: CompositionStyles["layerStyles"]) => v
 
@@ -61,9 +68,6 @@ export const defineSemanticTokens =
 
 export const defineConfig = (v: SystemConfig) => v
 
-export const mergeConfigs = (
-  config: SystemConfig,
-  ...configs: SystemConfig[]
-): SystemConfig => {
-  return mergeWith({}, config, ...configs)
+export const mergeConfigs = (...configs: SystemConfig[]): SystemConfig => {
+  return mergeWith({}, ...configs.map(clone))
 }

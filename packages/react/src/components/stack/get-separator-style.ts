@@ -1,5 +1,5 @@
-import { mapResponsive } from "@chakra-ui/utils"
 import type { ConditionalValue, SystemStyleObject } from "../../styled-system"
+import { mapObject } from "../../utils"
 
 export type StackDirection = ConditionalValue<
   "row" | "column" | "row-reverse" | "column-reverse"
@@ -41,6 +41,6 @@ export function getSeparatorStyles(options: Options) {
   }
 
   return {
-    "&": mapResponsive(direction, (value) => styles[value]),
+    "&": mapObject(direction, (value) => styles[value]),
   }
 }

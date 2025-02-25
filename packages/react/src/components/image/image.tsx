@@ -1,12 +1,12 @@
 "use client"
 
-import { cx } from "@chakra-ui/utils"
 import { forwardRef } from "react"
 import {
   type HTMLChakraProps,
   type SystemStyleObject,
   chakra,
 } from "../../styled-system"
+import { cx } from "../../utils"
 
 interface ImageOptions {
   /**
@@ -29,11 +29,11 @@ export interface ImageProps extends HTMLChakraProps<"img", ImageOptions> {}
  * React component that renders an image with support
  * for fallbacks
  *
- * @see Docs https://chakra-ui.com/image
+ * @see Docs https://www.chakra-ui.com/docs/components/image
  */
 export const Image = forwardRef<HTMLImageElement, ImageProps>(
   function Image(props, ref) {
-    const { align, fit, ...rest } = props
+    const { align, fit = "cover", ...rest } = props
     return (
       <chakra.img
         ref={ref}
@@ -45,5 +45,3 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(
     )
   },
 )
-
-Image.displayName = "Image"

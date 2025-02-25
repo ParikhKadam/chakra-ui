@@ -60,13 +60,15 @@ describe("cva", () => {
 
     expect(result({ size: "sm" })).toMatchInlineSnapshot(`
       {
-        "color": "var(--chakra-colors-pink-400)",
-        "marginTop": "md",
+        "@layer recipes": {
+          "color": "var(--chakra-colors-pink-400)",
+          "marginTop": "md",
+        },
       }
     `)
   })
 
-  test("responsive", () => {
+  test("responsive - array", () => {
     const result = cva({
       base: {
         color: "pink.400",
@@ -91,13 +93,53 @@ describe("cva", () => {
 
     expect(result({ size: ["sm", "md"], caps: true })).toMatchInlineSnapshot(`
       {
-        "@media screen and (min-width: 30rem)": {
-          "marginTop": "30px",
+        "@layer recipes": {
+          "@media screen and (min-width: 30rem)": {
+            "marginTop": "30px",
+          },
+          "color": "var(--chakra-colors-pink-400)",
+          "marginTop": "20px",
+          "textTransform": "uppercase",
         },
-        "color": "var(--chakra-colors-pink-400)",
-        "marginTop": "20px",
-        "textTransform": "uppercase",
       }
     `)
+  })
+
+  test("responsive - object", () => {
+    const result = cva({
+      base: {
+        color: "pink.400",
+        marginTop: "100px",
+      },
+      variants: {
+        size: {
+          sm: {
+            mt: "20px",
+          },
+          md: {
+            mt: "30px",
+          },
+        },
+        caps: {
+          true: {
+            textTransform: "uppercase",
+          },
+        },
+      },
+    })
+
+    expect(result({ size: { base: "sm", sm: "md" }, caps: true }))
+      .toMatchInlineSnapshot(`
+        {
+          "@layer recipes": {
+            "@media screen and (min-width: 30rem)": {
+              "marginTop": "30px",
+            },
+            "color": "var(--chakra-colors-pink-400)",
+            "marginTop": "20px",
+            "textTransform": "uppercase",
+          },
+        }
+      `)
   })
 })

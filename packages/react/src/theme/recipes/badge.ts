@@ -1,74 +1,62 @@
 import { defineRecipe } from "../../styled-system"
 
 export const badgeRecipe = defineRecipe({
+  className: "chakra-badge",
   base: {
     display: "inline-flex",
     alignItems: "center",
+    borderRadius: "l2",
     gap: "1",
     fontWeight: "medium",
     fontVariantNumeric: "tabular-nums",
-    colorPalette: "gray",
     whiteSpace: "nowrap",
-    verticalAlign: "middle",
+    userSelect: "none",
   },
   variants: {
     variant: {
       solid: {
-        bg: "colorPalette.600",
-        color: "white",
+        bg: "colorPalette.solid",
+        color: "colorPalette.contrast",
       },
       subtle: {
-        bg: { base: "colorPalette.100", _dark: "colorPalette.400/20" },
-        color: { base: "colorPalette.800", _dark: "colorPalette.300" },
+        bg: "colorPalette.subtle",
+        color: "colorPalette.fg",
       },
       outline: {
-        color: { base: "colorPalette.800", _dark: "colorPalette.200" },
+        color: "colorPalette.fg",
         shadow: "inset 0 0 0px 1px var(--shadow-color)",
-        shadowColor: { base: "colorPalette.300", _dark: "colorPalette.200/10" },
+        shadowColor: "colorPalette.muted",
       },
       surface: {
-        bg: { base: "colorPalette.50", _dark: "colorPalette.300/20" },
-        color: { base: "colorPalette.800", _dark: "colorPalette.200" },
+        bg: "colorPalette.subtle",
+        color: "colorPalette.fg",
         shadow: "inset 0 0 0px 1px var(--shadow-color)",
-        shadowColor: { base: "colorPalette.300", _dark: "colorPalette.200/10" },
+        shadowColor: "colorPalette.muted",
       },
       plain: {
-        color: { base: "colorPalette.800", _dark: "colorPalette.200" },
+        color: "colorPalette.fg",
       },
     },
     size: {
       xs: {
-        fontSize: "2xs",
-        borderRadius: "xs",
-        px: "0.5",
-        _empty: {
-          height: "1",
-        },
+        textStyle: "2xs",
+        px: "1",
+        minH: "4",
       },
       sm: {
-        fontSize: "xs",
-        borderRadius: "sm",
-        px: "1",
-        _empty: {
-          height: "2",
-        },
+        textStyle: "xs",
+        px: "1.5",
+        minH: "5",
       },
       md: {
-        fontSize: "sm",
-        borderRadius: "sm",
+        textStyle: "sm",
         px: "2",
-        _empty: {
-          height: "4",
-        },
+        minH: "6",
       },
       lg: {
-        fontSize: "sm",
-        borderRadius: "sm",
-        px: "2",
-        py: "0.5",
-        _empty: {
-          height: "4",
-        },
+        textStyle: "sm",
+        px: "2.5",
+        minH: "7",
       },
     },
   },

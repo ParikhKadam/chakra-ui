@@ -1,9 +1,12 @@
+"use client"
+
+import type { Assign } from "@ark-ui/react"
 import { Collapsible as ArkCollapsible } from "@ark-ui/react/collapsible"
 import {
   type HTMLChakraProps,
   type SlotRecipeProps,
   type UnstyledProp,
-  createStyleContext,
+  createSlotRecipeContext,
 } from "../../styled-system"
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -12,16 +15,36 @@ const {
   withProvider,
   withContext,
   useStyles: useCollapsibleStyles,
-} = createStyleContext("Collapsible")
+  PropsProvider,
+} = createSlotRecipeContext({ key: "collapsible" })
 
 export { useCollapsibleStyles }
 
 ////////////////////////////////////////////////////////////////////////////////////
 
-export interface CollapsibleRootProps
-  extends HTMLChakraProps<"div", ArkCollapsible.RootProps>,
-    SlotRecipeProps<"Collapsible">,
+export interface CollapsibleRootProviderBaseProps
+  extends Assign<
+      ArkCollapsible.RootProviderBaseProps,
+      SlotRecipeProps<"collapsible">
+    >,
     UnstyledProp {}
+
+export interface CollapsibleRootProviderProps
+  extends HTMLChakraProps<"div", CollapsibleRootProviderBaseProps> {}
+
+export const CollapsibleRootProvider = withProvider<
+  HTMLDivElement,
+  CollapsibleRootProviderProps
+>(ArkCollapsible.RootProvider, "root", { forwardAsChild: true })
+
+////////////////////////////////////////////////////////////////////////////////////
+
+export interface CollapsibleRootBaseProps
+  extends Assign<ArkCollapsible.RootBaseProps, SlotRecipeProps<"collapsible">>,
+    UnstyledProp {}
+
+export interface CollapsibleRootProps
+  extends HTMLChakraProps<"div", CollapsibleRootBaseProps> {}
 
 export const CollapsibleRoot = withProvider<
   HTMLDivElement,
@@ -30,8 +53,13 @@ export const CollapsibleRoot = withProvider<
 
 ////////////////////////////////////////////////////////////////////////////////////
 
+export const CollapsiblePropsProvider =
+  PropsProvider as React.Provider<CollapsibleRootBaseProps>
+
+////////////////////////////////////////////////////////////////////////////////////
+
 export interface CollapsibleTriggerProps
-  extends HTMLChakraProps<"button", ArkCollapsible.TriggerProps> {}
+  extends HTMLChakraProps<"button", ArkCollapsible.TriggerBaseProps> {}
 
 export const CollapsibleTrigger = withContext<
   HTMLButtonElement,
@@ -41,9 +69,16 @@ export const CollapsibleTrigger = withContext<
 ////////////////////////////////////////////////////////////////////////////////////
 
 export interface CollapsibleContentProps
-  extends HTMLChakraProps<"div", ArkCollapsible.ContentProps> {}
+  extends HTMLChakraProps<"div", ArkCollapsible.ContentBaseProps> {}
 
 export const CollapsibleContent = withContext<
   HTMLDivElement,
   CollapsibleContentProps
 >(ArkCollapsible.Content, "content", { forwardAsChild: true })
+
+////////////////////////////////////////////////////////////////////////////////////
+
+export const CollapsibleContext = ArkCollapsible.Context
+
+export interface CollapsibleOpenChangeDetails
+  extends ArkCollapsible.OpenChangeDetails {}

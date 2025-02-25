@@ -1,15 +1,17 @@
+import type { Meta } from "@storybook/react"
 import { Box } from "../src"
-import { Bleed } from "../src/components/bleed"
 
 export default {
   title: "Layout / Bleed",
-}
+  decorators: [
+    (Story) => (
+      <Box p="4">
+        <Story />
+      </Box>
+    ),
+  ],
+} satisfies Meta
 
-export const Basic = () => (
-  <Box padding="4" borderWidth="1px">
-    <Bleed inline="4" bg="pink.100" padding="3">
-      Some bleed
-    </Bleed>
-    <Box padding="4">Inner text</Box>
-  </Box>
-)
+export { BleedBasic as Basic } from "compositions/examples/bleed-basic"
+export { BleedVertical as Vertical } from "compositions/examples/bleed-vertical"
+export { BleedWithDirection as Direction } from "compositions/examples/bleed-with-direction"

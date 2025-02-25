@@ -1,137 +1,25 @@
 import type { Meta } from "@storybook/react"
-import { chakra, useRecipe, useSlotRecipe } from "../src/styled-system"
+import { Box } from "../src"
 
 export default {
   title: "Foundations / System",
+  decorators: [
+    (Story) => (
+      <Box p="10">
+        <Story />
+      </Box>
+    ),
+  ],
 } satisfies Meta
 
-const Box = chakra("div")
-
-const Alert = chakra("div", {
-  base: {
-    lineHeight: "1",
-    fontSize: "sm",
-    rounded: 4,
-    paddingX: 20,
-    paddingY: 10,
-    fontFamily: "Inter",
-    color: "white",
-  },
-  variants: {
-    status: {
-      default: { bg: "gray" },
-      error: { bg: "red" },
-      success: { bg: "green" },
-      warning: { bg: "orange" },
-    },
-    caps: {
-      true: {
-        textTransform: "uppercase",
-      },
-    },
-  },
-})
-
-export const TextStyle = () => {
-  return (
-    <Box
-      bg="pink.500"
-      px="5"
-      py="2"
-      rounded="sm"
-      textStyle="2xl"
-      fontSize="6xl"
-      color="white/50"
-    >
-      Welcome
-    </Box>
-  )
-}
-
-export const Basic = () => {
-  return (
-    <Box>
-      <Alert status="success" caps>
-        Welcome
-      </Alert>
-      <Box
-        as="section"
-        bg={{ base: "primary", _hover: "green" }}
-        color="pink"
-        padding="40px"
-        rounded="12px"
-        mt="40px"
-      >
-        Welcome
-        <Box
-          w="40px"
-          h="40px"
-          bg="white/20"
-          color="colorPalette.300"
-          borderWidth="4px"
-          borderStyle="solid"
-          borderColor="colorPalette.300/30"
-          colorPalette="green"
-          display="inline-flex"
-          alignItems="center"
-          justifyContent="center"
-          animation="spin 2s infinite"
-        >
-          3
-        </Box>
-      </Box>
-    </Box>
-  )
-}
-
-export const WithAsChild = () => {
-  return (
-    <chakra.button bg="red" padding="20px" asChild>
-      <a href="dfd">sdfsd</a>
-    </chakra.button>
-  )
-}
-
-const Flex = chakra("div", {
-  base: {
-    display: "flex",
-  },
-  variants: {
-    direction: {
-      row: { flexDirection: "row" },
-      column: { flexDirection: "column" },
-    },
-    align: {
-      start: { alignItems: "flex-start" },
-      center: { alignItems: "center" },
-      end: { alignItems: "flex-end" },
-    },
-    justify: {
-      start: { justifyContent: "flex-start" },
-      center: { justifyContent: "center" },
-      end: { justifyContent: "flex-end" },
-    },
-  },
-})
-
-export const WithRecipe = () => {
-  const button = useRecipe("Button")
-  return (
-    <Flex align="center" gap="40px">
-      <button>Welcome</button>
-      <chakra.button className="reset" css={button({ size: "md" })}>
-        Welcome
-      </chakra.button>
-    </Flex>
-  )
-}
-
-export const WithSlotRecipe = () => {
-  const alert = useSlotRecipe("Alert")
-  const styles = alert({ variant: "solid" })
-  return (
-    <chakra.button className="reset" css={styles["root"]}>
-      Welcome
-    </chakra.button>
-  )
-}
+export { SystemAlertRecipe as AlertRecipe } from "compositions/examples/system/alert-recipe"
+export { SystemColorPalette as ColorPalette } from "compositions/examples/system/color-palette"
+export { SystemFlexRecipe as FlexRecipe } from "compositions/examples/system/flex-recipe"
+export { SystemInlineRecipe as InlineRecipe } from "compositions/examples/system/inline-recipe"
+export { SystemInlineSlotRecipe as InlineSlotRecipe } from "compositions/examples/system/inline-slot-recipe"
+export { SystemWithAnimation as Animation } from "compositions/examples/system/with-animation"
+export { SystemWithAsChild as AsChild } from "compositions/examples/system/with-as-child"
+export { WithCompoundBoolean as CompoundBoolean } from "compositions/examples/system/with-compound-boolean"
+export { WithCompoundColorPalette as CompoundColorPalette } from "compositions/examples/system/with-compound-color-palette"
+export { SystemWithUseRecipe as UseRecipe } from "compositions/examples/system/with-use-recipe"
+export { SystemWithUseSlotRecipe as UseSlotRecipe } from "compositions/examples/system/with-use-slot-recipe"

@@ -1,7 +1,7 @@
 export interface Conditions {
-  /** `&:is(:hover, [data-hover]):not(:disabled, [data-disabled])` */
+  /** `@media (hover: hover),&:is(:hover, [data-hover]):not(:disabled, [data-disabled])` */
   _hover: string
-  /** `&:is(:active, [data-active]):not(:disabled, [data-disabled])` */
+  /** `&:is(:active, [data-active]):not(:disabled, [data-disabled], [data-state=open])` */
   _active: string
   /** `&:is(:focus, [data-focus])` */
   _focus: string
@@ -33,6 +33,8 @@ export interface Conditions {
   _complete: string
   /** `&[data-incomplete]` */
   _incomplete: string
+  /** `&[data-dragging]` */
+  _dragging: string
   /** `&::before` */
   _before: string
   /** `&::after` */
@@ -111,9 +113,9 @@ export interface Conditions {
   _invalid: string
   /** `&:autofill` */
   _autofill: string
-  /** `&:in-range` */
+  /** `&:is(:in-range, [data-in-range])` */
   _inRange: string
-  /** `&:out-of-range` */
+  /** `&:is(:out-of-range, [data-outside-range])` */
   _outOfRange: string
   /** `&::placeholder, &[data-placeholder]` */
   _placeholder: string
@@ -125,6 +127,12 @@ export interface Conditions {
   _selected: string
   /** `&:is([aria-grabbed=true], [data-grabbed])` */
   _grabbed: string
+  /** `&[data-state=under-value]` */
+  _underValue: string
+  /** `&[data-state=over-value]` */
+  _overValue: string
+  /** `&[data-state=at-value]` */
+  _atValue: string
   /** `&:default` */
   _default: string
   /** `&:optional` */
@@ -145,6 +153,18 @@ export interface Conditions {
   _currentPage: string
   /** `&[aria-current=step]` */
   _currentStep: string
+  /** `&[data-today]` */
+  _today: string
+  /** `&[data-unavailable]` */
+  _unavailable: string
+  /** `&[data-range-start]` */
+  _rangeStart: string
+  /** `&[data-range-end]` */
+  _rangeEnd: string
+  /** `&[data-now]` */
+  _now: string
+  /** `&[data-topmost]` */
+  _topmost: string
   /** `@media (prefers-reduced-motion: reduce)` */
   _motionReduce: string
   /** `@media (prefers-reduced-motion: no-preference)` */
@@ -155,14 +175,14 @@ export interface Conditions {
   _landscape: string
   /** `@media (orientation: portrait)` */
   _portrait: string
-  /** ` &.dark, .dark &` */
+  /** `.dark &, .dark .chakra-theme:not(.light) &` */
   _dark: string
-  /** ` &.light, .light &` */
+  /** `:root &, .light &` */
   _light: string
   /** `@media (prefers-color-scheme: dark)` */
-  _mediaDark: string
+  _osDark: string
   /** `@media (prefers-color-scheme: light)` */
-  _mediaLight: string
+  _osLight: string
   /** `@media (forced-colors: active)` */
   _highContrast: string
   /** `@media (prefers-contrast: less)` */
@@ -183,6 +203,10 @@ export interface Conditions {
   _horizontal: string
   /** `&[data-orientation=vertical]` */
   _vertical: string
+  /** `& :where(svg)` */
+  _icon: string
+  /** `@starting-style` */
+  _starting: string
   /** `@media screen and (min-width: 30rem)` */
   sm: string
   /** `@media screen and (min-width: 30rem) and (max-width: 47.9975rem)` */
@@ -191,15 +215,15 @@ export interface Conditions {
   smDown: string
   /** `@media screen and (min-width: 48rem)` */
   md: string
-  /** `@media screen and (min-width: 48rem) and (max-width: 61.9975rem)` */
+  /** `@media screen and (min-width: 48rem) and (max-width: 63.9975rem)` */
   mdOnly: string
   /** `@media screen and (max-width: 47.9975rem)` */
   mdDown: string
-  /** `@media screen and (min-width: 62rem)` */
+  /** `@media screen and (min-width: 64rem)` */
   lg: string
-  /** `@media screen and (min-width: 62rem) and (max-width: 79.9975rem)` */
+  /** `@media screen and (min-width: 64rem) and (max-width: 79.9975rem)` */
   lgOnly: string
-  /** `@media screen and (max-width: 61.9975rem)` */
+  /** `@media screen and (max-width: 63.9975rem)` */
   lgDown: string
   /** `@media screen and (min-width: 80rem)` */
   xl: string
@@ -215,21 +239,21 @@ export interface Conditions {
   "2xlDown": string
   /** `@media screen and (min-width: 30rem) and (max-width: 47.9975rem)` */
   smToMd: string
-  /** `@media screen and (min-width: 30rem) and (max-width: 61.9975rem)` */
+  /** `@media screen and (min-width: 30rem) and (max-width: 63.9975rem)` */
   smToLg: string
   /** `@media screen and (min-width: 30rem) and (max-width: 79.9975rem)` */
   smToXl: string
   /** `@media screen and (min-width: 30rem) and (max-width: 95.9975rem)` */
   smTo2xl: string
-  /** `@media screen and (min-width: 48rem) and (max-width: 61.9975rem)` */
+  /** `@media screen and (min-width: 48rem) and (max-width: 63.9975rem)` */
   mdToLg: string
   /** `@media screen and (min-width: 48rem) and (max-width: 79.9975rem)` */
   mdToXl: string
   /** `@media screen and (min-width: 48rem) and (max-width: 95.9975rem)` */
   mdTo2xl: string
-  /** `@media screen and (min-width: 62rem) and (max-width: 79.9975rem)` */
+  /** `@media screen and (min-width: 64rem) and (max-width: 79.9975rem)` */
   lgToXl: string
-  /** `@media screen and (min-width: 62rem) and (max-width: 95.9975rem)` */
+  /** `@media screen and (min-width: 64rem) and (max-width: 95.9975rem)` */
   lgTo2xl: string
   /** `@media screen and (min-width: 80rem) and (max-width: 95.9975rem)` */
   xlTo2xl: string

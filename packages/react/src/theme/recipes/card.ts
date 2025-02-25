@@ -1,30 +1,44 @@
-import { cardAnatomy as parts } from "../../anatomy"
+import { cardAnatomy } from "../../anatomy"
 import { defineSlotRecipe } from "../../styled-system"
 
 export const cardSlotRecipe = defineSlotRecipe({
-  slots: parts.keys,
+  className: "chakra-card",
+  slots: cardAnatomy.keys(),
   base: {
     root: {
-      display: "inline-flex",
+      display: "flex",
+      flexDirection: "column",
       position: "relative",
-      minWidth: 0,
+      minWidth: "0",
       wordWrap: "break-word",
-      bg: "var(--card-bg)",
-      boxShadow: "var(--card-shadow)",
-      borderRadius: "var(--card-radius)",
-      color: "text",
-      borderWidth: "var(--card-border-width, 0)",
-      borderColor: "var(--card-border)",
+      borderRadius: "l3",
+      color: "fg",
+      textAlign: "start",
     },
-    body: {
-      padding: "var(--card-padding)",
-      flex: "1 1 0%",
+    title: {
+      fontWeight: "semibold",
+    },
+    description: {
+      color: "fg.muted",
+      fontSize: "sm",
     },
     header: {
       paddingInline: "var(--card-padding)",
       paddingTop: "var(--card-padding)",
+      display: "flex",
+      flexDirection: "column",
+      gap: "1.5",
+    },
+    body: {
+      padding: "var(--card-padding)",
+      flex: "1",
+      display: "flex",
+      flexDirection: "column",
     },
     footer: {
+      display: "flex",
+      alignItems: "center",
+      gap: "2",
       paddingInline: "var(--card-padding)",
       paddingBottom: "var(--card-padding)",
     },
@@ -33,39 +47,47 @@ export const cardSlotRecipe = defineSlotRecipe({
     size: {
       sm: {
         root: {
-          "--card-radius": "radii.sm",
           "--card-padding": "spacing.4",
+        },
+        title: {
+          textStyle: "md",
         },
       },
       md: {
         root: {
-          "--card-radius": "radii.md",
           "--card-padding": "spacing.6",
+        },
+        title: {
+          textStyle: "lg",
         },
       },
       lg: {
         root: {
-          "--card-radius": "radii.xl",
           "--card-padding": "spacing.7",
+        },
+        title: {
+          textStyle: "xl",
         },
       },
     },
+
     variant: {
       elevated: {
         root: {
-          "--card-bg": { base: "white", _dark: "colors.gray.800" },
-          "--card-shadow": "shadows.xs",
+          bg: "bg.panel",
+          boxShadow: "md",
         },
       },
       outline: {
         root: {
-          "--card-border-width": "1px",
-          "--card-border": "colors.border",
+          bg: "bg.panel",
+          borderWidth: "1px",
+          borderColor: "border",
         },
       },
       subtle: {
         root: {
-          "--card-bg": "colors.bg.muted",
+          bg: "bg.muted",
         },
       },
     },

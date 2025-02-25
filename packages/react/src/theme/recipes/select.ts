@@ -1,11 +1,11 @@
-import { selectAnatomy } from "@ark-ui/anatomy"
+import { selectAnatomy } from "../../anatomy"
 import { defineSlotRecipe } from "../../styled-system"
 
 export const selectSlotRecipe = defineSlotRecipe({
+  className: "chakra-select",
   slots: selectAnatomy.keys(),
   base: {
     root: {
-      colorPalette: "accent",
       display: "flex",
       flexDirection: "column",
       gap: "1.5",
@@ -15,117 +15,266 @@ export const selectSlotRecipe = defineSlotRecipe({
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
-      bg: "bg",
       width: "full",
+      minH: "var(--select-trigger-height)",
+      px: "var(--select-trigger-padding-x)",
+      borderRadius: "l2",
+      userSelect: "none",
+      textAlign: "start",
+      focusVisibleRing: "inside",
       _placeholderShown: {
-        color: "fg.subtle",
+        color: "fg.muted/80",
       },
       _disabled: {
-        cursor: "not-allowed",
-        opacity: "0.5",
+        layerStyle: "disabled",
       },
-      _focusVisible: {
-        outline: "2px solid",
-        outlineColor: "colorPalette.500",
-        outlineOffset: "2px",
+      _invalid: {
+        borderColor: "border.error",
       },
     },
+    indicatorGroup: {
+      display: "flex",
+      alignItems: "center",
+      gap: "1",
+      pos: "absolute",
+      right: "0",
+      top: "0",
+      bottom: "0",
+      px: "var(--select-trigger-padding-x)",
+      pointerEvents: "none",
+    },
+    indicator: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      color: { base: "fg.muted", _disabled: "fg.subtle", _invalid: "fg.error" },
+    },
     content: {
-      background: "bg",
-      borderRadius: "l2",
-      boxShadow: "sm",
+      background: "bg.panel",
       display: "flex",
       flexDirection: "column",
       zIndex: "dropdown",
-      minW: "12rem",
+      borderRadius: "l2",
+      outline: 0,
+      maxH: "96",
+      overflowY: "auto",
+      boxShadow: "md",
       _open: {
-        animation: "fade-in 0.25s",
+        animationStyle: "slide-fade-in",
+        animationDuration: "fast",
       },
-      _focusVisible: {
-        outline: "0",
+      _closed: {
+        animationStyle: "slide-fade-out",
+        animationDuration: "fastest",
       },
     },
     item: {
       position: "relative",
-      display: "flex",
-      width: "full",
-      alignItems: "center",
-      borderRadius: "l1",
       userSelect: "none",
+      display: "flex",
+      alignItems: "center",
+      gap: "2",
+      cursor: "option",
+      justifyContent: "space-between",
+      flex: "1",
+      textAlign: "start",
+      borderRadius: "l1",
       _highlighted: {
-        bg: "bg.muted",
+        bg: "bg.emphasized/60",
       },
       _disabled: {
         pointerEvents: "none",
         opacity: "0.5",
       },
+      _icon: {
+        width: "4",
+        height: "4",
+      },
+    },
+    control: {
+      pos: "relative",
+    },
+    itemText: {
+      flex: "1",
+    },
+    itemGroup: {
+      _first: { mt: "0" },
     },
     itemGroupLabel: {
-      fontWeight: "semibold",
-      textStyle: "sm",
+      py: "1",
+      fontWeight: "medium",
     },
     label: {
-      color: "fg",
       fontWeight: "medium",
+      userSelect: "none",
+      textStyle: "sm",
+      _disabled: {
+        layerStyle: "disabled",
+      },
     },
     valueText: {
       lineClamp: "1",
+      maxW: "80%",
     },
   },
+
   variants: {
     variant: {
       outline: {
         trigger: {
+          bg: "transparent",
           borderWidth: "1px",
+          borderColor: "border",
+          _expanded: {
+            borderColor: "border.emphasized",
+          },
+        },
+      },
+
+      subtle: {
+        trigger: {
+          borderWidth: "1px",
+          borderColor: "transparent",
+          bg: "bg.muted",
         },
       },
     },
+
     size: {
-      sm: {},
-      md: {
+      xs: {
+        root: {
+          "--select-trigger-height": "sizes.8",
+          "--select-trigger-padding-x": "spacing.2",
+        },
         content: {
           p: "1",
           gap: "1",
-          rounded: "md",
+          textStyle: "xs",
+        },
+        trigger: {
+          textStyle: "xs",
+          gap: "1",
         },
         item: {
+          py: "1",
+          px: "2",
+        },
+        itemGroupLabel: {
+          py: "1",
+          px: "2",
+        },
+        indicator: {
+          _icon: {
+            width: "3.5",
+            height: "3.5",
+          },
+        },
+      },
+
+      sm: {
+        root: {
+          "--select-trigger-height": "sizes.9",
+          "--select-trigger-padding-x": "spacing.2.5",
+        },
+        content: {
+          p: "1",
           textStyle: "sm",
+        },
+        trigger: {
+          textStyle: "sm",
+          gap: "1",
+        },
+        indicator: {
+          _icon: {
+            width: "4",
+            height: "4",
+          },
+        },
+        item: {
+          py: "1",
+          px: "1.5",
+        },
+        itemGroup: {
+          mt: "1",
+        },
+        itemGroupLabel: {
+          py: "1",
+          px: "1.5",
+        },
+      },
+
+      md: {
+        root: {
+          "--select-trigger-height": "sizes.10",
+          "--select-trigger-padding-x": "spacing.3",
+        },
+        content: {
+          p: "1",
+          textStyle: "sm",
+        },
+        itemGroup: {
+          mt: "1.5",
+        },
+        item: {
           py: "1.5",
           px: "2",
-          rounded: "sm",
         },
         itemIndicator: {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          "& :where(svg)": {
-            width: "4",
-            height: "4",
-          },
         },
         itemGroupLabel: {
-          px: "2",
           py: "1.5",
-        },
-        label: {
-          textStyle: "sm",
+          px: "2",
         },
         trigger: {
-          px: "3",
-          h: "10",
-          minW: "10",
-          fontSize: "sm",
-          rounded: "md",
+          textStyle: "sm",
           gap: "2",
-          "& :where(svg)": {
+        },
+        indicator: {
+          _icon: {
             width: "4",
             height: "4",
           },
         },
       },
-      lg: {},
+
+      lg: {
+        root: {
+          "--select-trigger-height": "sizes.12",
+          "--select-trigger-padding-x": "spacing.4",
+        },
+        content: {
+          p: "1.5",
+          textStyle: "md",
+        },
+        itemGroup: {
+          mt: "2",
+        },
+        item: {
+          py: "2",
+          px: "3",
+        },
+        itemGroupLabel: {
+          py: "2",
+          px: "3",
+        },
+        trigger: {
+          textStyle: "md",
+          py: "3",
+          gap: "2",
+        },
+        indicator: {
+          _icon: {
+            width: "5",
+            height: "5",
+          },
+        },
+      },
     },
   },
+
   defaultVariants: {
     size: "md",
     variant: "outline",

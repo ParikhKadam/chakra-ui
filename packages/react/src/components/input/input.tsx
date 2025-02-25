@@ -1,56 +1,21 @@
 "use client"
 
-import { cx } from "@chakra-ui/utils"
-import { forwardRef } from "react"
+import { Field as ArkField } from "@ark-ui/react/field"
 import {
-  EMPTY_STYLES,
   type HTMLChakraProps,
   type RecipeProps,
   type UnstyledProp,
-  chakra,
-  mergeProps,
-  useRecipe,
+  createRecipeContext,
 } from "../../styled-system"
-import { type FieldOptions, splitFieldProps, useField } from "../field"
 
-export interface InputProps
-  extends HTMLChakraProps<"input">,
-    RecipeProps<"Input">,
-    UnstyledProp,
-    FieldOptions {
-  /**
-   * If `true`, the input will be unstyled
-   */
-  unstyled?: boolean
-}
+const { withContext, PropsProvider } = createRecipeContext({
+  key: "input",
+})
 
-/**
- * Input
- *
- * Element that allows users enter single valued data.
- *
- * @see Docs https://chakra-ui.com/docs/components/input
- */
-export const Input = forwardRef<HTMLInputElement, InputProps>(
-  function Input(props, ref) {
-    const { unstyled, ...restProps } = props
+export interface InputBaseProps extends RecipeProps<"input">, UnstyledProp {}
 
-    const recipe = useRecipe("Input", props.recipe)
-    const [variantProps, localProps] = recipe.splitVariantProps(restProps)
-    const styles = unstyled ? EMPTY_STYLES : recipe(variantProps)
+export interface InputProps extends HTMLChakraProps<"input", InputBaseProps> {}
 
-    const [fieldProps, elementProps] = splitFieldProps(localProps)
-    const inputProps = useField<HTMLInputElement>(fieldProps)
+export const Input = withContext<HTMLInputElement, InputProps>(ArkField.Input)
 
-    return (
-      <chakra.input
-        {...mergeProps(elementProps, inputProps)}
-        css={[styles, props.css]}
-        ref={ref}
-        className={cx("chakra-input", props.className)}
-      />
-    )
-  },
-)
-
-Input.displayName = "Input"
+export const InputPropsProvider = PropsProvider as React.Provider<InputProps>

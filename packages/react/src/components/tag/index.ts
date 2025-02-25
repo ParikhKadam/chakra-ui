@@ -1,10 +1,19 @@
-export { TagRoot } from "./tag-root"
-export type { TagRootProps } from "./tag-root"
+export {
+  TagRoot,
+  TagLabel,
+  TagCloseTrigger,
+  TagStartElement,
+  TagEndElement,
+  useTagStyles,
+  TagRootPropsProvider,
+} from "./tag"
 
-export { TagCloseTrigger } from "./tag-close-trigger"
-export type { TagCloseTriggerProps } from "./tag-close-trigger"
-
-export { TagLabel } from "./tag-label"
-export type { TagLabelProps } from "./tag-label"
+export type {
+  TagRootProps,
+  TagCloseTriggerProps,
+  TagLabelProps,
+  TagStartElementProps,
+  TagEndElementProps,
+} from "./tag"
 
 export * as Tag from "./namespace"

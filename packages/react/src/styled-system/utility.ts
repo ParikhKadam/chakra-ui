@@ -1,4 +1,4 @@
-import { type Dict, isFunction, isString, memo } from "@chakra-ui/utils"
+import { type Dict, isFunction, isString, memo } from "../utils"
 import { colorMix } from "./color-mix"
 import { mapToJson } from "./map-to-json"
 import type {
@@ -103,6 +103,11 @@ export function createUtility(options: Options) {
     }
   }
 
+  const addPropertyType = (property: string, type: string[]) => {
+    const set = propTypes.get(property) ?? new Set()
+    propTypes.set(property, new Set([...set, ...type]))
+  }
+
   const getTypes = () => {
     const map = new Map<string, string[]>()
 
@@ -167,7 +172,8 @@ export function createUtility(options: Options) {
   const transform = memo((prop: string, raw: any) => {
     const key = resolveShorthand(prop)
 
-    if (isString(raw)) {
+    // skip emotion generated keyframes
+    if (isString(raw) && !raw.includes("_EMO_")) {
       raw = tokens.expandReferenceInValue(raw)
     }
 
@@ -217,6 +223,7 @@ export function createUtility(options: Options) {
     resolveShorthand,
     register,
     getTypes,
+    addPropertyType,
   }
 
   return instance

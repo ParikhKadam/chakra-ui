@@ -1,53 +1,90 @@
 "use client"
 
-import { cx, dataAttr } from "@chakra-ui/utils"
-import { forwardRef } from "react"
+import { forwardRef, useMemo } from "react"
+import { mergeProps } from "../../merge-props"
 import {
-  EMPTY_STYLES,
   type HTMLChakraProps,
   type RecipeProps,
   type UnstyledProp,
   chakra,
-  useRecipe,
+  createRecipeContext,
 } from "../../styled-system"
+import { cx } from "../../utils"
+import { Loader } from "../loader"
 
-interface ButtonOptions {
+const { useRecipeResult, PropsProvider, usePropsContext } = createRecipeContext(
+  { key: "button" },
+)
+
+export interface ButtonLoadingProps {
   /**
-   * If `true`, the button will be styled in its active state.
+   * If `true`, the button will show a loading spinner.
    * @default false
    */
-  active?: boolean
+  loading?: boolean
+  /**
+   * The text to show while loading.
+   */
+  loadingText?: React.ReactNode
+  /**
+   * The spinner to show while loading.
+   */
+  spinner?: React.ReactNode
+  /**
+   * The placement of the spinner
+   * @default "start"
+   */
+  spinnerPlacement?: "start" | "end"
 }
 
+export interface ButtonBaseProps
+  extends RecipeProps<"button">,
+    UnstyledProp,
+    ButtonLoadingProps {}
+
 export interface ButtonProps
-  extends HTMLChakraProps<"button">,
-    ButtonOptions,
-    RecipeProps<"Button">,
-    UnstyledProp {}
+  extends HTMLChakraProps<"button", ButtonBaseProps> {}
 
-/**
- * Button component is used to trigger an action or event, such as submitting a form, opening a Dialog, canceling an action, or performing a delete operation.
- *
- * @see Docs https://chakra-ui.com/docs/components/button
- * @see WAI-ARIA https://www.w3.org/WAI/ARIA/apg/patterns/button/
- */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  function Button({ unstyled, active, ...props }, ref) {
-    const recipe = useRecipe("Button", props.recipe)
-    const [variantProps, localProps] = recipe.splitVariantProps(props)
-    const styles = unstyled ? EMPTY_STYLES : recipe(variantProps)
-
+  function Button(inProps, ref) {
+    const propsContext = usePropsContext()
+    const props = useMemo(
+      () => mergeProps(propsContext, inProps),
+      [propsContext, inProps],
+    )
+    const result = useRecipeResult(props)
+    const {
+      loading,
+      loadingText,
+      children,
+      spinner,
+      spinnerPlacement,
+      ...rest
+    } = result.props
     return (
       <chakra.button
-        ref={ref}
         type="button"
-        data-active={dataAttr(active)}
-        {...localProps}
-        css={[styles, props.css]}
-        className={cx("chakra-button", localProps.className)}
-      />
+        ref={ref}
+        {...rest}
+        disabled={loading || rest.disabled}
+        className={cx(result.className, props.className)}
+        css={[result.styles, props.css]}
+      >
+        {!props.asChild && loading ? (
+          <Loader
+            spinner={spinner}
+            text={loadingText}
+            spinnerPlacement={spinnerPlacement}
+          >
+            {children}
+          </Loader>
+        ) : (
+          children
+        )}
+      </chakra.button>
     )
   },
 )
 
-Button.displayName = "Button"
+export const ButtonPropsProvider =
+  PropsProvider as React.Provider<ButtonBaseProps>

@@ -1,21 +1,20 @@
-import type { StoryFn } from "@storybook/react"
-import { Container, Separator } from "../src"
+import type { Meta } from "@storybook/react"
+import { Box } from "../src"
 
 export default {
   title: "Components / Separator",
   decorators: [
-    (Story: StoryFn) => (
-      <Container p={4} height="300px">
+    (Story) => (
+      <Box p="10">
         <Story />
-      </Container>
+      </Box>
     ),
   ],
-}
+} satisfies Meta
 
-export const Basic = () => <Separator />
-
-export const Vertical = () => <Separator orientation="vertical" />
-
-export const DashedVariant = () => (
-  <Separator orientation="horizontal" variant="dashed" />
-)
+export { SeparatorBasic as Basic } from "compositions/examples/separator-basic"
+export { SeparatorVertical as Vertical } from "compositions/examples/separator-vertical"
+export { SeparatorWithLabel as Label } from "compositions/examples/separator-with-label"
+export { SeparatorWithResponsiveOrientation as ResponsiveOrientation } from "compositions/examples/separator-with-responsive-orientation"
+export { SeparatorWithSizes as Sizes } from "compositions/examples/separator-with-sizes"
+export { SeparatorWithVariants as Variants } from "compositions/examples/separator-with-variants"

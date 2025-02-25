@@ -1,15 +1,15 @@
 import {
   type Dict,
   compact,
-  mergeWith as mergeProps,
+  cx,
   mergeWith,
   omit,
   splitProps,
   uniq,
-} from "@chakra-ui/utils"
+} from "../utils"
 import { createCssFn } from "./css"
 import type { RecipeCreatorFn, RecipeDefinition } from "./recipe.types"
-import type { Condition, CssFn } from "./types"
+import type { Condition, CssFn, Layers } from "./types"
 
 const defaults = (conf: any): Required<RecipeDefinition> => ({
   base: {},
@@ -23,16 +23,17 @@ interface Options {
   normalize: (styles: Dict) => Dict
   css: CssFn
   conditions: Condition
+  layers: Layers
 }
 
 export function createRecipeFn(options: Options): RecipeCreatorFn {
-  const { css, conditions, normalize } = options
+  const { css, conditions, normalize, layers } = options
 
   function cva(config: Dict = {}) {
     const { base, variants, defaultVariants, compoundVariants } =
       defaults(config)
 
-    const processor = createCssFn({
+    const getVariantCss = createCssFn({
       conditions,
       normalize,
       transform(prop, value) {
@@ -48,14 +49,14 @@ export function createRecipeFn(options: Options): RecipeCreatorFn {
 
       let variantCss = { ...base }
 
-      mergeWith(variantCss, processor(variantSelections))
+      mergeWith(variantCss, getVariantCss(variantSelections))
 
       const compoundVariantCss = getCompoundVariantCss(
         compoundVariants,
         variantSelections,
       )
 
-      return css(variantCss, compoundVariantCss)
+      return layers.wrap("recipes", css(variantCss, compoundVariantCss))
     }
 
     const variantKeys = Object.keys(variants)
@@ -67,6 +68,10 @@ export function createRecipeFn(options: Options): RecipeCreatorFn {
       if (!variantKeys.includes("colorPalette")) {
         recipeProps.colorPalette =
           props.colorPalette || defaultVariants.colorPalette
+      }
+
+      if (variantKeys.includes("orientation")) {
+        ;(localProps as any).orientation = props.orientation
       }
 
       return [recipeProps, localProps]
@@ -81,6 +86,7 @@ export function createRecipeFn(options: Options): RecipeCreatorFn {
 
     const cvaFn = (props: any) => css(resolve(props))
     return Object.assign(cvaFn, {
+      className: config.className,
       __cva__: true,
       variantMap,
       variantKeys,
@@ -129,7 +135,7 @@ function mergeCva(opts: Options) {
       ]),
     )
 
-    const defaultVariants = mergeProps(
+    const defaultVariants = mergeWith(
       cvaA.config.defaultVariants,
       override.defaultVariants,
     )
@@ -139,6 +145,14 @@ function mergeCva(opts: Options) {
       ...override.compoundVariants,
     ]
 
-    return { base, variants, defaultVariants, compoundVariants }
+    const className = cx(cvaA.className, cvaB.className)
+
+    return {
+      className,
+      base,
+      variants,
+      defaultVariants,
+      compoundVariants,
+    }
   }
 }

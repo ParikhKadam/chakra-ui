@@ -1,41 +1,68 @@
-import { fieldAnatomy as parts } from "../../anatomy"
+import { fieldAnatomy } from "../../anatomy"
 import { defineSlotRecipe } from "../../styled-system"
 
 export const fieldSlotRecipe = defineSlotRecipe({
-  slots: parts.keys,
+  className: "chakra-field",
+  slots: fieldAnatomy.keys(),
   base: {
+    requiredIndicator: {
+      color: "fg.error",
+      lineHeight: "1",
+    },
     root: {
       display: "flex",
-      flexDirection: "column",
-      alignItems: "flex-start",
       width: "100%",
       position: "relative",
-      gap: "2",
+      gap: "1.5",
     },
     label: {
-      display: "block",
+      display: "flex",
+      alignItems: "center",
       textAlign: "start",
-      fontSize: "sm",
+      textStyle: "sm",
       fontWeight: "medium",
-      marginEnd: "3",
+      gap: "1",
       userSelect: "none",
       _disabled: {
         opacity: "0.5",
       },
     },
-    requiredIndicator: {
-      marginStart: "2",
-    },
-    helpText: {
-      color: "fg.subtle",
-      lineHeight: "normal",
-      fontSize: "sm",
-    },
-    errorMessage: {
+    errorText: {
       display: "inline-flex",
       alignItems: "center",
-      gap: "2",
+      fontWeight: "medium",
+      gap: "1",
       color: "fg.error",
+      textStyle: "xs",
     },
+    helperText: {
+      color: "fg.muted",
+      textStyle: "xs",
+    },
+  },
+
+  variants: {
+    orientation: {
+      vertical: {
+        root: {
+          flexDirection: "column",
+          alignItems: "flex-start",
+        },
+      },
+      horizontal: {
+        root: {
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+        },
+        label: {
+          flex: "0 0 var(--field-label-width, 80px)",
+        },
+      },
+    },
+  },
+
+  defaultVariants: {
+    orientation: "vertical",
   },
 })

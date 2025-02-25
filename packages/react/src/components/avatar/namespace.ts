@@ -1,16 +1,17 @@
-export { AvatarRoot as Root } from "./avatar-root"
-export type { AvatarRootProps as RootProps } from "./avatar-root"
+export {
+  AvatarRoot as Root,
+  AvatarRootProvider as RootProvider,
+  AvatarPropsProvider as PropsProvider,
+  AvatarImage as Image,
+  AvatarFallback as Fallback,
+  AvatarIcon as Icon,
+  AvatarContext as Context,
+} from "./avatar"
 
-export { AvatarImage as Image } from "./avatar-image"
-export type { AvatarImageProps as ImageProps } from "./avatar-image"
-
-export { AvatarFallback as Fallback } from "./avatar-fallback"
-export type { AvatarFallbackProps as FallbackProps } from "./avatar-fallback"
-
-export { AvatarBadge as Badge } from "./avatar-badge"
-export type { AvatarBadgeProps as BadgeProps } from "./avatar-badge"
-
-export { AvatarGroup as Group } from "./avatar-group"
-export type { AvatarGroupProps as GroupProps } from "./avatar-group"
-
-export { AvatarIcon as Icon } from "./avatar-icon"
+export type {
+  AvatarRootProps as RootProps,
+  AvatarImageProps as ImageProps,
+  AvatarFallbackProps as FallbackProps,
+  AvatarIconProps as IconProps,
+  AvatarStatusChangeDetails as StatusChangeDetails,
+} from "./avatar"

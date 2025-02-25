@@ -1,11 +1,23 @@
-export { SwitchRoot as Root } from "./switch-root"
-export type { SwitchRootProps as RootProps } from "./switch-root"
+export {
+  SwitchRoot as Root,
+  SwitchRootProvider as RootProvider,
+  SwitchPropsProvider as PropsProvider,
+  SwitchControl as Control,
+  SwitchLabel as Label,
+  SwitchThumb as Thumb,
+  SwitchIndicator as Indicator,
+  SwitchThumbIndicator as ThumbIndicator,
+  SwitchContext as Context,
+  SwitchHiddenInput as HiddenInput,
+} from "./switch"
 
-export { SwitchLabel as Label } from "./switch-label"
-export type { SwitchLabelProps as LabelProps } from "./switch-label"
-
-export { SwitchThumb as Thumb } from "./switch-thumb"
-export type { SwitchThumbProps as ThumbProps } from "./switch-thumb"
-
-export { SwitchTrack as Track } from "./switch-track"
-export type { SwitchTrackProps as TrackProps } from "./switch-track"
+export type {
+  SwitchRootProps as RootProps,
+  SwitchRootProviderProps as RootProviderProps,
+  SwitchControlProps as ControlProps,
+  SwitchLabelProps as LabelProps,
+  SwitchThumbProps as ThumbProps,
+  SwitchIndicatorProps as IndicatorProps,
+  SwitchThumbIndicatorProps as ThumbIndicatorProps,
+  SwitchCheckedChangeDetails as CheckedChangeDetails,
+} from "./switch"

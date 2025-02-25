@@ -1,111 +1,27 @@
-import { For, Span, useSlotRecipe } from "../src"
-import { Table } from "../src/components/table"
-import { colorPalettes } from "./shared/color-palettes"
-import { PlaygroundTable } from "./shared/playground-table"
+import type { Meta } from "@storybook/react"
+import { Box } from "../src"
 
 export default {
   title: "Components / Table",
-}
+  decorators: [
+    (Story) => (
+      <Box p="10">
+        <Story />
+      </Box>
+    ),
+  ],
+} satisfies Meta
 
-const DemoTable = (props: Table.RootProps) => (
-  <Table.Root {...props}>
-    <Table.Header>
-      <Table.Row>
-        <Table.ColumnHeader>Name</Table.ColumnHeader>
-        <Table.ColumnHeader>Email</Table.ColumnHeader>
-        <Table.ColumnHeader numeric>Award Count</Table.ColumnHeader>
-      </Table.Row>
-    </Table.Header>
-    <Table.Body>
-      <Table.Row>
-        <Table.Cell>John Doe</Table.Cell>
-        <Table.Cell>johndoe@gmail.com</Table.Cell>
-        <Table.Cell numeric>10</Table.Cell>
-      </Table.Row>
-      <Table.Row>
-        <Table.Cell>Jane Doe</Table.Cell>
-        <Table.Cell>janedoe@gmail.com</Table.Cell>
-        <Table.Cell numeric>2</Table.Cell>
-      </Table.Row>
-      <Table.Row data-selected="">
-        <Table.Cell>Jack Doe</Table.Cell>
-        <Table.Cell>jackdoe@gmail.com</Table.Cell>
-        <Table.Cell numeric>9</Table.Cell>
-      </Table.Row>
-    </Table.Body>
-    <Table.Footer>
-      <Table.Row>
-        <Table.Cell colSpan={2}>Total</Table.Cell>
-        <Table.Cell>15</Table.Cell>
-      </Table.Row>
-    </Table.Footer>
-  </Table.Root>
-)
-
-export const Variants = () => {
-  const recipe = useSlotRecipe("Table")
-  return (
-    <PlaygroundTable>
-      <thead>
-        <tr>
-          <td />
-          <For each={recipe.variantMap.variant}>{(v) => <td>{v}</td>}</For>
-        </tr>
-      </thead>
-      <tbody>
-        <For each={colorPalettes}>
-          {(c) => (
-            <tr>
-              <td>
-                <Span fontSize="sm" color="fg.muted" minW="8ch">
-                  {c}
-                </Span>
-              </td>
-              <For each={recipe.variantMap.variant}>
-                {(v) => (
-                  <td>
-                    <DemoTable showColumnBorder variant={v} colorPalette={c} />
-                  </td>
-                )}
-              </For>
-            </tr>
-          )}
-        </For>
-      </tbody>
-    </PlaygroundTable>
-  )
-}
-
-export const Sizes = () => {
-  const recipe = useSlotRecipe("Table")
-  return (
-    <PlaygroundTable>
-      <thead>
-        <tr>
-          <td />
-          <For each={recipe.variantMap.size}>{(v) => <td>{v}</td>}</For>
-        </tr>
-      </thead>
-      <tbody>
-        <For each={recipe.variantMap.variant}>
-          {(c) => (
-            <tr>
-              <td>
-                <Span fontSize="sm" color="fg.muted" minW="8ch">
-                  {c}
-                </Span>
-              </td>
-              <For each={recipe.variantMap.size}>
-                {(v) => (
-                  <td>
-                    <DemoTable size={v} variant={c} striped />
-                  </td>
-                )}
-              </For>
-            </tr>
-          )}
-        </For>
-      </tbody>
-    </PlaygroundTable>
-  )
-}
+export { TableBasic as Basic } from "compositions/examples/table-basic"
+export { TableWithColumnBorder as ColumnBorder } from "compositions/examples/table-with-column-border"
+export { TableWithColumnGroup as ColumnGroup } from "compositions/examples/table-with-column-group"
+export { TableWithInteractive as Interactive } from "compositions/examples/table-with-interactive"
+export { TableWithOverflow as Overflow } from "compositions/examples/table-with-overflow"
+export { TableWithPagination as Pagination } from "compositions/examples/table-with-pagination"
+export { TableWithStickyColumn as StickyColumn } from "compositions/examples/table-with-sticky-column"
+export { TableWithStickyHeader as StickyHeader } from "compositions/examples/table-with-sticky-header"
+export { TableWithStriped as Stripe } from "compositions/examples/table-with-striped"
+export { TableWithSelection as Selection } from "compositions/examples/table-with-selection"
+export { TableWithSelectionActionBar as SelectionActionBar } from "compositions/examples/table-with-selection-action-bar"
+export { TableVariantTable as Variants } from "compositions/examples/table-variant-table"
+export { TableSizeTable as Sizes } from "compositions/examples/table-size-table"

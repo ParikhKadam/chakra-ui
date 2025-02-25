@@ -1,21 +1,20 @@
-import { toastAnatomy as parts } from "../../anatomy"
+import { toastAnatomy } from "../../anatomy"
 import { defineSlotRecipe } from "../../styled-system"
 
 export const toastSlotRecipe = defineSlotRecipe({
-  slots: parts.keys,
+  slots: toastAnatomy.keys(),
+  className: "chakra-toast",
   base: {
     root: {
-      width: "auto",
+      width: "full",
       display: "flex",
       alignItems: "flex-start",
       position: "relative",
-      overflow: "hidden",
       gap: "3",
-      paddingY: "4",
-      paddingStart: "4",
-      paddingEnd: "8",
-      rounded: "md",
-      fontSize: "sm",
+      py: "4",
+      ps: "4",
+      pe: "6",
+      borderRadius: "l2",
       translate: "var(--x) var(--y)",
       scale: "var(--scale)",
       zIndex: "var(--z-index)",
@@ -29,60 +28,72 @@ export const toastSlotRecipe = defineSlotRecipe({
         transition: "translate 400ms, scale 400ms, opacity 200ms",
         transitionTimingFunction: "cubic-bezier(0.06, 0.71, 0.55, 1)",
       },
-      "&[data-type=info]": {
-        colorPalette: "blue",
-      },
+      bg: "bg.panel",
+      color: "fg",
+      boxShadow: "xl",
+      "--toast-trigger-bg": "colors.bg.muted",
       "&[data-type=warning]": {
-        colorPalette: "orange",
+        bg: "orange.solid",
+        color: "orange.contrast",
+        "--toast-trigger-bg": "{white/10}",
+        "--toast-border-color": "{white/40}",
       },
       "&[data-type=success]": {
-        colorPalette: "green",
+        bg: "green.solid",
+        color: "green.contrast",
+        "--toast-trigger-bg": "{white/10}",
+        "--toast-border-color": "{white/40}",
       },
       "&[data-type=error]": {
-        colorPalette: "red",
-      },
-      "&[data-type=loading]": {
-        colorPalette: "gray",
+        bg: "red.solid",
+        color: "red.contrast",
+        "--toast-trigger-bg": "{white/10}",
+        "--toast-border-color": "{white/40}",
       },
     },
     title: {
-      fontWeight: "semibold",
-      lineHeight: "1.2",
+      fontWeight: "medium",
+      textStyle: "sm",
       marginEnd: "2",
     },
     description: {
       display: "inline",
-      lineHeight: "1.5",
+      textStyle: "sm",
       opacity: "0.8",
     },
-    icon: {
-      flexShrink: 0,
+    indicator: {
+      flexShrink: "0",
+      boxSize: "5",
     },
-  },
-  variants: {
-    variant: {
-      solid: {
-        root: {
-          bg: "colorPalette.700",
-          color: "white",
-        },
-        icon: {
-          color: "white",
-        },
-      },
-      raised: {
-        root: {
-          bg: "bg.panel",
-          color: "fg",
-          boxShadow: "md",
-        },
-        icon: {
-          color: "colorPalette.600",
-        },
+    actionTrigger: {
+      textStyle: "sm",
+      fontWeight: "medium",
+      height: "8",
+      px: "3",
+      borderRadius: "l2",
+      alignSelf: "center",
+      borderWidth: "1px",
+      borderColor: "var(--toast-border-color, inherit)",
+      transition: "background 200ms",
+      _hover: {
+        bg: "var(--toast-trigger-bg)",
       },
     },
-  },
-  defaultVariants: {
-    variant: "solid",
+    closeTrigger: {
+      position: "absolute",
+      top: "1",
+      insetEnd: "1",
+      padding: "1",
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      color: "{currentColor/60}",
+      borderRadius: "l2",
+      textStyle: "md",
+      transition: "background 200ms",
+      _icon: {
+        boxSize: "1em",
+      },
+    },
   },
 })

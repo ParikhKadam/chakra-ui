@@ -1,63 +1,19 @@
 "use client"
 
-import { compact, cx } from "@chakra-ui/utils"
-import { forwardRef } from "react"
+import type { Assign } from "@ark-ui/react"
 import {
   type HTMLChakraProps,
   type RecipeProps,
-  type SystemStyleObject,
-  chakra,
-  useRecipe,
+  createRecipeContext,
 } from "../../styled-system"
 
-interface TextOptions {
-  /**
-   * The CSS `text-align` property
-   * @type SystemStyleObject["textAlign"]
-   */
-  align?: SystemStyleObject["textAlign"]
-  /**
-   * The CSS `text-decoration` property
-   * @type SystemStyleObject["textDecoration"]
-   */
-  decoration?: SystemStyleObject["textDecoration"]
-  /**
-   * The CSS `text-transform` property
-   * @type SystemStyleObject["textTransform"]
-   */
-  casing?: SystemStyleObject["textTransform"]
-}
+const { withContext, PropsProvider } = createRecipeContext({
+  key: "text",
+})
 
 export interface TextProps
-  extends HTMLChakraProps<"p", TextOptions>,
-    RecipeProps<"Text"> {}
+  extends Assign<HTMLChakraProps<"p">, RecipeProps<"text">> {}
 
-/**
- * Used to render texts or paragraphs.
- *
- * @see Docs https://chakra-ui.com/text
- */
-export const Text = forwardRef<HTMLParagraphElement, TextProps>(
-  function Text(props, ref) {
-    const recipe = useRecipe("Text", props.recipe)
-    const [variantProps, localProps] = recipe.splitVariantProps(props)
+export const Text = withContext<HTMLParagraphElement, TextProps>("p")
 
-    const aliasedProps = compact({
-      textAlign: localProps.align,
-      textDecoration: localProps.decoration,
-      textTransform: localProps.casing,
-    })
-
-    return (
-      <chakra.p
-        ref={ref}
-        className={cx("chakra-text", props.className)}
-        {...aliasedProps}
-        {...localProps}
-        css={[recipe(variantProps), localProps.css]}
-      />
-    )
-  },
-)
-
-Text.displayName = "Text"
+export const TextPropsProvider = PropsProvider as React.Provider<TextProps>

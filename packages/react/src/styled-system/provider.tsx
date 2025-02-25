@@ -17,12 +17,10 @@ export interface ChakraProviderProps {
 
 function ChakraProvider(props: ChakraProviderProps) {
   const { value: sys, children } = props
-
   return (
     <ChakraContextProvider value={sys}>
-      <Global
-        styles={[sys.getPreflightCss(), sys.getGlobalCss(), sys.getTokenCss()]}
-      />
+      {!sys._config.disableLayers && <Global styles={sys.layers.atRule} />}
+      <Global styles={sys._global} />
       {children}
     </ChakraContextProvider>
   )

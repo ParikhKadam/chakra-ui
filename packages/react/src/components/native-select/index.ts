@@ -1,10 +1,15 @@
-export { NativeSelectRoot } from "./select-root"
-export type { NativeSelectRootProps } from "./select-root"
+export {
+  NativeSelectRoot,
+  NativeSelectField,
+  NativeSelectIndicator,
+  NativeSelectPropsProvider,
+  useNativeSelectStyles,
+} from "./native-select"
 
-export { NativeSelectField } from "./select-field"
-export type { NativeSelectFieldProps } from "./select-field"
-
-export { NativeSelectIndicator } from "./select-indicator"
-export type { NativeSelectIndicatorProps } from "./select-indicator"
+export type {
+  NativeSelectRootProps,
+  NativeSelectFieldProps,
+  NativeSelectIndicatorProps,
+} from "./native-select"
 
 export * as NativeSelect from "./namespace"

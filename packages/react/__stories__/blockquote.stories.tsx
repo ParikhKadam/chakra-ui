@@ -1,52 +1,21 @@
-import { Blockquote, For, Span, useSlotRecipe } from "../src"
-import { colorPalettes } from "./shared/color-palettes"
-import { PlaygroundTable } from "./shared/playground-table"
+import type { Meta } from "@storybook/react"
+import { Box } from "../src"
 
 export default {
   title: "Components / Blockquote",
-}
+  decorators: [
+    (Story) => (
+      <Box p="10">
+        <Story />
+      </Box>
+    ),
+  ],
+} satisfies Meta
 
-const DemoBlockquote = (props: Blockquote.RootProps) => (
-  <Blockquote.Root {...props}>
-    <Blockquote.Content cite="#">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet, sapiente.
-    </Blockquote.Content>
-    <Blockquote.Caption>
-      — Blockquote Caption, <cite>Book</cite>
-    </Blockquote.Caption>
-  </Blockquote.Root>
-)
-
-export const Variants = () => {
-  const recipe = useSlotRecipe("Blockquote")
-  return (
-    <PlaygroundTable>
-      <thead>
-        <tr>
-          <td />
-          <For each={recipe.variantMap.variant}>{(v) => <td>{v}</td>}</For>
-        </tr>
-      </thead>
-      <tbody>
-        <For each={colorPalettes}>
-          {(c) => (
-            <tr>
-              <td>
-                <Span fontSize="sm" color="fg.muted" minW="8ch">
-                  {c}
-                </Span>
-              </td>
-              <For each={recipe.variantMap.variant}>
-                {(v) => (
-                  <td>
-                    <DemoBlockquote variant={v} colorPalette={c} />
-                  </td>
-                )}
-              </For>
-            </tr>
-          )}
-        </For>
-      </tbody>
-    </PlaygroundTable>
-  )
-}
+export { BlockquoteBasic as Basic } from "compositions/examples/blockquote-basic"
+export { BlockquoteVariantTable as Variants } from "compositions/examples/blockquote-variant-table"
+export { BlockquoteWithAvatar as Avatar } from "compositions/examples/blockquote-with-avatar"
+export { BlockquoteWithCite as Cite } from "compositions/examples/blockquote-with-cite"
+export { BlockquoteWithCustomIcon as CustomIcon } from "compositions/examples/blockquote-with-custom-icon"
+export { BlockquoteWithIcon as Icon } from "compositions/examples/blockquote-with-icon"
+export { BlockquoteWithJustify as Justify } from "compositions/examples/blockquote-with-justify"

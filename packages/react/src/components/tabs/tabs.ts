@@ -1,11 +1,12 @@
 "use client"
 
+import type { Assign } from "@ark-ui/react"
 import { Tabs as ArkTabs } from "@ark-ui/react/tabs"
 import {
   type HTMLChakraProps,
   type SlotRecipeProps,
   type UnstyledProp,
-  createStyleContext,
+  createSlotRecipeContext,
 } from "../../styled-system"
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -14,16 +15,33 @@ const {
   withProvider,
   withContext,
   useStyles: useTabsStyles,
-} = createStyleContext("Tabs")
+  PropsProvider,
+} = createSlotRecipeContext({ key: "tabs" })
 
 export { useTabsStyles }
 
 ////////////////////////////////////////////////////////////////////////////////////
 
-export interface TabsRootProps
-  extends HTMLChakraProps<"div", ArkTabs.RootProps>,
-    SlotRecipeProps<"Tabs">,
+export interface TabsRootProviderBaseProps
+  extends Assign<ArkTabs.RootProviderBaseProps, SlotRecipeProps<"tabs">>,
     UnstyledProp {}
+
+export interface TabsRootProviderProps
+  extends HTMLChakraProps<"div", TabsRootProviderBaseProps> {}
+
+export const TabsRootProvider = withProvider<
+  HTMLDivElement,
+  TabsRootProviderProps
+>(ArkTabs.RootProvider, "root", { forwardAsChild: true })
+
+////////////////////////////////////////////////////////////////////////////////////
+
+export interface TabsRootBaseProps
+  extends Assign<ArkTabs.RootBaseProps, SlotRecipeProps<"tabs">>,
+    UnstyledProp {}
+
+export interface TabsRootProps
+  extends HTMLChakraProps<"div", TabsRootBaseProps> {}
 
 export const TabsRoot = withProvider<HTMLDivElement, TabsRootProps>(
   ArkTabs.Root,
@@ -33,8 +51,13 @@ export const TabsRoot = withProvider<HTMLDivElement, TabsRootProps>(
 
 ////////////////////////////////////////////////////////////////////////////////////
 
+export const TabsPropsProvider =
+  PropsProvider as React.Provider<TabsRootBaseProps>
+
+////////////////////////////////////////////////////////////////////////////////////
+
 export interface TabsTriggerProps
-  extends HTMLChakraProps<"button", ArkTabs.TriggerProps> {}
+  extends HTMLChakraProps<"button", ArkTabs.TriggerBaseProps> {}
 
 export const TabsTrigger = withContext<HTMLButtonElement, TabsTriggerProps>(
   ArkTabs.Trigger,
@@ -45,7 +68,7 @@ export const TabsTrigger = withContext<HTMLButtonElement, TabsTriggerProps>(
 ////////////////////////////////////////////////////////////////////////////////////
 
 export interface TabsContentProps
-  extends HTMLChakraProps<"div", ArkTabs.ContentProps> {}
+  extends HTMLChakraProps<"div", ArkTabs.ContentBaseProps> {}
 
 export const TabsContent = withContext<HTMLDivElement, TabsContentProps>(
   ArkTabs.Content,
@@ -65,7 +88,7 @@ export const TabsContentGroup = withContext<
 ////////////////////////////////////////////////////////////////////////////////////
 
 export interface TabsListProps
-  extends HTMLChakraProps<"div", ArkTabs.ListProps> {}
+  extends HTMLChakraProps<"div", ArkTabs.ListBaseProps> {}
 
 export const TabsList = withContext<HTMLDivElement, TabsListProps>(
   ArkTabs.List,
@@ -76,10 +99,16 @@ export const TabsList = withContext<HTMLDivElement, TabsListProps>(
 ////////////////////////////////////////////////////////////////////////////////////
 
 export interface TabsIndicatorProps
-  extends HTMLChakraProps<"div", ArkTabs.ListProps> {}
+  extends HTMLChakraProps<"div", ArkTabs.ListBaseProps> {}
 
 export const TabsIndicator = withContext<HTMLDivElement, TabsIndicatorProps>(
   ArkTabs.Indicator,
   "indicator",
   { forwardAsChild: true },
 )
+
+////////////////////////////////////////////////////////////////////////////////////
+
+export const TabsContext = ArkTabs.Context
+
+export interface TabsValueChangeDetails extends ArkTabs.ValueChangeDetails {}

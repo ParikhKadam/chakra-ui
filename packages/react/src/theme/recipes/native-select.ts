@@ -1,29 +1,40 @@
-import { mapEntries } from "@chakra-ui/utils"
-import { selectAnatomy as parts } from "../../anatomy"
+import { nativeSelectAnatomy } from "../../anatomy"
 import { defineSlotRecipe } from "../../styled-system"
-import { inputRecipe } from "./input"
+import { selectSlotRecipe } from "./select"
 
 export const nativeSelectSlotRecipe = defineSlotRecipe({
-  slots: parts.keys,
+  className: "chakra-native-select",
+  slots: nativeSelectAnatomy.keys(),
+
   base: {
     root: {
       height: "fit-content",
       display: "flex",
+      width: "100%",
       position: "relative",
     },
     field: {
-      ...inputRecipe.base,
       width: "100%",
+      minWidth: "0",
+      outline: "0",
       appearance: "none",
+      borderRadius: "l2",
+      "--error-color": "colors.border.error",
+      _disabled: {
+        layerStyle: "disabled",
+      },
+      _invalid: {
+        focusRingColor: "var(--error-color)",
+        borderColor: "var(--error-color)",
+      },
+      focusVisibleRing: "inside",
       lineHeight: "normal",
-      bg: "bg",
       "& > option, & > optgroup": {
-        bg: "inherit",
+        bg: "bg",
       },
     },
     indicator: {
       position: "absolute",
-      insetEnd: "0",
       display: "inline-flex",
       alignItems: "center",
       justifyContent: "center",
@@ -31,33 +42,100 @@ export const nativeSelectSlotRecipe = defineSlotRecipe({
       top: "50%",
       transform: "translateY(-50%)",
       height: "100%",
-      color: "fg.subtle",
+      color: "fg.muted",
       _disabled: {
-        opacity: 0.5,
+        opacity: "0.5",
       },
-      "& svg": {
-        boxSize: "1em",
+      _invalid: {
+        color: "fg.error",
+      },
+      _icon: {
+        width: "1em",
+        height: "1em",
       },
     },
   },
+
   variants: {
-    variant: mapEntries(inputRecipe.variants!.variant, (variant, styles) => [
-      variant,
-      { field: styles },
-    ]),
-    size: mapEntries(inputRecipe.variants!.size, (size, styles) => [
-      size,
-      {
+    variant: {
+      outline: {
+        field: selectSlotRecipe.variants?.variant.outline.trigger,
+      },
+      subtle: {
+        field: selectSlotRecipe.variants?.variant.subtle.trigger,
+      },
+      plain: {
         field: {
-          ...styles,
-          paddingEnd: "8",
-          paddingBlock: "0",
-        },
-        indicator: {
-          insetEnd: size === "sm" ? "1" : "2",
+          bg: "transparent",
+          color: "fg",
+          focusRingWidth: "2px",
         },
       },
-    ]),
+    },
+
+    size: {
+      xs: {
+        field: {
+          textStyle: "xs",
+          ps: "2",
+          pe: "6",
+          height: "6",
+        },
+        indicator: {
+          textStyle: "sm",
+          insetEnd: "1.5",
+        },
+      },
+      sm: {
+        field: {
+          textStyle: "sm",
+          ps: "2.5",
+          pe: "8",
+          height: "8",
+        },
+        indicator: {
+          textStyle: "md",
+          insetEnd: "2",
+        },
+      },
+      md: {
+        field: {
+          textStyle: "sm",
+          ps: "3",
+          pe: "8",
+          height: "10",
+        },
+        indicator: {
+          textStyle: "lg",
+          insetEnd: "2",
+        },
+      },
+      lg: {
+        field: {
+          textStyle: "md",
+          ps: "4",
+          pe: "8",
+          height: "11",
+        },
+        indicator: {
+          textStyle: "xl",
+          insetEnd: "3",
+        },
+      },
+      xl: {
+        field: {
+          textStyle: "md",
+          ps: "4.5",
+          pe: "10",
+          height: "12",
+        },
+        indicator: {
+          textStyle: "xl",
+          insetEnd: "3",
+        },
+      },
+    },
   },
-  defaultVariants: inputRecipe.defaultVariants,
+
+  defaultVariants: selectSlotRecipe.defaultVariants,
 })

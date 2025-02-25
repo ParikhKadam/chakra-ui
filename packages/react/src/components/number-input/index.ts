@@ -1,24 +1,41 @@
-export { NumberInputRoot } from "./number-input-root"
-export type { NumberInputRootProps } from "./number-input-root"
+export {
+  NumberInputControl,
+  NumberInputDecrementTrigger,
+  NumberInputIncrementTrigger,
+  NumberInputInput,
+  NumberInputLabel,
+  NumberInputRoot,
+  NumberInputRootProvider,
+  NumberInputPropsProvider,
+  NumberInputScrubber,
+  NumberInputContext,
+  useNumberInputStyles,
+  NumberInputValueText,
+} from "./number-input"
 
-export { NumberInputDecrementTrigger } from "./number-input-decrement"
-export type { NumberInputDecrementTriggerProps } from "./number-input-decrement"
+export type {
+  NumberInputControlProps,
+  NumberInputDecrementTriggerProps,
+  NumberInputIncrementTriggerProps,
+  NumberInputInputProps,
+  NumberInputLabelProps,
+  NumberInputRootProps,
+  NumberInputRootProviderProps,
+  NumberInputScrubberProps,
+  NumberInputValueTextProps,
+  NumberInputFocusChangeDetails,
+  NumberInputValueChangeDetails,
+  NumberInputValueInvalidDetails,
+} from "./number-input"
 
-export { NumberInputIncrementTrigger } from "./number-input-increment"
-export type { NumberInputIncrementTriggerProps } from "./number-input-increment"
+export {
+  useNumberInput,
+  useNumberInputContext,
+} from "@ark-ui/react/number-input"
 
-export { NumberInputField } from "./number-input-field"
-export type { NumberInputFieldProps } from "./number-input-field"
-
-export { NumberInputControl } from "./number-input-control"
-export type { NumberInputControlProps } from "./number-input-control"
-
-export { useNumberInput } from "./use-number-input"
 export type {
   UseNumberInputProps,
   UseNumberInputReturn,
-} from "./use-number-input"
-
-export { useNumberInputStyles } from "./number-input-context"
+} from "@ark-ui/react/number-input"
 
 export * as NumberInput from "./namespace"

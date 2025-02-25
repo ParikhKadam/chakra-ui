@@ -1,26 +1,33 @@
-import { blockquoteAnatomy as parts } from "../../anatomy"
+import { blockquoteAnatomy } from "../../anatomy"
 import { defineSlotRecipe } from "../../styled-system"
 
 export const blockquoteSlotRecipe = defineSlotRecipe({
-  slots: parts.keys,
+  className: "chakra-blockquote",
+  slots: blockquoteAnatomy.keys(),
   base: {
     root: {
+      position: "relative",
       display: "flex",
       flexDirection: "column",
       gap: "2",
-      colorPalette: "gray",
     },
     caption: {
-      fontSize: "sm",
-      opacity: 0.6,
+      textStyle: "sm",
+      color: "fg.muted",
     },
     icon: {
-      fontSize: "xl",
+      boxSize: "5",
     },
   },
+
   variants: {
     justify: {
-      start: {},
+      start: {
+        root: {
+          alignItems: "flex-start",
+          textAlign: "start",
+        },
+      },
       center: {
         root: {
           alignItems: "center",
@@ -34,42 +41,43 @@ export const blockquoteSlotRecipe = defineSlotRecipe({
         },
       },
     },
+
     variant: {
       subtle: {
         root: {
+          paddingX: "5",
           borderStartWidth: "4px",
-          paddingStart: "4",
-          borderStartColor: {
-            base: "colorPalette.200",
-            _dark: "colorPalette.200/40",
-          },
-        },
-        content: {
-          color: { base: "colorPalette.900", _dark: "colorPalette.300" },
+          borderStartColor: "colorPalette.muted",
         },
         icon: {
-          color: { base: "colorPalette.900", _dark: "colorPalette.300" },
+          color: "colorPalette.fg",
         },
       },
+
       solid: {
         root: {
-          paddingStart: "4",
+          paddingX: "5",
           borderStartWidth: "4px",
-          borderStartColor: "colorPalette.600",
-        },
-        content: {
-          color: { base: "colorPalette.900", _dark: "colorPalette.300" },
+          borderStartColor: "colorPalette.solid",
         },
         icon: {
-          color: { base: "colorPalette.900", _dark: "colorPalette.300" },
+          color: "colorPalette.solid",
         },
       },
-      plain: {},
+
+      plain: {
+        root: {
+          paddingX: "5",
+        },
+        icon: {
+          color: "colorPalette.solid",
+        },
+      },
     },
   },
+
   defaultVariants: {
     variant: "subtle",
     justify: "start",
-    colorPalette: "gray",
   },
 })

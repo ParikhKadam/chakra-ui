@@ -1,11 +1,28 @@
-export { EditableRoot as Root } from "./editable-root"
-export type { EditableRootProps as RootProps } from "./editable-root"
+export {
+  EditableInput as Input,
+  EditablePreview as Preview,
+  EditableRoot as Root,
+  EditableRootProvider as RootProvider,
+  EditablePropsProvider as PropsProvider,
+  EditableTextarea as Textarea,
+  EditableControl as Control,
+  EditableArea as Area,
+  EditableEditTrigger as EditTrigger,
+  EditableCancelTrigger as CancelTrigger,
+  EditableSubmitTrigger as SubmitTrigger,
+  EditableContext as Context,
+} from "./editable"
 
-export { EditableInput as Input } from "./editable-input"
-export type { EditableInputProps as InputProps } from "./editable-input"
-
-export { EditablePreview as Preview } from "./editable-preview"
-export type { EditablePreviewProps as PreviewProps } from "./editable-preview"
-
-export { EditableTextarea as Textarea } from "./editable-textarea"
-export type { EditableTextareaProps as TextareaProps } from "./editable-textarea"
+export type {
+  EditableInputProps as InputProps,
+  EditablePreviewProps as PreviewProps,
+  EditableRootProps as RootProps,
+  EditableRootProviderProps as RootProviderProps,
+  EditableTextareaProps as TextareaProps,
+  EditableControlProps as ControlProps,
+  EditableAreaProps as AreaProps,
+  EditableEditTriggerProps as EditTriggerProps,
+  EditableCancelTriggerProps as CancelTriggerProps,
+  EditableSubmitTriggerProps as SubmitTriggerProps,
+  EditableValueChangeDetails as ValueChangeDetails,
+} from "./editable"

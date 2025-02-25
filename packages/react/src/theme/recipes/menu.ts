@@ -1,38 +1,45 @@
-import { anatomy as parts } from "@ark-ui/anatomy/menu"
+import { menuAnatomy } from "../../anatomy"
 import { defineSlotRecipe } from "../../styled-system"
 
 export const menuSlotRecipe = defineSlotRecipe({
-  slots: [...parts.keys(), "itemCommand"],
+  className: "chakra-menu",
+  slots: menuAnatomy.keys(),
   base: {
     content: {
       outline: 0,
       bg: "bg.panel",
-      boxShadow: "sm",
-      color: "inherit",
-      minW: "8rem",
-      padding: "1",
-      zIndex: "dropdown",
-      borderRadius: "md",
+      boxShadow: "lg",
+      color: "fg",
+      maxHeight: "var(--available-height)",
+      "--menu-z-index": "zIndex.dropdown",
+      zIndex: "calc(var(--menu-z-index) + var(--layer-index, 0))",
+      borderRadius: "l2",
       overflow: "hidden",
-      colorPalette: "gray",
+      overflowY: "auto",
+      _open: {
+        animationStyle: "slide-fade-in",
+        animationDuration: "fast",
+      },
+      _closed: {
+        animationStyle: "slide-fade-out",
+        animationDuration: "faster",
+      },
     },
     item: {
       textDecoration: "none",
-      color: "inherit",
+      color: "fg",
       userSelect: "none",
+      borderRadius: "l1",
       width: "100%",
       display: "flex",
+      cursor: "menuitem",
       alignItems: "center",
       textAlign: "start",
-      gap: "2",
+      position: "relative",
       flex: "0 0 auto",
       outline: 0,
-      fontSize: "sm",
-      borderRadius: "sm",
-      py: "1.5",
-      px: "2",
       _disabled: {
-        opacity: "0.5",
+        layerStyle: "disabled",
       },
     },
     itemText: {
@@ -41,8 +48,8 @@ export const menuSlotRecipe = defineSlotRecipe({
     itemGroupLabel: {
       px: "2",
       py: "1.5",
-      fontWeight: "medium",
-      fontSize: "sm",
+      fontWeight: "semibold",
+      textStyle: "sm",
     },
     indicator: {
       display: "inline-flex",
@@ -52,7 +59,10 @@ export const menuSlotRecipe = defineSlotRecipe({
     },
     itemCommand: {
       opacity: "0.6",
-      marginLeft: "auto",
+      textStyle: "xs",
+      ms: "auto",
+      ps: "4",
+      letterSpacing: "widest",
     },
     separator: {
       height: "1px",
@@ -61,31 +71,56 @@ export const menuSlotRecipe = defineSlotRecipe({
       mx: "-1",
     },
   },
+
   variants: {
     variant: {
       subtle: {
         item: {
           _highlighted: {
-            bg: { base: "gray.100", _dark: "whiteAlpha.100" },
+            bg: "bg.emphasized/60",
           },
         },
       },
       solid: {
         item: {
           _highlighted: {
-            bg: "colorPalette.600",
-            color: "white",
+            bg: "colorPalette.solid",
+            color: "colorPalette.contrast",
           },
         },
       },
     },
+
     size: {
-      sm: {},
-      md: {},
+      sm: {
+        content: {
+          minW: "8rem",
+          padding: "1",
+        },
+        item: {
+          gap: "1",
+          textStyle: "xs",
+          py: "1",
+          px: "1.5",
+        },
+      },
+      md: {
+        content: {
+          minW: "8rem",
+          padding: "1.5",
+        },
+        item: {
+          gap: "2",
+          textStyle: "sm",
+          py: "1.5",
+          px: "2",
+        },
+      },
     },
   },
+
   defaultVariants: {
+    size: "md",
     variant: "subtle",
-    colorPalette: "gray",
   },
 })

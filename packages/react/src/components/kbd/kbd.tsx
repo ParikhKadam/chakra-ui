@@ -1,49 +1,20 @@
 "use client"
 
-import { cx } from "@chakra-ui/utils"
-import { forwardRef } from "react"
 import {
-  EMPTY_STYLES,
   type HTMLChakraProps,
   type RecipeProps,
   type UnstyledProp,
-  chakra,
-  useRecipe,
+  createRecipeContext,
 } from "../../styled-system"
 
-export interface KbdProps
-  extends HTMLChakraProps<"kbd">,
-    RecipeProps<"Kbd">,
-    UnstyledProp {}
-
-/**
- * Semantic component to render a keyboard shortcut
- * within an application.
- *
- * @example
- *
- * ```jsx
- * <Kbd>⌘ + T</Kbd>
- * ```
- *
- * @see Docs https://chakra-ui.com/kbd
- */
-export const Kbd = forwardRef<HTMLElement, KbdProps>(function Kbd(
-  { unstyled, ...props },
-  ref,
-) {
-  const recipe = useRecipe("Kbd", props.recipe)
-  const [variantProps, localProps] = recipe.splitVariantProps(props)
-  const styles = unstyled ? EMPTY_STYLES : recipe(variantProps)
-
-  return (
-    <chakra.kbd
-      ref={ref}
-      {...localProps}
-      className={cx("chakra-kbd", localProps.className)}
-      css={[styles, props.css]}
-    />
-  )
+const { withContext, PropsProvider } = createRecipeContext({
+  key: "kbd",
 })
 
-Kbd.displayName = "Kbd"
+export interface KbdBaseProps extends RecipeProps<"kbd">, UnstyledProp {}
+
+export interface KbdProps extends HTMLChakraProps<"kbd", KbdBaseProps> {}
+
+export const Kbd = withContext<HTMLElement, KbdProps>("kbd")
+
+export const KbdPropsProvider = PropsProvider as React.Provider<KbdProps>

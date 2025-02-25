@@ -1,29 +1,19 @@
 "use client"
 
-import { cx } from "@chakra-ui/utils"
-import { forwardRef } from "react"
+import type { Assign } from "@ark-ui/react"
 import {
   type HTMLChakraProps,
   type RecipeProps,
-  chakra,
-  useRecipe,
+  createRecipeContext,
 } from "../../styled-system"
 
-export interface MarkProps
-  extends RecipeProps<"Mark">,
-    HTMLChakraProps<"mark"> {}
+const { withContext, PropsProvider } = createRecipeContext({
+  key: "mark",
+})
 
-export const Mark = forwardRef<HTMLElement, MarkProps>(
-  function Mark(props, ref) {
-    const recipe = useRecipe("Mark", props.recipe)
-    const [variantProps, localProps] = recipe.splitVariantProps(props)
-    return (
-      <chakra.mark
-        ref={ref}
-        {...localProps}
-        className={cx("chakra-mark", props.className)}
-        css={[recipe(variantProps), localProps.css]}
-      />
-    )
-  },
-)
+export interface MarkProps
+  extends Assign<HTMLChakraProps<"mark">, RecipeProps<"mark">> {}
+
+export const Mark = withContext<HTMLElement, MarkProps>("mark")
+
+export const MarkPropsProvider = PropsProvider as React.Provider<MarkProps>

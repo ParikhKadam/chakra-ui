@@ -1,8 +1,9 @@
-import { switchAnatomy as parts } from "../../anatomy"
+import { switchAnatomy } from "../../anatomy"
 import { defineSlotRecipe } from "../../styled-system"
 
 export const switchSlotRecipe = defineSlotRecipe({
-  slots: parts.keys,
+  slots: switchAnatomy.keys(),
+  className: "chakra-switch",
   base: {
     root: {
       display: "inline-flex",
@@ -15,32 +16,61 @@ export const switchSlotRecipe = defineSlotRecipe({
         base: "var(--switch-diff)",
         _rtl: "calc(var(--switch-diff) * -1)",
       },
-      colorPalette: "gray",
     },
+
     label: {
       lineHeight: "1",
       userSelect: "none",
       fontSize: "sm",
+      fontWeight: "medium",
+      _disabled: {
+        opacity: "0.5",
+      },
     },
-    track: {
+
+    indicator: {
+      position: "absolute",
+      height: "var(--switch-height)",
+      width: "var(--switch-height)",
+      fontSize: "var(--switch-indicator-font-size)",
+      fontWeight: "medium",
+      flexShrink: 0,
+      userSelect: "none",
+      display: "grid",
+      placeContent: "center",
+      transition: "inset-inline-start 0.12s ease",
+      insetInlineStart: "calc(var(--switch-x) - 2px)",
+      _checked: {
+        insetInlineStart: "2px",
+      },
+    },
+
+    control: {
       display: "inline-flex",
       gap: "0.5rem",
       flexShrink: 0,
       justifyContent: "flex-start",
-      cursor: "pointer",
+      cursor: "switch",
       borderRadius: "full",
       position: "relative",
       width: "var(--switch-width)",
       height: "var(--switch-height)",
-      transitionProperty: "common",
-      transitionDuration: "fast",
       _disabled: {
         opacity: "0.5",
         cursor: "not-allowed",
       },
+      _invalid: {
+        outline: "2px solid",
+        outlineColor: "border.error",
+        outlineOffset: "2px",
+      },
     },
+
     thumb: {
-      bg: "white",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      flexShrink: 0,
       transitionProperty: "translate",
       transitionDuration: "fast",
       borderRadius: "inherit",
@@ -49,71 +79,38 @@ export const switchSlotRecipe = defineSlotRecipe({
       },
     },
   },
+
   variants: {
     variant: {
       solid: {
-        track: {
+        control: {
           borderRadius: "full",
-          bg: { base: "gray.300", _dark: "whiteAlpha.400" },
+          bg: "bg.emphasized",
+          focusVisibleRing: "outside",
           _checked: {
-            bg: "colorPalette.600",
-          },
-          _focusVisible: {
-            outline: "2px solid",
-            outlineColor: "colorPalette.500",
-            outlineOffset: "2px",
+            bg: "colorPalette.solid",
           },
         },
         thumb: {
+          bg: "white",
           width: "var(--switch-height)",
           height: "var(--switch-height)",
           scale: "0.8",
           boxShadow: "sm",
-        },
-      },
-      outline: {
-        track: {
-          borderRadius: "full",
-          shadowColor: "border",
-          boxShadow: "0 0 0 1px var(--shadow-color)",
-          bg: { base: "gray.100", _dark: "whiteAlpha.400" },
           _checked: {
-            shadowColor: {
-              base: "colorPalette.300",
-              _dark: "colorPalette.200/60",
-            },
-            bg: { base: "colorPalette.200", _dark: "colorPalette.400/40" },
-          },
-          _focusVisible: {
-            outline: "2px solid",
-            outlineColor: "colorPalette.500",
-            outlineOffset: "2px",
-          },
-        },
-        thumb: {
-          bg: "bg",
-          width: "var(--switch-height)",
-          height: "var(--switch-height)",
-          boxShadow: "0 0 0 1px var(--shadow-color)",
-          shadowColor: "border",
-          _checked: {
-            boxShadow:
-              "inset 0 0 0 1px var(--shadow-color), 0 0 0 1px var(--shadow-color)",
-            shadowColor: {
-              base: "colorPalette.500",
-              _dark: "colorPalette.200/60",
-            },
+            bg: "colorPalette.contrast",
           },
         },
       },
+
       raised: {
-        track: {
+        control: {
           borderRadius: "full",
           height: "calc(var(--switch-height) / 2)",
-          bg: { base: "gray.100", _dark: "whiteAlpha.400" },
+          bg: "bg.muted",
           boxShadow: "inset",
           _checked: {
-            bg: { base: "colorPalette.300", _dark: "colorPalette.400/30" },
+            bg: "colorPalette.solid/60",
           },
         },
         thumb: {
@@ -123,47 +120,48 @@ export const switchSlotRecipe = defineSlotRecipe({
           top: "calc(var(--switch-height) * -0.25)",
           bg: "white",
           boxShadow: "xs",
+          focusVisibleRing: "outside",
           _checked: {
-            bg: { base: "colorPalette.700", _dark: "colorPalette.500" },
-          },
-          _focusVisible: {
-            outline: "2px solid",
-            outlineColor: "colorPalette.500",
-            outlineOffset: "2px",
+            bg: "colorPalette.solid",
           },
         },
       },
     },
+
     size: {
+      xs: {
+        root: {
+          "--switch-width": "sizes.6",
+          "--switch-height": "sizes.3",
+          "--switch-indicator-font-size": "fontSizes.xs",
+        },
+      },
       sm: {
         root: {
-          "--switch-width": "sizes.5",
-          "--switch-height": "sizes.3",
+          "--switch-width": "sizes.8",
+          "--switch-height": "sizes.4",
+          "--switch-indicator-font-size": "fontSizes.xs",
         },
       },
       md: {
         root: {
-          "--switch-width": "sizes.9",
+          "--switch-width": "sizes.10",
           "--switch-height": "sizes.5",
+          "--switch-indicator-font-size": "fontSizes.sm",
         },
       },
       lg: {
         root: {
-          "--switch-width": "sizes.10",
+          "--switch-width": "sizes.12",
           "--switch-height": "sizes.6",
-        },
-      },
-      xl: {
-        root: {
-          "--switch-width": "sizes.14",
-          "--switch-height": "sizes.8",
+          "--switch-indicator-font-size": "fontSizes.md",
         },
       },
     },
   },
+
   defaultVariants: {
     variant: "solid",
     size: "md",
-    colorPalette: "gray",
   },
 })

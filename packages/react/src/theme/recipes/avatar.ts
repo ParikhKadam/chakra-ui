@@ -1,18 +1,10 @@
-import { avatarAnatomy as parts } from "../../anatomy"
+import { avatarAnatomy } from "../../anatomy"
 import { defineSlotRecipe } from "../../styled-system"
 
 export const avatarSlotRecipe = defineSlotRecipe({
-  slots: parts.keys,
+  slots: avatarAnatomy.keys(),
+  className: "chakra-avatar",
   base: {
-    group: {
-      display: "inline-flex",
-      alignItems: "center",
-      position: "relative",
-      flexDirection: "row",
-      "& > *:not(style) ~ *:not(style)": {
-        marginInlineStart: "var(--avatar-margin)",
-      },
-    },
     root: {
       display: "inline-flex",
       alignItems: "center",
@@ -20,23 +12,16 @@ export const avatarSlotRecipe = defineSlotRecipe({
       fontWeight: "medium",
       position: "relative",
       verticalAlign: "top",
-      flexShrink: 0,
+      flexShrink: "0",
       userSelect: "none",
-      bg: "gray.400",
       width: "var(--avatar-size)",
       height: "var(--avatar-size)",
-      "--avatar-font-size": "calc(var(--avatar-size) / 2.5)",
       fontSize: "var(--avatar-font-size)",
       borderRadius: "var(--avatar-radius)",
-      "&[data-in-group]": {
+      "&[data-group-item]": {
         borderWidth: "2px",
         borderColor: "bg",
       },
-    },
-    badge: {
-      borderRadius: "full",
-      border: "0.2em solid",
-      borderColor: { base: "white", _dark: "gray.800" },
     },
     image: {
       width: "100%",
@@ -55,69 +40,102 @@ export const avatarSlotRecipe = defineSlotRecipe({
 
   variants: {
     size: {
+      full: {
+        root: {
+          "--avatar-size": "100%",
+          "--avatar-font-size": "100%",
+        },
+      },
+      "2xs": {
+        root: {
+          "--avatar-font-size": "fontSizes.2xs",
+          "--avatar-size": "sizes.6",
+        },
+      },
       xs: {
         root: {
-          "--avatar-size": "sizes.5",
-          "--avatar-margin": "-0.45rem",
+          "--avatar-font-size": "fontSizes.xs",
+          "--avatar-size": "sizes.8",
         },
       },
       sm: {
         root: {
-          "--avatar-size": "sizes.6",
-          "--avatar-margin": "-0.5rem",
+          "--avatar-font-size": "fontSizes.sm",
+          "--avatar-size": "sizes.9",
         },
       },
       md: {
         root: {
-          "--avatar-size": "sizes.8",
-          "--avatar-margin": "-0.65rem",
+          "--avatar-font-size": "fontSizes.md",
+          "--avatar-size": "sizes.10",
         },
       },
       lg: {
         root: {
-          "--avatar-size": "sizes.12",
-          "--avatar-margin": "-0.8rem",
+          "--avatar-font-size": "fontSizes.md",
+          "--avatar-size": "sizes.11",
         },
       },
       xl: {
         root: {
-          "--avatar-size": "sizes.16",
-          "--avatar-margin": "-0.85rem",
+          "--avatar-font-size": "fontSizes.lg",
+          "--avatar-size": "sizes.12",
         },
       },
       "2xl": {
         root: {
-          "--avatar-size": "sizes.24",
-          "--avatar-margin": "-1rem",
+          "--avatar-font-size": "fontSizes.xl",
+          "--avatar-size": "sizes.16",
         },
       },
     },
+
     variant: {
       solid: {
         root: {
-          bg: "colorPalette.600",
-          color: "white",
+          bg: "colorPalette.solid",
+          color: "colorPalette.contrast",
         },
       },
       subtle: {
         root: {
-          bg: { base: "colorPalette.100", _dark: "colorPalette.400/20" },
-          color: { base: "colorPalette.800", _dark: "colorPalette.300" },
+          bg: "colorPalette.muted",
+          color: "colorPalette.fg",
+        },
+      },
+      outline: {
+        root: {
+          color: "colorPalette.fg",
+          borderWidth: "1px",
+          borderColor: "colorPalette.muted",
         },
       },
     },
+
     shape: {
       square: {},
       rounded: {
-        root: { "--avatar-radius": "radii.md" },
+        root: { "--avatar-radius": "radii.l3" },
       },
       full: {
         root: { "--avatar-radius": "radii.full" },
       },
     },
+
+    borderless: {
+      true: {
+        root: {
+          "&[data-group-item]": {
+            borderWidth: "0px",
+          },
+        },
+      },
+    },
   },
+
   defaultVariants: {
     size: "md",
     shape: "full",
+    variant: "subtle",
   },
 })

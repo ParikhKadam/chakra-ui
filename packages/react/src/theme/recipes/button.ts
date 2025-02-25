@@ -1,6 +1,7 @@
 import { defineRecipe } from "../../styled-system"
 
 export const buttonRecipe = defineRecipe({
+  className: "chakra-button",
   base: {
     display: "inline-flex",
     appearance: "none",
@@ -8,126 +9,175 @@ export const buttonRecipe = defineRecipe({
     justifyContent: "center",
     userSelect: "none",
     position: "relative",
+    borderRadius: "l2",
     whiteSpace: "nowrap",
     verticalAlign: "middle",
+    borderWidth: "1px",
+    borderColor: "transparent",
+    cursor: "button",
+    flexShrink: "0",
     outline: "0",
     lineHeight: "1.2",
     isolation: "isolate",
     fontWeight: "medium",
     transitionProperty: "common",
-    transitionDuration: "normal",
-    colorPalette: "gray",
-    _focusVisible: {
-      outline: "2px solid",
-      outlineColor: "colorPalette.500",
-      outlineOffset: "2px",
-    },
+    transitionDuration: "moderate",
+    focusVisibleRing: "outside",
     _disabled: {
-      opacity: 0.6,
-      cursor: "not-allowed",
+      layerStyle: "disabled",
     },
-    "& svg": {
-      fontSize: "1.25em",
+    _icon: {
+      flexShrink: "0",
     },
   },
+
   variants: {
     size: {
-      lg: {
-        gap: "3",
-        h: "12",
-        minW: "12",
-        borderRadius: "lg",
-        fontSize: "md",
-        px: "6",
-      },
-      md: {
-        gap: "2",
-        h: "10",
-        minW: "10",
-        borderRadius: "md",
-        fontSize: "sm",
-        px: "4",
-      },
-      sm: {
-        gap: "2",
-        h: "8",
-        minW: "8",
-        fontSize: "sm",
-        borderRadius: "sm",
-        px: "3",
-      },
-      xs: {
-        gap: "1",
+      "2xs": {
         h: "6",
         minW: "6",
-        fontSize: "xs",
-        borderRadius: "sm",
+        textStyle: "xs",
         px: "2",
+        gap: "1",
+        _icon: {
+          width: "3.5",
+          height: "3.5",
+        },
+      },
+      xs: {
+        h: "8",
+        minW: "8",
+        textStyle: "xs",
+        px: "2.5",
+        gap: "1",
+        _icon: {
+          width: "4",
+          height: "4",
+        },
+      },
+      sm: {
+        h: "9",
+        minW: "9",
+        px: "3.5",
+        textStyle: "sm",
+        gap: "2",
+        _icon: {
+          width: "4",
+          height: "4",
+        },
+      },
+      md: {
+        h: "10",
+        minW: "10",
+        textStyle: "sm",
+        px: "4",
+        gap: "2",
+        _icon: {
+          width: "5",
+          height: "5",
+        },
+      },
+      lg: {
+        h: "11",
+        minW: "11",
+        textStyle: "md",
+        px: "5",
+        gap: "3",
+        _icon: {
+          width: "5",
+          height: "5",
+        },
+      },
+      xl: {
+        h: "12",
+        minW: "12",
+        textStyle: "md",
+        px: "5",
+        gap: "2.5",
+        _icon: {
+          width: "5",
+          height: "5",
+        },
+      },
+      "2xl": {
+        h: "16",
+        minW: "16",
+        textStyle: "lg",
+        px: "7",
+        gap: "3",
+        _icon: {
+          width: "6",
+          height: "6",
+        },
       },
     },
+
     variant: {
       solid: {
-        bg: "colorPalette.600",
-        color: "white",
+        bg: "colorPalette.solid",
+        color: "colorPalette.contrast",
         _hover: {
-          bg: "colorPalette.700",
+          bg: "colorPalette.solid/90",
         },
-        _active: {
-          bg: "colorPalette.800",
+        _expanded: {
+          bg: "colorPalette.solid/90",
         },
       },
+
       subtle: {
-        bg: { base: "colorPalette.100", _dark: "colorPalette.400/10" },
-        color: { base: "colorPalette.700", _dark: "colorPalette.200" },
+        bg: "colorPalette.subtle",
+        color: "colorPalette.fg",
         _hover: {
-          bg: { base: "colorPalette.200", _dark: "colorPalette.400/20" },
+          bg: "colorPalette.muted",
         },
-        _active: {
-          bg: { base: "colorPalette.300", _dark: "colorPalette.400/30" },
+        _expanded: {
+          bg: "colorPalette.muted",
         },
       },
+
+      surface: {
+        bg: "colorPalette.subtle",
+        color: "colorPalette.fg",
+        shadow: "0 0 0px 1px var(--shadow-color)",
+        shadowColor: "colorPalette.muted",
+        _hover: {
+          bg: "colorPalette.muted",
+        },
+        _expanded: {
+          bg: "colorPalette.muted",
+        },
+      },
+
       outline: {
-        bg: "bg",
         borderWidth: "1px",
-        borderColor: { base: "colorPalette.300", _dark: "colorPalette.200/10" },
-        color: { base: "colorPalette.700", _dark: "colorPalette.200" },
+        borderColor: "colorPalette.muted",
+        color: "colorPalette.fg",
         _hover: {
-          bg: { base: "colorPalette.50", _dark: "colorPalette.400/10" },
+          bg: "colorPalette.subtle",
         },
-        _active: {
-          bg: { base: "colorPalette.100", _dark: "colorPalette.400/20" },
+        _expanded: {
+          bg: "colorPalette.subtle",
         },
       },
+
       ghost: {
-        color: { base: "colorPalette.700", _dark: "colorPalette.200" },
+        color: "colorPalette.fg",
         _hover: {
-          bg: { base: "colorPalette.50", _dark: "colorPalette.400/10" },
+          bg: "colorPalette.subtle",
         },
-        _active: {
-          bg: { base: "colorPalette.100", _dark: "colorPalette.400/20" },
+        _expanded: {
+          bg: "colorPalette.subtle",
         },
+      },
+
+      plain: {
+        color: "colorPalette.fg",
       },
     },
   },
-  compoundVariants: [
-    {
-      variant: "solid",
-      colorPalette: "gray",
-      css: {
-        bg: { base: "gray.800", _dark: "gray.200" },
-        color: { base: "white", _dark: "gray.800" },
-        _hover: {
-          bg: { base: "gray.700", _dark: "gray.300" },
-        },
-        _active: {
-          bg: { base: "gray.600", _dark: "gray.400" },
-        },
-      },
-    },
-  ],
+
   defaultVariants: {
     size: "md",
     variant: "solid",
-    colorPalette: "gray",
   },
 })

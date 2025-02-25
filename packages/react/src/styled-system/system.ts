@@ -1,3 +1,4 @@
+import { isCssProperty } from "@pandacss/is-valid-prop"
 import {
   type Dict,
   compact,
@@ -6,12 +7,13 @@ import {
   memo,
   mergeWith,
   splitProps,
-} from "@chakra-ui/utils"
-import { isCssProperty } from "@pandacss/is-valid-prop"
+} from "../utils"
 import { createBreakpoints } from "./breakpoints"
 import { createConditions } from "./conditions"
+import { mergeConfigs } from "./config"
 import { createCssFn } from "./css"
 import { createRecipeFn } from "./cva"
+import { createLayers } from "./layers"
 import { createNormalizeFn } from "./normalize"
 import { createPreflight } from "./preflight"
 import { createSerializeFn } from "./serialize"
@@ -25,7 +27,8 @@ import type {
 } from "./types"
 import { createUtility } from "./utility"
 
-export function createSystem(config: SystemConfig): SystemContext {
+export function createSystem(...configs: SystemConfig[]): SystemContext {
+  const config = mergeConfigs(...configs)
   const {
     theme = {},
     utilities = {},
@@ -35,7 +38,10 @@ export function createSystem(config: SystemConfig): SystemContext {
     preflight,
   } = config
 
+  const layers = createLayers(config)
+
   const tokens = createTokenDictionary({
+    breakpoints: theme.breakpoints,
     tokens: theme.tokens,
     semanticTokens: theme.semanticTokens,
     prefix: cssVarsPrefix,
@@ -54,11 +60,12 @@ export function createSystem(config: SystemConfig): SystemContext {
   })
 
   function assignComposition() {
-    const { textStyles, layerStyles } = theme
+    const { textStyles, layerStyles, animationStyles } = theme
 
     const compositions = compact({
       textStyle: textStyles,
       layerStyle: layerStyles,
+      animationStyle: animationStyles,
     })
 
     for (const [key, values] of Object.entries(compositions)) {
@@ -77,6 +84,7 @@ export function createSystem(config: SystemConfig): SystemContext {
   }
 
   assignComposition()
+  utility.addPropertyType("animationName", Object.keys(theme.keyframes ?? {}))
 
   const properties = new Set(["css", ...utility.keys(), ...conditions.keys()])
 
@@ -84,8 +92,26 @@ export function createSystem(config: SystemConfig): SystemContext {
     (prop: string) => properties.has(prop) || isCssProperty(prop),
   )
 
-  const normalizeFn = createNormalizeFn({ utility, conditions })
-  const serialize = createSerializeFn({ conditions, isValidProperty })
+  const normalizeValue = (value: any): any => {
+    if (Array.isArray(value)) {
+      return value.reduce((acc, current, index) => {
+        const key = conditions.breakpoints[index]
+        if (current != null) acc[key] = current
+        return acc
+      }, {})
+    }
+    return value
+  }
+
+  const normalizeFn = createNormalizeFn({
+    utility,
+    normalize: normalizeValue,
+  })
+
+  const serialize = createSerializeFn({
+    conditions,
+    isValidProperty,
+  })
 
   const css = createCssFn({
     transform: utility.transform,
@@ -97,6 +123,7 @@ export function createSystem(config: SystemConfig): SystemContext {
     css: css as any,
     conditions,
     normalize: normalizeFn,
+    layers,
   })
 
   const sva = createSlotRecipeFn({ cva })
@@ -107,17 +134,12 @@ export function createSystem(config: SystemConfig): SystemContext {
     for (const [key, values] of tokens.cssVarMap.entries()) {
       const varsObj = Object.fromEntries(values) as any
       if (Object.keys(varsObj).length === 0) continue
-
-      if (key === "base") {
-        const cssObj = css(serialize({ [cssVarsRoot]: varsObj }))
-        mergeWith(result, cssObj)
-      } else {
-        const cssObject = css(serialize({ [key]: varsObj }))
-        mergeWith(result, cssObject)
-      }
+      const selector = key === "base" ? cssVarsRoot : conditions.resolve(key)
+      const cssObject = css(serialize({ [selector]: varsObj }))
+      mergeWith(result, cssObject)
     }
 
-    return result
+    return layers.wrap("tokens", result)
   }
 
   function getGlobalCss() {
@@ -127,7 +149,8 @@ export function createSystem(config: SystemConfig): SystemContext {
         value,
       ]),
     )
-    return Object.assign({}, keyframes, css(serialize(globalCss)))
+    const result = Object.assign({}, keyframes, css(serialize(globalCss)))
+    return layers.wrap("base", result)
   }
 
   function splitCssProps(props: any) {
@@ -135,7 +158,8 @@ export function createSystem(config: SystemConfig): SystemContext {
   }
 
   function getPreflightCss() {
-    return createPreflight({ preflight })
+    const result = createPreflight({ preflight })
+    return layers.wrap("reset", result)
   }
 
   const tokenMap = getTokenMap(tokens)
@@ -156,17 +180,34 @@ export function createSystem(config: SystemConfig): SystemContext {
     return theme.slotRecipes?.[key] ?? fallback
   }
 
+  function isRecipe(key: string) {
+    return Object.hasOwnProperty.call(theme.recipes ?? {}, key)
+  }
+
+  function isSlotRecipe(key: string) {
+    return Object.hasOwnProperty.call(theme.slotRecipes ?? {}, key)
+  }
+
+  function hasRecipe(key: string) {
+    return isRecipe(key) || isSlotRecipe(key)
+  }
+
+  const _global = [getPreflightCss(), getGlobalCss(), getTokenCss()]
+
   return {
-    $$typeof: "SystemContext",
+    $$chakra: true,
     _config: config,
+    _global,
     breakpoints,
     tokens,
     conditions,
     utility,
     token: tokenFn,
     properties,
+    layers,
     isValidProperty,
     splitCssProps: splitCssProps as any,
+    normalizeValue,
     getTokenCss,
     getGlobalCss,
     getPreflightCss,
@@ -175,6 +216,9 @@ export function createSystem(config: SystemConfig): SystemContext {
     sva,
     getRecipe,
     getSlotRecipe,
+    hasRecipe,
+    isRecipe,
+    isSlotRecipe,
   }
 }
 
@@ -188,4 +232,8 @@ function getTokenMap(tokens: TokenDictionary) {
   })
 
   return map
+}
+
+export const isValidSystem = (mod: unknown): mod is SystemContext => {
+  return isObject(mod) && !!Reflect.get(mod, "$$chakra")
 }

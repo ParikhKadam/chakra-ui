@@ -1,23 +1,34 @@
-export { DrawerRoot as Root } from "./drawer"
-export type { DrawerRootProps as RootProps } from "./drawer"
+export {
+  DrawerBackdrop as Backdrop,
+  DrawerBody as Body,
+  DrawerCloseTrigger as CloseTrigger,
+  DrawerFooter as Footer,
+  DrawerHeader as Header,
+  DrawerPositioner as Positioner,
+  DrawerRoot as Root,
+  DrawerRootProvider as RootProvider,
+  DrawerRootPropsProvider as RootPropsProvider,
+  DrawerTrigger as Trigger,
+  DrawerContent as Content,
+  DrawerTitle as Title,
+  DrawerDescription as Description,
+  DrawerContext as Context,
+  DrawerActionTrigger as ActionTrigger,
+} from "./drawer"
 
-export { DrawerBody as Body } from "./drawer"
-export type { DrawerBodyProps as BodyProps } from "./drawer"
-
-export { DrawerCloseTrigger as CloseTrigger } from "./drawer"
-export type { DrawerCloseTriggerProps as CloseTriggerProps } from "./drawer"
-
-export { DrawerContent as Content } from "./drawer"
-export type { DrawerContentProps as ContentProps } from "./drawer"
-
-export { DrawerFooter as Footer } from "./drawer"
-export type { DrawerFooterProps as FooterProps } from "./drawer"
-
-export { DrawerHeader as Header } from "./drawer"
-export type { DrawerHeaderProps as HeaderProps } from "./drawer"
-
-export { DrawerBackdrop as Backdrop } from "./drawer"
-export type { DrawerBackdropProps as BackdropProps } from "./drawer"
-
-export { DrawerPositioner as Positioner } from "./drawer"
-export type { DrawerPositionerProps as PositionerProps } from "./drawer"
+export type {
+  DrawerBackdropProps as BackdropProps,
+  DrawerBodyProps as BodyProps,
+  DrawerCloseTriggerProps as CloseTriggerProps,
+  DrawerContentProps as ContentProps,
+  DrawerDescriptionProps as DescriptionProps,
+  DrawerFooterProps as FooterProps,
+  DrawerHeaderProps as HeaderProps,
+  DrawerPositionerProps as PositionerProps,
+  DrawerRootProps as RootProps,
+  DrawerRootProviderProps as RootProviderProps,
+  DrawerTriggerProps as TriggerProps,
+  DrawerTitleProps as TitleProps,
+  DrawerOpenChangeDetails as OpenChangeDetails,
+  DrawerActionTriggerProps as ActionTriggerProps,
+} from "./drawer"

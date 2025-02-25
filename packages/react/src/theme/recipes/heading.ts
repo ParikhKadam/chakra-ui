@@ -1,9 +1,10 @@
 import { defineRecipe } from "../../styled-system"
 
 export const headingRecipe = defineRecipe({
+  className: "chakra-heading",
   base: {
     fontFamily: "heading",
-    fontWeight: "medium",
+    fontWeight: "semibold",
   },
   variants: {
     size: {

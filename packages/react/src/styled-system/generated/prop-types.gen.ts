@@ -1,9 +1,18 @@
-import type { ConditionalValue, CssProperties } from "../css.types"
+import type { CssProperties } from "../css.types"
 import type { Tokens } from "./token.gen"
 
-type AnyString = string & {}
+type WithColorOpacityModifier<T> = T extends string ? `${T}/${string}` : T
+type ImportantMark = "!" | "!important"
+type WhitespaceImportant = ` ${ImportantMark}`
+type Important = ImportantMark | WhitespaceImportant
 
-interface PropertyValueTypes {
+type WithImportant<T> = T extends string ? `${T}${Important}` & { __important?: true } : T
+
+export type WithEscapeHatch<T> = T | `[${string}]` | WithColorOpacityModifier<T> | WithImportant<T>
+// eslint-disable-next-line
+export type OnlyKnown<Value> = Value extends boolean ? Value : Value extends `${infer _}` ? Value : never
+
+export interface UtilityValues {
   colorPalette:
     | "transparent"
     | "current"
@@ -24,22 +33,14 @@ interface PropertyValueTypes {
     | "bg"
     | "fg"
     | "border"
-  background: Tokens["colors"]
-  backgroundColor: Tokens["colors"]
-  backgroundGradient:
-    | Tokens["gradients"]
-    | "to-t"
-    | "to-tr"
-    | "to-r"
-    | "to-br"
-    | "to-b"
-    | "to-bl"
-    | "to-l"
-    | "to-tl"
-  gradientFrom: Tokens["colors"]
-  gradientTo: Tokens["colors"]
-  gradientVia: Tokens["colors"]
-  backgroundImage: Tokens["gradients"]
+  background: Tokens["colors"] | "currentBg"
+  backgroundColor: Tokens["colors"] | "currentBg"
+  backgroundClip: "text"
+  backgroundGradient: Tokens["gradients"] | "to-t" | "to-tr" | "to-r" | "to-br" | "to-b" | "to-bl" | "to-l" | "to-tl"
+  gradientFrom: Tokens["colors"] | "currentBg"
+  gradientTo: Tokens["colors"] | "currentBg"
+  gradientVia: Tokens["colors"] | "currentBg"
+  backgroundImage: Tokens["gradients"] | Tokens["assets"]
   border: Tokens["borders"]
   borderTop: Tokens["borders"]
   borderLeft: Tokens["borders"]
@@ -51,15 +52,15 @@ interface PropertyValueTypes {
   borderInlineStart: Tokens["borders"]
   borderInline: Tokens["borders"]
   borderBlock: Tokens["borders"]
-  borderColor: Tokens["colors"]
-  borderTopColor: Tokens["colors"]
-  borderBlockStartColor: Tokens["colors"]
-  borderBottomColor: Tokens["colors"]
-  borderBlockEndColor: Tokens["colors"]
-  borderLeftColor: Tokens["colors"]
-  borderInlineStartColor: Tokens["colors"]
-  borderRightColor: Tokens["colors"]
-  borderInlineEndColor: Tokens["colors"]
+  borderColor: Tokens["colors"] | "currentBg"
+  borderTopColor: Tokens["colors"] | "currentBg"
+  borderBlockStartColor: Tokens["colors"] | "currentBg"
+  borderBottomColor: Tokens["colors"] | "currentBg"
+  borderBlockEndColor: Tokens["colors"] | "currentBg"
+  borderLeftColor: Tokens["colors"] | "currentBg"
+  borderInlineStartColor: Tokens["colors"] | "currentBg"
+  borderRightColor: Tokens["colors"] | "currentBg"
+  borderInlineEndColor: Tokens["colors"] | "currentBg"
   borderStyle: Tokens["borderStyles"]
   borderTopStyle: Tokens["borderStyles"]
   borderBlockStartStyle: Tokens["borderStyles"]
@@ -90,19 +91,22 @@ interface PropertyValueTypes {
   borderBottomWidth: Tokens["borderWidths"]
   borderBlockEndWidth: Tokens["borderWidths"]
   borderRightWidth: Tokens["borderWidths"]
+  borderInlineWidth: Tokens["borderWidths"]
   borderInlineStartWidth: Tokens["borderWidths"]
   borderInlineEndWidth: Tokens["borderWidths"]
   borderLeftWidth: Tokens["borderWidths"]
-  color: Tokens["colors"]
-  fill: Tokens["colors"]
-  stroke: Tokens["colors"]
-  accentColor: Tokens["colors"]
+  borderBlockWidth: Tokens["borderWidths"]
+  color: Tokens["colors"] | "currentBg"
+  fill: Tokens["colors"] | "currentBg"
+  stroke: Tokens["colors"] | "currentBg"
+  accentColor: Tokens["colors"] | "currentBg"
   divideX: string
   divideY: string
-  divideColor: Tokens["colors"]
+  divideColor: Tokens["colors"] | "currentBg"
   boxShadow: Tokens["shadows"]
-  boxShadowColor: Tokens["colors"]
+  boxShadowColor: Tokens["colors"] | "currentBg"
   opacity: Tokens["opacity"]
+  blur: Tokens["blurs"]
   backdropBlur: Tokens["blurs"]
   flexBasis: Tokens["sizes"]
   gap: Tokens["spacing"]
@@ -111,13 +115,19 @@ interface PropertyValueTypes {
   gridGap: Tokens["spacing"]
   gridColumnGap: Tokens["spacing"]
   gridRowGap: Tokens["spacing"]
-  outlineColor: Tokens["colors"]
+  outlineColor: Tokens["colors"] | "currentBg"
+  focusRing: "outside" | "inside" | "mixed" | "none"
+  focusVisibleRing: "outside" | "inside" | "mixed" | "none"
+  focusRingColor: Tokens["colors"] | "currentBg"
+  focusRingOffset: Tokens["spacing"]
+  focusRingWidth: Tokens["borderWidths"] | CssProperties["outlineWidth"]
+  focusRingStyle: Tokens["borderStyles"] | CssProperties["outlineStyle"]
   aspectRatio: Tokens["aspectRatios"]
   width: Tokens["sizes"]
   inlineSize: Tokens["sizes"]
   height: Tokens["sizes"]
   blockSize: Tokens["sizes"]
-  boxSize: Tokens["sizes"]
+  boxSize: Tokens["sizes"] | CssProperties["width"]
   minWidth: Tokens["sizes"]
   minInlineSize: Tokens["sizes"]
   minHeight: Tokens["sizes"]
@@ -128,6 +138,10 @@ interface PropertyValueTypes {
   maxBlockSize: Tokens["sizes"]
   hideFrom: Tokens["breakpoints"]
   hideBelow: Tokens["breakpoints"]
+  scrollbar: "visible" | "hidden"
+  scrollbarColor: Tokens["colors"] | "currentBg"
+  scrollbarGutter: Tokens["spacing"]
+  scrollbarWidth: Tokens["sizes"]
   scrollMargin: Tokens["spacing"]
   scrollMarginTop: Tokens["spacing"]
   scrollMarginBottom: Tokens["spacing"]
@@ -140,8 +154,16 @@ interface PropertyValueTypes {
   scrollPaddingBottom: Tokens["spacing"]
   scrollPaddingLeft: Tokens["spacing"]
   scrollPaddingRight: Tokens["spacing"]
-  scrollPaddingX: Tokens["spacing"]
-  scrollPaddingY: Tokens["spacing"]
+  scrollPaddingInline: Tokens["spacing"]
+  scrollPaddingBlock: Tokens["spacing"]
+  scrollSnapType: "none" | "x" | "y" | "both"
+  scrollSnapStrictness: "mandatory" | "proximity"
+  scrollSnapMargin: Tokens["spacing"]
+  scrollSnapMarginTop: Tokens["spacing"]
+  scrollSnapMarginBottom: Tokens["spacing"]
+  scrollSnapMarginLeft: Tokens["spacing"]
+  scrollSnapMarginRight: Tokens["spacing"]
+  listStyleImage: Tokens["assets"]
   zIndex: Tokens["zIndex"]
   inset: Tokens["spacing"]
   insetInline: Tokens["spacing"]
@@ -154,8 +176,8 @@ interface PropertyValueTypes {
   right: Tokens["spacing"]
   insetInlineStart: Tokens["spacing"]
   insetInlineEnd: Tokens["spacing"]
-  ringColor: Tokens["colors"]
-  ringOffsetColor: Tokens["colors"]
+  ringColor: Tokens["colors"] | "currentBg"
+  ringOffsetColor: Tokens["colors"] | "currentBg"
   margin: Tokens["spacing"]
   marginTop: Tokens["spacing"]
   marginBlockStart: Tokens["spacing"]
@@ -178,151 +200,79 @@ interface PropertyValueTypes {
   paddingInlineEnd: Tokens["spacing"]
   paddingInline: Tokens["spacing"]
   paddingBlock: Tokens["spacing"]
-  textDecorationColor: Tokens["colors"]
+  textDecorationColor: Tokens["colors"] | "currentBg"
   textShadow: Tokens["shadows"]
+  spaceXReverse: boolean
+  spaceX: Tokens["spacing"] | CssProperties["marginInlineStart"]
+  spaceYReverse: boolean
+  spaceY: Tokens["spacing"] | CssProperties["marginTop"]
   translateX: Tokens["spacing"]
   translateY: Tokens["spacing"]
+  transition: "all" | "common" | "colors" | "opacity" | "position" | "backgrounds" | "size" | "shadow" | "transform"
   transitionDuration: Tokens["durations"]
   transitionProperty: "common" | "colors" | "size" | "position" | "background"
   transitionTimingFunction: Tokens["easings"]
   animation: Tokens["animations"]
   animationDuration: Tokens["durations"]
   animationDelay: Tokens["durations"]
+  animationTimingFunction: Tokens["easings"]
   fontFamily: Tokens["fonts"]
   fontSize: Tokens["fontSizes"]
   fontWeight: Tokens["fontWeights"]
   lineHeight: Tokens["lineHeights"]
   letterSpacing: Tokens["letterSpacings"]
-  truncated: boolean
+  textIndent: Tokens["spacing"]
+  truncate: boolean
   srOnly: boolean
   debug: boolean
-  caretColor: Tokens["colors"]
+  caretColor: Tokens["colors"] | "currentBg"
+  cursor: Tokens["cursor"]
   divideStyle: CssProperties["borderStyle"]
-  textStyle:
-    | "xs"
-    | "sm"
-    | "md"
-    | "lg"
-    | "xl"
-    | "2xl"
-    | "3xl"
-    | "4xl"
-    | "5xl"
-    | "6xl"
-    | "7xl"
+  textStyle: "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl" | "none"
+  layerStyle:
+    | "fill.muted"
+    | "fill.subtle"
+    | "fill.surface"
+    | "fill.solid"
+    | "outline.subtle"
+    | "outline.solid"
+    | "indicator.bottom"
+    | "indicator.top"
+    | "indicator.start"
+    | "indicator.end"
+    | "disabled"
+    | "none"
+  animationStyle: "slide-fade-in" | "slide-fade-out" | "scale-fade-in" | "scale-fade-out"
+  animationName:
+    | "spin"
+    | "pulse"
+    | "ping"
+    | "bounce"
+    | "bg-position"
+    | "position"
+    | "circular-progress"
+    | "expand-height"
+    | "collapse-height"
+    | "expand-width"
+    | "collapse-width"
+    | "fade-in"
+    | "fade-out"
+    | "slide-from-left-full"
+    | "slide-from-right-full"
+    | "slide-from-top-full"
+    | "slide-from-bottom-full"
+    | "slide-to-left-full"
+    | "slide-to-right-full"
+    | "slide-to-top-full"
+    | "slide-to-bottom-full"
+    | "slide-from-top"
+    | "slide-from-bottom"
+    | "slide-from-left"
+    | "slide-from-right"
+    | "slide-to-top"
+    | "slide-to-bottom"
+    | "slide-to-left"
+    | "slide-to-right"
+    | "scale-in"
+    | "scale-out"
 }
-
-// eslint-disable-next-line
-type PropOrCondition<Value> = ConditionalValue<Value | AnyString>
-
-type CssValue<T> = T extends keyof CssProperties ? CssProperties[T] : never
-
-type Shorthand<T> = T extends keyof PropertyValueTypes
-  ? PropertyValueTypes[T] | CssValue<T>
-  : CssValue<T>
-
-export interface PropertyTypes extends PropertyValueTypes {
-  bg: Shorthand<"background">
-  bgColor: Shorthand<"backgroundColor">
-  bgSize: Shorthand<"backgroundSize">
-  bgPos: Shorthand<"backgroundPosition">
-  bgRepeat: Shorthand<"backgroundRepeat">
-  bgAttachment: Shorthand<"backgroundAttachment">
-  bgClip: Shorthand<"backgroundClip">
-  bgGradient: Shorthand<"backgroundGradient">
-  bgImg: Shorthand<"backgroundImage">
-  bgImage: Shorthand<"backgroundImage">
-  borderStart: Shorthand<"borderInlineStart">
-  borderX: Shorthand<"borderInline">
-  borderY: Shorthand<"borderBlock">
-  borderStartColor: Shorthand<"borderInlineStartColor">
-  borderEndColor: Shorthand<"borderInlineEndColor">
-  borderStartStyle: Shorthand<"borderInlineStartStyle">
-  borderEndStyle: Shorthand<"borderInlineEndStyle">
-  rounded: Shorthand<"borderRadius">
-  roundedTopLeft: Shorthand<"borderTopLeftRadius">
-  roundedStartStart: Shorthand<"borderStartStartRadius">
-  borderTopStartRadius: Shorthand<"borderStartStartRadius">
-  roundedEndStart: Shorthand<"borderEndStartRadius">
-  borderBottomStartRadius: Shorthand<"borderEndStartRadius">
-  roundedTopRight: Shorthand<"borderTopRightRadius">
-  roundedStartEnd: Shorthand<"borderStartEndRadius">
-  borderTopEndRadius: Shorthand<"borderStartEndRadius">
-  roundedEndEnd: Shorthand<"borderEndEndRadius">
-  borderBottomEndRadius: Shorthand<"borderEndEndRadius">
-  roundedBottomLeft: Shorthand<"borderBottomLeftRadius">
-  roundedBottomRight: Shorthand<"borderBottomRightRadius">
-  roundedStart: Shorthand<"borderInlineStartRadius">
-  borderStartRadius: Shorthand<"borderInlineStartRadius">
-  roundedEnd: Shorthand<"borderInlineEndRadius">
-  borderEndRadius: Shorthand<"borderInlineEndRadius">
-  roundedTop: Shorthand<"borderTopRadius">
-  roundedBottom: Shorthand<"borderBottomRadius">
-  roundedLeft: Shorthand<"borderLeftRadius">
-  roundedRight: Shorthand<"borderRightRadius">
-  borderStartWidth: Shorthand<"borderInlineStartWidth">
-  borderEndWidth: Shorthand<"borderInlineEndWidth">
-  shadow: Shorthand<"boxShadow">
-  shadowColor: Shorthand<"boxShadowColor">
-  blendMode: Shorthand<"mixBlendMode">
-  bgBlendMode: Shorthand<"backgroundBlendMode">
-  flexDir: Shorthand<"flexDirection">
-  w: Shorthand<"width">
-  h: Shorthand<"height">
-  minW: Shorthand<"minWidth">
-  minH: Shorthand<"minHeight">
-  maxW: Shorthand<"maxWidth">
-  maxH: Shorthand<"maxHeight">
-  overscroll: Shorthand<"overscrollBehavior">
-  overscrollX: Shorthand<"overscrollBehaviorX">
-  overscrollY: Shorthand<"overscrollBehaviorY">
-  listStylePos: Shorthand<"listStylePosition">
-  listStyleImg: Shorthand<"listStyleImage">
-  pos: Shorthand<"position">
-  insetX: Shorthand<"insetInline">
-  insetY: Shorthand<"insetBlock">
-  insetStart: Shorthand<"insetInlineStart">
-  insetEnd: Shorthand<"insetInlineEnd">
-  m: Shorthand<"margin">
-  mt: Shorthand<"marginBlockStart">
-  mr: Shorthand<"marginRight">
-  mb: Shorthand<"marginBottom">
-  ml: Shorthand<"marginLeft">
-  ms: Shorthand<"marginInlineStart">
-  marginStart: Shorthand<"marginInlineStart">
-  me: Shorthand<"marginInlineEnd">
-  marginEnd: Shorthand<"marginInlineEnd">
-  mx: Shorthand<"marginInline">
-  marginX: Shorthand<"marginInline">
-  my: Shorthand<"marginBlock">
-  marginY: Shorthand<"marginBlock">
-  p: Shorthand<"padding">
-  pt: Shorthand<"paddingTop">
-  pr: Shorthand<"paddingRight">
-  pb: Shorthand<"paddingBottom">
-  pl: Shorthand<"paddingLeft">
-  ps: Shorthand<"paddingInlineStart">
-  paddingStart: Shorthand<"paddingInlineStart">
-  pe: Shorthand<"paddingInlineEnd">
-  paddingEnd: Shorthand<"paddingInlineEnd">
-  px: Shorthand<"paddingInline">
-  paddingX: Shorthand<"paddingInline">
-  py: Shorthand<"paddingBlock">
-  paddingY: Shorthand<"paddingBlock">
-  textDecor: Shorthand<"textDecoration">
-  transitionTiming: Shorthand<"transitionTimingFunction">
-}
-
-type PropertyTypeValue<T extends string> = T extends keyof PropertyTypes
-  ? PropOrCondition<PropertyTypes[T] | CssValue<T>>
-  : never
-
-type CssPropertyValue<T extends string> = T extends keyof CssProperties
-  ? PropOrCondition<CssProperties[T]>
-  : never
-
-export type PropertyValue<T extends string> = T extends keyof PropertyTypes
-  ? PropertyTypeValue<T>
-  : T extends keyof CssProperties
-    ? CssPropertyValue<T>
-    : PropOrCondition<string | number>

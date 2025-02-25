@@ -1,19 +1,23 @@
 import {
   type Dict,
+  compact,
   createProps,
   isFunction,
   isObject,
   isString,
+  mapObject,
   memo,
   walkObject,
-} from "@chakra-ui/utils"
+} from "../utils"
 import { cssVar } from "./css-var"
+import { esc } from "./esc"
+import { expandTokenReferences as _expandReferences } from "./expand-reference"
 import { mapToJson } from "./map-to-json"
 import {
+  TOKEN_PATH_REGEX,
   expandReferences,
   getReferences,
   hasReference,
-  transformReferences,
 } from "./references"
 import { tokenMiddlewares } from "./token-middleware"
 import { tokenTransforms } from "./token-transforms"
@@ -30,6 +34,7 @@ import type {
 
 interface Options {
   prefix?: string
+  breakpoints?: Record<string, string>
   tokens?: TokenDefinition
   semanticTokens?: SemanticTokenDefinition
 }
@@ -38,8 +43,26 @@ const isToken = (value: any) => {
   return isObject(value) && Object.prototype.hasOwnProperty.call(value, "value")
 }
 
+function expandBreakpoints(breakpoints?: Record<string, string>) {
+  if (!breakpoints) return { breakpoints: {}, sizes: {} }
+  return {
+    breakpoints: mapObject(breakpoints, (value) => ({ value })),
+    sizes: Object.fromEntries(
+      Object.entries(breakpoints).map(([key, value]) => [
+        `breakpoint-${key}`,
+        { value },
+      ]),
+    ),
+  }
+}
+
 export function createTokenDictionary(options: Options): TokenDictionary {
-  const { prefix = "", tokens = {}, semanticTokens = {} } = options
+  const {
+    prefix = "",
+    tokens = {},
+    semanticTokens = {},
+    breakpoints = {},
+  } = options
 
   const formatTokenName = (path: string[]) => path.join(".")
 
@@ -69,9 +92,20 @@ export function createTokenDictionary(options: Options): TokenDictionary {
     }
   }
 
+  const breakpointTokens = expandBreakpoints(breakpoints)
+
+  const computedTokens = compact({
+    ...tokens,
+    breakpoints: breakpointTokens.breakpoints,
+    sizes: {
+      ...tokens.sizes,
+      ...breakpointTokens.sizes,
+    },
+  })
+
   function registerTokens() {
     walkObject(
-      tokens,
+      computedTokens,
       (entry, path) => {
         const isDefault = path.includes("DEFAULT")
         path = filterDefault(path)
@@ -112,7 +146,9 @@ export function createTokenDictionary(options: Options): TokenDictionary {
         const category = path[0]
 
         const name = formatTokenName(path)
-        const t = isString(entry) ? { value: { base: entry } } : entry
+        const t = isString(entry.value)
+          ? { value: { base: entry.value } }
+          : entry
 
         const token: Token = {
           value: t.value.base || "",
@@ -262,6 +298,34 @@ export function createTokenDictionary(options: Options): TokenDictionary {
     byCategoryJson = mapToJson(byCategory)
   }
 
+  const colorMix = (value: string, tokenFn: (path: string) => string) => {
+    if (!value || typeof value !== "string") return { invalid: true, value }
+
+    const [colorPath, rawOpacity] = value.split("/")
+
+    if (!colorPath || !rawOpacity) {
+      return { invalid: true, value: colorPath }
+    }
+
+    const colorToken = tokenFn(colorPath)
+    const opacityToken = getByName(`opacity.${rawOpacity}`)?.value
+
+    if (!opacityToken && isNaN(Number(rawOpacity))) {
+      return { invalid: true, value: colorPath }
+    }
+
+    const percent = opacityToken
+      ? Number(opacityToken) * 100 + "%"
+      : `${rawOpacity}%`
+    const color = colorToken ?? colorPath
+
+    return {
+      invalid: false,
+      color,
+      value: `color-mix(in srgb, ${color} ${percent}, transparent)`,
+    }
+  }
+
   const getVar = memo((value: string, fallback?: string) => {
     return flatMap.get(value) ?? fallback
   })
@@ -271,7 +335,24 @@ export function createTokenDictionary(options: Options): TokenDictionary {
   })
 
   const expandReferenceInValue = memo((value: string) => {
-    return transformReferences(value, (path) => getVar(path))
+    return _expandReferences(value, (path) => {
+      if (!path) return
+
+      if (path.includes("/")) {
+        const mix = colorMix(path, (v) => getVar(v)!)
+        if (mix.invalid) {
+          throw new Error("Invalid color mix at " + path + ": " + mix.value)
+        }
+
+        return mix.value
+      }
+
+      const resolved = getVar(path)
+      if (resolved) return resolved
+
+      // If the path includes an unresolved token reference, we need to escape it
+      return TOKEN_PATH_REGEX.test(path) ? esc(path) : path
+    })
   })
 
   const dictionary: TokenDictionary = {
@@ -456,6 +537,7 @@ export const tokenCategories = createProps<Record<TokenCategory, any>>()([
   "shadows",
   "spacing",
   "radii",
+  "cursor",
   "borders",
   "borderWidths",
   "borderStyles",

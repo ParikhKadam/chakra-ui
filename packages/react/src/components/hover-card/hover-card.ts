@@ -1,11 +1,12 @@
 "use client"
 
+import type { Assign } from "@ark-ui/react"
 import { HoverCard as ArkHoverCard } from "@ark-ui/react/hover-card"
 import {
   type HTMLChakraProps,
   type SlotRecipeProps,
   type UnstyledProp,
-  createStyleContext,
+  createSlotRecipeContext,
 } from "../../styled-system"
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -14,16 +15,37 @@ const {
   withRootProvider,
   withContext,
   useStyles: useHoverCardStyles,
-} = createStyleContext("HoverCard")
+  PropsProvider,
+} = createSlotRecipeContext({ key: "hoverCard" })
 
 export { useHoverCardStyles }
 
 ////////////////////////////////////////////////////////////////////////////////////
 
-export interface HoverCardRootProps
-  extends ArkHoverCard.RootProps,
-    SlotRecipeProps<"HoverCard">,
+export interface HoverCardRootProviderBaseProps
+  extends Assign<
+      ArkHoverCard.RootProviderBaseProps,
+      SlotRecipeProps<"hoverCard">
+    >,
     UnstyledProp {}
+
+export interface HoverCardRootProviderProps
+  extends HoverCardRootProviderBaseProps {
+  children: React.ReactNode
+}
+
+export const HoverCardRootProvider =
+  withRootProvider<HoverCardRootProviderProps>(ArkHoverCard.RootProvider)
+
+////////////////////////////////////////////////////////////////////////////////////
+
+export interface HoverCardRootBaseProps
+  extends Assign<ArkHoverCard.RootBaseProps, SlotRecipeProps<"hoverCard">>,
+    UnstyledProp {}
+
+export interface HoverCardRootProps extends HoverCardRootBaseProps {
+  children: React.ReactNode
+}
 
 export const HoverCardRoot = withRootProvider<HoverCardRootProps>(
   ArkHoverCard.Root,
@@ -31,8 +53,13 @@ export const HoverCardRoot = withRootProvider<HoverCardRootProps>(
 
 ////////////////////////////////////////////////////////////////////////////////////
 
+export const HoverCardPropsProvider =
+  PropsProvider as React.Provider<HoverCardRootBaseProps>
+
+////////////////////////////////////////////////////////////////////////////////////
+
 export interface HoverCardTriggerProps
-  extends HTMLChakraProps<"button", ArkHoverCard.TriggerProps> {}
+  extends HTMLChakraProps<"button", ArkHoverCard.TriggerBaseProps> {}
 
 export const HoverCardTrigger = withContext<
   HTMLButtonElement,
@@ -42,7 +69,7 @@ export const HoverCardTrigger = withContext<
 ////////////////////////////////////////////////////////////////////////////////////
 
 export interface HoverCardPositionerProps
-  extends HTMLChakraProps<"div", ArkHoverCard.PositionerProps> {}
+  extends HTMLChakraProps<"div", ArkHoverCard.PositionerBaseProps> {}
 
 export const HoverCardPositioner = withContext<
   HTMLDivElement,
@@ -52,7 +79,7 @@ export const HoverCardPositioner = withContext<
 ////////////////////////////////////////////////////////////////////////////////////
 
 export interface HoverCardContentProps
-  extends HTMLChakraProps<"section", ArkHoverCard.ContentProps> {}
+  extends HTMLChakraProps<"section", ArkHoverCard.ContentBaseProps> {}
 
 export const HoverCardContent = withContext<
   HTMLDivElement,
@@ -62,7 +89,7 @@ export const HoverCardContent = withContext<
 ////////////////////////////////////////////////////////////////////////////////////
 
 export interface HoverCardArrowProps
-  extends HTMLChakraProps<"div", ArkHoverCard.ArrowProps> {}
+  extends HTMLChakraProps<"div", ArkHoverCard.ArrowBaseProps> {}
 
 export const HoverCardArrow = withContext<HTMLDivElement, HoverCardArrowProps>(
   ArkHoverCard.Arrow,
@@ -73,9 +100,16 @@ export const HoverCardArrow = withContext<HTMLDivElement, HoverCardArrowProps>(
 ////////////////////////////////////////////////////////////////////////////////////
 
 export interface HoverCardArrowTipProps
-  extends HTMLChakraProps<"div", ArkHoverCard.ArrowTipProps> {}
+  extends HTMLChakraProps<"div", ArkHoverCard.ArrowTipBaseProps> {}
 
 export const HoverCardArrowTip = withContext<
   HTMLDivElement,
   HoverCardArrowTipProps
 >(ArkHoverCard.ArrowTip, "arrowTip", { forwardAsChild: true })
+
+////////////////////////////////////////////////////////////////////////////////////
+
+export const HoverCardContext = ArkHoverCard.Context
+
+export interface HoverCardOpenChangeDetails
+  extends ArkHoverCard.OpenChangeDetails {}

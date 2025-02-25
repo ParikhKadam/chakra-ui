@@ -1,10 +1,16 @@
 export {
-  CollapsibleRoot as Root,
-  CollapsibleTrigger as Trigger,
   CollapsibleContent as Content,
+  CollapsibleContext as Context,
+  CollapsiblePropsProvider as PropsProvider,
+  CollapsibleRoot as Root,
+  CollapsibleRootProvider as RootProvider,
+  CollapsibleTrigger as Trigger,
 } from "./collapsible"
+
 export type {
-  CollapsibleRootProps as RootProps,
-  CollapsibleTriggerProps as TriggerProps,
   CollapsibleContentProps as ContentProps,
+  CollapsibleOpenChangeDetails as OpenChangeDetails,
+  CollapsibleRootProps as RootProps,
+  CollapsibleRootProviderProps as RootProviderProps,
+  CollapsibleTriggerProps as TriggerProps,
 } from "./collapsible"

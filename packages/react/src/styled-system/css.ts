@@ -6,8 +6,9 @@ import {
   memo,
   mergeWith,
   walkObject,
-} from "@chakra-ui/utils"
+} from "../utils"
 import type { SystemStyleObject } from "./css.types"
+import { sortAtRules } from "./sort-at-rules"
 import type { SystemContext } from "./types"
 
 const importantRegex = /\s*!(important)?/i
@@ -27,7 +28,7 @@ export function createCssFn(context: CssFnOptions) {
   const { transform, conditions, normalize } = context
   const mergeFn = mergeCss(context)
 
-  return memo((...styleArgs: SystemStyleObject[]) => {
+  return memo(function cssFn(...styleArgs: SystemStyleObject[]) {
     const styles = mergeFn(...styleArgs)
 
     const normalized = normalize(styles)
@@ -53,10 +54,10 @@ export function createCssFn(context: CssFnOptions) {
         { getKey: (prop) => conditions.expandAtRule(prop) },
       )
 
-      mergeByPath(result, selectors, transformed)
+      mergeByPath(result, selectors.flat(), transformed)
     })
 
-    return result
+    return sortAtRules(result)
   })
 }
 
@@ -82,7 +83,7 @@ function mergeCss(ctx: CssFnOptions) {
     if (comp.length === 1) return comp
     return comp.map((style) => ctx.normalize(style))
   }
-  return memo((...styles) => {
+  return memo(function mergeFn(...styles: Dict[]) {
     return mergeWith({}, ...resolve(styles))
   })
 }

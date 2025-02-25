@@ -1,17 +1,6 @@
 import { resolve } from "path/posix"
 import { buildProject } from "./build.js"
 
-const aliases = [
-  {
-    find: new RegExp(`^@chakra-ui/hooks`),
-    replacement: resolve("../hooks", "src"),
-  },
-  {
-    find: new RegExp(`^@chakra-ui/utils`),
-    replacement: resolve("../utils", "src"),
-  },
-]
-
 async function main() {
   const cwd = process.cwd()
   const flags = process.argv.slice(2)
@@ -27,7 +16,6 @@ async function main() {
     watch,
     clean,
     dts,
-    aliases,
   })
 }
 

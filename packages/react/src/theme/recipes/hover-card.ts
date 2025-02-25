@@ -1,34 +1,30 @@
-import { hoverCardAnatomy } from "@ark-ui/anatomy"
+import { hoverCardAnatomy } from "../../anatomy"
 import { defineSlotRecipe } from "../../styled-system"
 
 export const hoverCardSlotRecipe = defineSlotRecipe({
+  className: "chakra-hover-card",
   slots: hoverCardAnatomy.keys(),
   base: {
     content: {
       position: "relative",
       display: "flex",
       flexDirection: "column",
-      fontSize: "sm",
-      paddingInline: "var(--hovercard-padding)",
-      paddingBlock: "var(--hovercard-padding)",
+      textStyle: "sm",
       "--hovercard-bg": "colors.bg.panel",
       bg: "var(--hovercard-bg)",
-      shadow: "md",
-      width: "xs",
-      borderRadius: "var(--hovercard-radius)",
-      zIndex: "inherit",
-      _focusVisible: {
-        outline: 0,
-      },
+      boxShadow: "lg",
+      maxWidth: "80",
+      borderRadius: "l3",
+      zIndex: "popover",
+      transformOrigin: "var(--transform-origin)",
+      outline: "0",
       _open: {
-        "--enter-opacity": "1",
-        "--enter-scale": "0.95",
-        animation: "enter 0.2s cubic-bezier(0, 0, 0.2, 1)",
+        animationStyle: "slide-fade-in",
+        animationDuration: "fast",
       },
       _closed: {
-        "--exit-opacity": "0",
-        "--exit-scale": "0.95",
-        animation: "exit 0.1s cubic-bezier(0.4, 0, 1, 1)",
+        animationStyle: "slide-fade-out",
+        animationDuration: "faster",
       },
     },
     arrow: {
@@ -36,38 +32,36 @@ export const hoverCardSlotRecipe = defineSlotRecipe({
       "--arrow-background": "var(--hovercard-bg)",
     },
     arrowTip: {
-      borderTopWidth: "1px",
-      borderInlineStartWidth: "1px",
+      borderTopWidth: "0.5px",
+      borderInlineStartWidth: "0.5px",
     },
   },
+
   variants: {
     size: {
       xs: {
         content: {
-          "--hovercard-padding": "spacing.3",
-          "--hovercard-radius": "radii.sm",
+          padding: "3",
         },
       },
       sm: {
         content: {
-          "--hovercard-padding": "spacing.4",
-          "--hovercard-radius": "radii.sm",
+          padding: "4",
         },
       },
       md: {
         content: {
-          "--hovercard-padding": "spacing.5",
-          "--hovercard-radius": "radii.md",
+          padding: "5",
         },
       },
       lg: {
         content: {
-          "--hovercard-padding": "spacing.6",
-          "--hovercard-radius": "radii.lg",
+          padding: "6",
         },
       },
     },
   },
+
   defaultVariants: {
     size: "md",
   },

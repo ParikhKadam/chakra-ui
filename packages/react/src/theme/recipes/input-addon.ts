@@ -2,25 +2,28 @@ import { defineRecipe } from "../../styled-system"
 import { inputRecipe } from "./input"
 
 export const inputAddonRecipe = defineRecipe({
+  className: "chakra-input-addon",
   base: {
     flex: "0 0 auto",
     width: "auto",
     display: "flex",
     alignItems: "center",
     whiteSpace: "nowrap",
+    alignSelf: "stretch",
+    borderRadius: "l2",
   },
   variants: {
     size: inputRecipe.variants!.size,
     variant: {
       outline: {
-        border: "1px solid",
-        borderColor: { base: "inherit", _dark: "whiteAlpha.50" },
+        borderWidth: "1px",
+        borderColor: "border",
         bg: "bg.muted",
       },
-      filled: {
-        border: "2px solid",
+      subtle: {
+        borderWidth: "1px",
         borderColor: "transparent",
-        bg: { base: "gray.100", _dark: "whiteAlpha.50" },
+        bg: "bg.emphasized",
       },
       flushed: {
         borderBottom: "1px solid",

@@ -1,13 +1,30 @@
-export { SwitchRoot } from "./switch-root"
-export type { SwitchRootProps as SwitchProps } from "./switch-root"
+export {
+  SwitchRoot,
+  SwitchRootProvider,
+  SwitchPropsProvider,
+  SwitchControl,
+  SwitchLabel,
+  SwitchThumb,
+  SwitchIndicator,
+  SwitchThumbIndicator,
+  useSwitchStyles,
+  SwitchContext,
+  SwitchHiddenInput,
+} from "./switch"
 
-export { SwitchTrack } from "./switch-track"
-export type { SwitchTrackProps } from "./switch-track"
+export type {
+  SwitchRootProps,
+  SwitchRootProviderProps,
+  SwitchControlProps,
+  SwitchLabelProps,
+  SwitchIndicatorProps,
+  SwitchThumbIndicatorProps,
+  SwitchThumbProps,
+  SwitchCheckedChangeDetails,
+} from "./switch"
 
-export { SwitchLabel } from "./switch-label"
-export type { SwitchLabelProps } from "./switch-label"
+export { useSwitch, useSwitchContext } from "@ark-ui/react/switch"
 
-export { SwitchThumb } from "./switch-thumb"
-export type { SwitchThumbProps } from "./switch-thumb"
+export type { UseSwitchProps, UseSwitchReturn } from "@ark-ui/react/switch"
 
 export * as Switch from "./namespace"

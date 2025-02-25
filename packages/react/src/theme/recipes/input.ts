@@ -1,88 +1,86 @@
 import { defineRecipe } from "../../styled-system"
 
 export const inputRecipe = defineRecipe({
+  className: "chakra-input",
   base: {
     width: "100%",
-    minWidth: 0,
-    outline: 0,
+    minWidth: "0",
+    outline: "0",
     position: "relative",
     appearance: "none",
-    colorPalette: "gray",
+    textAlign: "start",
+    borderRadius: "l2",
     _disabled: {
-      opacity: 0.5,
-      cursor: "not-allowed",
+      layerStyle: "disabled",
     },
-    _readOnly: {
-      boxShadow: "none !important",
-      userSelect: "all",
+    height: "var(--input-height)",
+    minW: "var(--input-height)",
+    "--focus-color": "colors.colorPalette.focusRing",
+    "--error-color": "colors.border.error",
+    _invalid: {
+      focusRingColor: "var(--error-color)",
+      borderColor: "var(--error-color)",
     },
-    "--focus-color": "colors.colorPalette.400",
-    "--error-color": "colors.red.500",
   },
+
   variants: {
     size: {
-      lg: {
-        fontSize: "md",
-        px: "4",
-        py: "3",
-        borderRadius: "md",
-        height: "12",
-      },
-      md: {
-        fontSize: "sm",
-        px: "3",
-        py: "2",
-        borderRadius: "md",
-        height: "10",
-      },
-      sm: {
-        fontSize: "sm",
-        padding: "3",
-        borderRadius: "sm",
-        height: "8",
+      "2xs": {
+        textStyle: "xs",
+        px: "2",
+        "--input-height": "sizes.7",
       },
       xs: {
-        fontSize: "xs",
-        padding: "2",
-        borderRadius: "sm",
-        height: "6",
+        textStyle: "xs",
+        px: "2",
+        "--input-height": "sizes.8",
+      },
+      sm: {
+        textStyle: "sm",
+        px: "2.5",
+        "--input-height": "sizes.9",
+      },
+      md: {
+        textStyle: "sm",
+        px: "3",
+        "--input-height": "sizes.10",
+      },
+      lg: {
+        textStyle: "md",
+        px: "4",
+        "--input-height": "sizes.11",
+      },
+      xl: {
+        textStyle: "md",
+        px: "4.5",
+        "--input-height": "sizes.12",
+      },
+      "2xl": {
+        textStyle: "lg",
+        px: "5",
+        "--input-height": "sizes.16",
       },
     },
+
     variant: {
       outline: {
-        border: "1px solid",
-        borderColor: "inherit",
-        bg: "bg",
-        _invalid: {
-          borderColor: "var(--error-color)",
-        },
-        _focusVisible: {
-          outline: "1px solid var(--focus-color)",
-          borderColor: "var(--focus-color)",
-        },
+        bg: "transparent",
+        borderWidth: "1px",
+        borderColor: "border",
+        focusVisibleRing: "inside",
       },
-      filled: {
-        border: "1px solid",
+      subtle: {
+        borderWidth: "1px",
         borderColor: "transparent",
-        bg: { base: "gray.100", _dark: "gray.800" },
-        _invalid: {
-          borderColor: "var(--error-color)",
-        },
-        _focusVisible: {
-          bg: "bg",
-          outline: "1px solid var(--focus-color)",
-          borderColor: "var(--focus-color)",
-        },
+        bg: "bg.muted",
+        focusVisibleRing: "inside",
       },
       flushed: {
-        borderBottom: "1px solid",
-        borderColor: "inherit",
+        bg: "transparent",
+        borderBottomWidth: "1px",
+        borderBottomColor: "border",
         borderRadius: "0",
         px: "0",
-        bg: "bg",
-        _invalid: {
-          borderColor: "var(--error-color)",
-        },
         _focusVisible: {
           borderColor: "var(--focus-color)",
           boxShadow: "0px 1px 0px 0px var(--focus-color)",
@@ -90,6 +88,7 @@ export const inputRecipe = defineRecipe({
       },
     },
   },
+
   defaultVariants: {
     size: "md",
     variant: "outline",

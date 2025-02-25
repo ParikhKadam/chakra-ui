@@ -1,39 +1,26 @@
-import { defineRecipe } from "../../styled-system"
+import { pinInputAnatomy } from "../../anatomy"
+import { defineSlotRecipe } from "../../styled-system"
+import { mapEntries } from "../../utils"
 import { inputRecipe } from "./input"
 
-export const pinInputRecipe = defineRecipe({
+const { variants, defaultVariants } = inputRecipe
+
+export const pinInputSlotRecipe = defineSlotRecipe({
+  className: "chakra-pin-input",
+  slots: pinInputAnatomy.keys(),
   base: {
-    ...inputRecipe.base,
-    textAlign: "center",
+    input: {
+      ...inputRecipe.base,
+      textAlign: "center",
+      width: "var(--input-height)",
+    },
   },
   variants: {
-    size: {
-      lg: {
-        fontSize: "lg",
-        w: 12,
-        h: 12,
-        borderRadius: "md",
-      },
-      md: {
-        fontSize: "md",
-        w: 10,
-        h: 10,
-        borderRadius: "md",
-      },
-      sm: {
-        fontSize: "sm",
-        w: 8,
-        h: 8,
-        borderRadius: "sm",
-      },
-      xs: {
-        fontSize: "xs",
-        w: 6,
-        h: 6,
-        borderRadius: "sm",
-      },
-    },
-    variant: inputRecipe.variants!.variant,
+    size: mapEntries(variants!.size, (key, value) => [key, { input: value }]),
+    variant: mapEntries(variants!.variant, (key, value) => [
+      key,
+      { input: value },
+    ]),
   },
-  defaultVariants: inputRecipe.defaultVariants,
+  defaultVariants: defaultVariants,
 })

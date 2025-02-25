@@ -1,44 +1,42 @@
 "use client"
 
-import { cx } from "@chakra-ui/utils"
 import { forwardRef } from "react"
 import {
-  EMPTY_SLOT_STYLES,
   type HTMLChakraProps,
   type RecipeProps,
   type UnstyledProp,
   chakra,
-  useRecipe,
+  createRecipeContext,
 } from "../../styled-system"
+import { cx, isString, omit } from "../../utils"
 
-export interface SeparatorProps
-  extends HTMLChakraProps<"div">,
-    RecipeProps<"Separator">,
+const { useRecipeResult, PropsProvider } = createRecipeContext({
+  key: "separator",
+})
+
+export interface SeparatorBaseProps
+  extends RecipeProps<"separator">,
     UnstyledProp {}
 
-/**
- * Layout component used to visually separate content in a list or group.
- * It displays a thin horizontal or vertical line, and renders a `hr` tag.
- *
- * @see Docs https://chakra-ui.com/divider
- */
-export const Separator = forwardRef<HTMLDivElement, SeparatorProps>(
-  function Separator({ unstyled, ...props }, ref) {
-    const recipe = useRecipe("Separator", props.recipe)
-    const [variantProps, localProps] = recipe.splitVariantProps(props)
-    const styles = unstyled ? EMPTY_SLOT_STYLES : recipe(variantProps)
+export interface SeparatorProps
+  extends HTMLChakraProps<"span", SeparatorBaseProps> {}
 
+export const Separator = forwardRef<HTMLSpanElement, SeparatorProps>(
+  function Separator(props, ref) {
+    const { styles, className, props: otherProps } = useRecipeResult(props)
+    const orientation = props.orientation || "horizontal"
     return (
-      <chakra.div
+      <chakra.span
         ref={ref}
-        role="separator"
-        aria-orientation={variantProps.orientation || "horizontal"}
-        {...localProps}
+        role={isString(orientation) ? "separator" : "presentation"}
+        aria-orientation={isString(orientation) ? orientation : undefined}
+        {...omit(otherProps, ["orientation"])}
+        className={cx(className, props.className)}
         css={[styles, props.css]}
-        className={cx("chakra-separator", props.className)}
       />
     )
   },
 )
 
-Separator.displayName = "Divider"
+export const SeparatorPropsProvider =
+  PropsProvider as React.Provider<SeparatorBaseProps>

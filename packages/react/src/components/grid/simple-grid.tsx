@@ -1,12 +1,12 @@
 "use client"
 
-import { mapResponsive } from "@chakra-ui/utils"
 import { forwardRef } from "react"
 import {
   type ConditionalValue,
   type SystemContext,
   useChakraContext,
 } from "../../styled-system"
+import { mapObject } from "../../utils"
 import { Grid, type GridProps } from "./grid"
 
 interface SimpleGridOptions {
@@ -47,21 +47,19 @@ export const SimpleGrid = forwardRef<HTMLDivElement, SimpleGridProps>(
   },
 )
 
-SimpleGrid.displayName = "SimpleGrid"
-
 function toPx(n: string | number) {
   return typeof n === "number" ? `${n}px` : n
 }
 
 function widthToColumns(width: any, sys: SystemContext) {
-  return mapResponsive(width, (value) => {
+  return mapObject(width, (value) => {
     const _value = sys.tokens.getVar(`sizes.${value}`, toPx(value))
     return value === null ? null : `repeat(auto-fit, minmax(${_value}, 1fr))`
   })
 }
 
 function countToColumns(count: any) {
-  return mapResponsive(count, (value) =>
+  return mapObject(count, (value) =>
     value === null ? null : `repeat(${value}, minmax(0, 1fr))`,
   )
 }

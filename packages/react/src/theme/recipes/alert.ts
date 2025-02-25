@@ -1,29 +1,40 @@
-import { alertAnatomy as parts } from "../../anatomy"
+import { alertAnatomy } from "../../anatomy"
 import { defineSlotRecipe } from "../../styled-system"
 
 export const alertSlotRecipe = defineSlotRecipe({
-  slots: parts.keys,
+  slots: alertAnatomy.keys(),
+  className: "chakra-alert",
+
   base: {
     root: {
-      width: "100%",
+      width: "full",
       display: "flex",
       alignItems: "flex-start",
       position: "relative",
-      overflow: "hidden",
+      borderRadius: "l3",
     },
     title: {
-      fontWeight: "semibold",
-      lineHeight: "1.2",
-      marginEnd: "2",
+      fontWeight: "medium",
     },
     description: {
       display: "inline",
-      lineHeight: "1.5",
     },
-    icon: {
-      flexShrink: 0,
+    indicator: {
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      flexShrink: "0",
+      width: "1em",
+      height: "1em",
+      _icon: { boxSize: "full" },
+    },
+    content: {
+      display: "flex",
+      flex: "1",
+      gap: "1",
     },
   },
+
   variants: {
     status: {
       info: {
@@ -38,51 +49,79 @@ export const alertSlotRecipe = defineSlotRecipe({
       error: {
         root: { colorPalette: "red" },
       },
+      neutral: {
+        root: { colorPalette: "gray" },
+      },
     },
+
+    inline: {
+      true: {
+        content: {
+          display: "inline-flex",
+          flexDirection: "row",
+          alignItems: "center",
+        },
+      },
+      false: {
+        content: {
+          display: "flex",
+          flexDirection: "column",
+        },
+      },
+    },
+
     variant: {
       subtle: {
         root: {
-          bg: { base: "colorPalette.100", _dark: "colorPalette.400/20" },
-        },
-        icon: {
-          color: { base: "colorPalette.800", _dark: "colorPalette.400" },
+          bg: "colorPalette.subtle",
+          color: "colorPalette.fg",
         },
       },
+
+      surface: {
+        root: {
+          bg: "colorPalette.subtle",
+          color: "colorPalette.fg",
+          shadow: "inset 0 0 0px 1px var(--shadow-color)",
+          shadowColor: "colorPalette.muted",
+        },
+        indicator: {
+          color: "colorPalette.fg",
+        },
+      },
+
       outline: {
         root: {
-          bg: { base: "colorPalette.50", _dark: "colorPalette.400/10" },
-          shadowColor: {
-            base: "colorPalette.300",
-            _dark: "colorPalette.200/10",
-          },
-          color: { base: "colorPalette.800", _dark: "colorPalette.200" },
+          color: "colorPalette.fg",
           shadow: "inset 0 0 0px 1px var(--shadow-color)",
+          shadowColor: "colorPalette.muted",
         },
-        icon: {
-          color: { base: "colorPalette.800", _dark: "colorPalette.400" },
+        indicator: {
+          color: "colorPalette.fg",
         },
       },
+
       solid: {
         root: {
-          bg: "colorPalette.600",
-          color: "white",
+          bg: "colorPalette.solid",
+          color: "colorPalette.contrast",
         },
-        icon: {
-          color: "white",
+        indicator: {
+          color: "colorPalette.contrast",
         },
       },
     },
+
     size: {
       sm: {
         root: {
           gap: "2",
           px: "3",
           py: "3",
-          rounded: "md",
-          fontSize: "xs",
+          textStyle: "xs",
         },
-        icon: {
-          fontSize: "md",
+        indicator: {
+          textStyle: "lg",
         },
       },
       md: {
@@ -90,11 +129,10 @@ export const alertSlotRecipe = defineSlotRecipe({
           gap: "3",
           px: "4",
           py: "4",
-          rounded: "md",
-          fontSize: "sm",
+          textStyle: "sm",
         },
-        icon: {
-          fontSize: "lg",
+        indicator: {
+          textStyle: "xl",
         },
       },
       lg: {
@@ -102,18 +140,19 @@ export const alertSlotRecipe = defineSlotRecipe({
           gap: "3",
           px: "4",
           py: "4",
-          rounded: "lg",
-          fontSize: "md",
+          textStyle: "md",
         },
-        icon: {
-          fontSize: "lg",
+        indicator: {
+          textStyle: "2xl",
         },
       },
     },
   },
+
   defaultVariants: {
     status: "info",
     variant: "subtle",
     size: "md",
+    inline: false,
   },
 })

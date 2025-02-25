@@ -1,18 +1,29 @@
-export { useProgressStyles } from "./progress-context"
+export {
+  ProgressContext,
+  ProgressLabel,
+  ProgressPropsProvider,
+  ProgressRange,
+  ProgressRoot,
+  ProgressRootProvider,
+  ProgressTrack,
+  ProgressValueText,
+  useProgressStyles,
+} from "./progress"
 
-export { ProgressFilledTrack } from "./progress-filled-track"
-export type { ProgressFilledTrackProps } from "./progress-filled-track"
-
-export { ProgressLabel } from "./progress-label"
-export type { ProgressLabelProps } from "./progress-label"
-
-export { ProgressRoot } from "./progress-root"
-export type { ProgressRootProps } from "./progress-root"
-
-export { ProgressTrack } from "./progress-track"
-export type { ProgressTrackProps } from "./progress-track"
-
-export { ProgressValueText } from "./progress-value-text"
-export type { ProgressValueTextProps } from "./progress-value-text"
+export type {
+  ProgressLabelProps,
+  ProgressRangeProps,
+  ProgressRootProps,
+  ProgressRootProviderProps,
+  ProgressTrackProps,
+  ProgressValueTextProps,
+} from "./progress"
 
 export * as Progress from "./namespace"
+
+export { useProgress, useProgressContext } from "@ark-ui/react/progress"
+
+export type {
+  UseProgressProps,
+  UseProgressReturn,
+} from "@ark-ui/react/progress"

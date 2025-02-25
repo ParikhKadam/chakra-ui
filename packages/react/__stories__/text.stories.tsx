@@ -1,25 +1,20 @@
-import { Em, Strong, Text } from "../src"
+import type { Meta } from "@storybook/react"
+import { Box } from "../src"
 
 export default {
   title: "Typography / Text",
-}
+  decorators: [
+    (Story) => (
+      <Box p="10">
+        <Story />
+      </Box>
+    ),
+  ],
+} satisfies Meta
 
-export const Basic = () => (
-  <Text>
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet, sapiente.
-  </Text>
-)
-
-export const WithStrong = () => (
-  <Text>
-    <Strong>Lorem ipsum dolor</Strong> sit amet, consectetur adipisicing elit.
-    Amet, sapiente.
-  </Text>
-)
-
-export const WithItalic = () => (
-  <Text>
-    <Em>Lorem ipsum dolor</Em> sit amet, consectetur adipisicing elit. Amet,
-    sapiente.
-  </Text>
-)
+export { TextBasic as Basic } from "compositions/examples/text-basic"
+export { TextWithAsProp as AsProps } from "compositions/examples/text-with-as-prop"
+export { TextWithTruncate as Truncate } from "compositions/examples/text-with-truncate"
+export { TextWithLineClamp as LineClamp } from "compositions/examples/text-with-line-clamp"
+export { TextWithSizes as Sizes } from "compositions/examples/text-with-sizes"
+export { TextWithWeights as Weights } from "compositions/examples/text-with-weights"

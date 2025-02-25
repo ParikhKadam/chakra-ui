@@ -1,19 +1,18 @@
-export { FieldRoot as Root } from "./field-root"
-export type { FieldRootProps as RootProps } from "./field-root"
+export {
+  FieldRoot as Root,
+  FieldPropsProvider as PropsProvider,
+  FieldLabel as Label,
+  FieldHelperText as HelperText,
+  FieldErrorText as ErrorText,
+  FieldErrorIcon as ErrorIcon,
+  FieldRequiredIndicator as RequiredIndicator,
+} from "./field"
 
-export { FieldErrorMessage as ErrorMessage } from "./field-error-message"
-export type { FieldErrorMessageProps as ErrorMessageProps } from "./field-error-message"
-
-export { FieldHelpText as HelpText } from "./field-help-text"
-export type { FieldHelpTextProps as HelpTextProps } from "./field-help-text"
-
-export { FieldRequiredIndicator as RequiredIndicator } from "./field-required-indicator"
-export type { FieldRequiredIndicatorProps as RequiredIndicatorProps } from "./field-required-indicator"
-
-export { FieldLabel as Label } from "./field-label"
-export type { FieldLabelProps as LabelProps } from "./field-label"
-
-export { FieldErrorIcon as ErrorIcon } from "./field-error-icon"
-export type { FieldErrorIconProps as ErrorIconProps } from "./field-error-icon"
-
-export { splitFieldProps as splitProps } from "./field-props"
+export type {
+  FieldRootProps as RootProps,
+  FieldLabelProps as LabelProps,
+  FieldHelperTextProps as HelperTextProps,
+  FieldErrorTextProps as ErrorTextProps,
+  FieldErrorIconProps as ErrorIconProps,
+  FieldRequiredIndicatorProps as RequiredIndicatorProps,
+} from "./field"
